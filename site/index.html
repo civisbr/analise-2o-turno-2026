@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Auditoria Pública – 2º turno 2026</title>
+  <meta name="description" content="Análise independente, com dados abertos do TSE, do que mudou entre o 1º e o 2º turno da eleição presidencial de 2026.">
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <style>
+    :root { --bg:#f6f8fa; --fg:#0d1117; --muted:#4b5563; --card:#fff; --line:#d0d7de; --accent:#2f8f2f; --warn:#8a5a00; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --bg:#0b1220; --fg:#e6edf3; --muted:#9aa7b4; --card:#111a2c; --line:#24324a; --accent:#6fd36f; --warn:#f0b429; }
+    }
+    :root[data-theme="dark"] { --bg:#0b1220; --fg:#e6edf3; --muted:#9aa7b4; --card:#111a2c; --line:#24324a; --accent:#6fd36f; --warn:#f0b429; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, sans-serif; }
+    .wrap { max-width:46rem; margin:0 auto; padding:0 16px; }
+    header { padding:24px 0 8px; }
+    header img { display:block; width:min(320px, 80%); height:auto; border-radius:6px; }
+    .badge { display:inline-block; border:1px solid var(--warn); color:var(--warn); border-radius:6px; padding:2px 10px; font-size:.875rem; }
+    h1 { font-size:1.75rem; line-height:1.25; margin:24px 0 8px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; margin:16px 0; }
+    ul { padding-left:1.25rem; }
+    a { color:var(--accent); }
+    footer { border-top:1px solid var(--line); margin-top:32px; padding:16px 0 32px; color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="assets/logo.png" alt="Auditoria Pública – 2º turno 2026" width="210" height="85">
+    </header>
+    <main>
+      <p><span class="badge">Versão preliminar · em revisão externa</span></p>
+      <h1>Números públicos. Transparência para todos.</h1>
+      <p>Projeto independente que analisa, com dados abertos do TSE, o que mudou entre o 1º e o 2º turno da eleição presidencial de 2026.</p>
+      <div class="card">
+        <strong>Como trabalhamos</strong>
+        <ul>
+          <li>Método a ser pré-registrado antes de qualquer análise dos dados reais.</li>
+          <li>Resultados positivos e negativos com o mesmo destaque, sempre com explicações alternativas.</li>
+          <li>Todo número da página é gerado por código, com fonte, comando e versão.</li>
+          <li>Granularidade pública: município.</li>
+        </ul>
+      </div>
+      <div class="card">
+        Os resultados serão publicados aqui depois da análise e da revisão externa. Este projeto não conclui fraude, manipulação ou irregularidade: trabalha com padrões atípicos e associações estatísticas.
+      </div>
+      <p><a href="https://github.com/civisbr/analise-2o-turno-2026">Código, pré-registro e metodologia no GitHub</a></p>
+    </main>
+    <footer>Projeto independente. Dados: TSE. Não é uma fonte oficial.</footer>
+  </div>
+</body>
+</html>
