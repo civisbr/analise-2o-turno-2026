@@ -34,7 +34,7 @@ def write_run(cmd, year, argv, raw_dir, out_dir):
         'argv': list(argv),
         'gerado_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
         'commit': _git('rev-parse', 'HEAD'),
-        'tree_clean': _git('status', '--porcelain') == '',
+        'tree_clean': _git('status', '--porcelain', '--', '.', ':(exclude)data') == '',
         'prereg_tag': _git('rev-parse', '-q', '--verify', 'refs/tags/prereg-v1^{commit}'),
         'versoes': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__},
         'semente_bootstrap': BOOT_SEED,
