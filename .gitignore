@@ -21,6 +21,7 @@ data/raw/*.part
 
 # rede de segurança: nada por seção, nenhum zip/csv fora de data/derived
 *.zip
+*.parquet
 *.csv
 !data/derived/*.csv
 

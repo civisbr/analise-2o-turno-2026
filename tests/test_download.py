@@ -32,7 +32,8 @@ def test_baixa_e_registra_manifesto(tmp_path, monkeypatch):
     monkeypatch.setattr(dl, '_opener', _Opener(lambda u: _Resp(b'zipdata')))
     dl.download(tmp_path, 2026)
     m = json.loads((tmp_path / 'MANIFEST.json').read_text())
-    assert set(m) == {'votacao_secao_2026_BR.zip', 'detalhe_votacao_secao_2026.zip'}
+    assert set(m) == {'votacao_secao_2026_BR.zip', 'detalhe_votacao_secao_2026.zip',
+                      'detalhe_votacao_munzona_2026.zip'}
     assert m['votacao_secao_2026_BR.zip']['sha256'] == hashlib.sha256(b'zipdata').hexdigest()
     assert not list(tmp_path.glob('*.part'))
 

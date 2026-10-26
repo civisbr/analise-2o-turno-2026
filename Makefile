@@ -3,7 +3,7 @@ PY   := $(VENV)/bin/python
 RAW  := data/raw
 OUT  := data/derived
 
-.PHONY: setup test data analysis site verify all guard-prereg
+.PHONY: setup test data build-2026 analysis site verify all guard-prereg
 
 setup:
 	python3 -m venv $(VENV)
@@ -13,9 +13,16 @@ setup:
 test:
 	$(PY) -m pytest -q
 
+# 2026 só fecha as fontes (verify); a tabela municipal de 2026 exige o pré-registro congelado (build-2026).
 data:
 	$(PY) -m auditoria download --year 2026 --dir $(RAW)
 	$(PY) -m auditoria download --year 2022 --dir $(RAW)
+	$(PY) -m auditoria build --year 2022 --dir $(RAW) --out $(OUT)
+	$(PY) -m auditoria verify --year 2022 --dir $(RAW) --out $(OUT)
+	$(PY) -m auditoria verify --year 2026 --dir $(RAW) --out $(OUT)
+
+build-2026: guard-prereg
+	$(PY) -m auditoria build --year 2026 --dir $(RAW) --out $(OUT)
 
 # Nenhuma análise sobre dados reais antes do pré-registro (project.md, seção 1, regra 1).
 # O pré-registro só vale congelado: tag prereg-v1 criada depois do commit e da revisão.

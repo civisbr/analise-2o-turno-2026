@@ -8,6 +8,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+import pyarrow
 
 from .robust import BOOT_SEED, CLOSING_SEED
 
@@ -48,6 +49,9 @@ def confere_insumos(raw_dir):
     if not manifest.exists():
         return None
     reg = json.loads(manifest.read_text()); lidos = {}
+    fora = sorted(p.name for p in raw.glob('*.zip') if p.name not in reg)
+    if fora:
+        sys.exit(f'{fora}: zip em {raw} sem registro no MANIFEST.json (baixe com `auditoria download`)')
     for nome, rec in reg.items():
         f = raw / nome
         if not f.exists():
@@ -59,7 +63,7 @@ def confere_insumos(raw_dir):
     return lidos
 
 
-def write_run(cmd, year, argv, out_dir, insumos, fechamento=None, arquivos=None):
+def write_run(cmd, year, argv, out_dir, insumos, fechamento=None, arquivos=None, conteudo_sha256=None):
     """Registra como a saída foi gerada. 'tree_clean' falso significa que o commit não reproduz a saída."""
     out = pathlib.Path(out_dir)
     saidas = [pathlib.Path(a) for a in arquivos] if arquivos else sorted(out.glob('*.csv'))
@@ -71,11 +75,12 @@ def write_run(cmd, year, argv, out_dir, insumos, fechamento=None, arquivos=None)
         'commit': _git('rev-parse', 'HEAD'),
         'tree_clean': _git('status', '--porcelain', '--', ':/', ':(exclude,top)data/derived') == '',
         'prereg_tag': _git('rev-parse', '-q', '--verify', 'refs/tags/prereg-v1^{commit}'),
-        'versoes': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__},
+        'versoes': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__, 'pyarrow': pyarrow.__version__},
         'semente': SEEDS.get(cmd),
         'insumos': insumos,
         'fechamento_secoes_divergentes': fechamento,
         'saidas': {p.name: _sha(p) for p in saidas},
+        'conteudo_sha256': conteudo_sha256,
     }
     out.mkdir(parents=True, exist_ok=True)
     (out / f'run_{cmd}_{year}.json').write_text(json.dumps(info, indent=2, ensure_ascii=False) + '\n')

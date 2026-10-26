@@ -1,4 +1,18 @@
 {
+  "detalhe_votacao_munzona_2022.zip": {
+    "bytes": 4429327,
+    "downloaded_utc": "2026-10-26T20:29:23+00:00",
+    "last_modified": "Sat, 24 Oct 2026 06:52:18 GMT",
+    "sha256": "dbf41c5e95c2efedc72848bd0ec70a47f419b539c82e893388314749617ea2f4",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2022.zip"
+  },
+  "detalhe_votacao_munzona_2026.zip": {
+    "bytes": 2511067,
+    "downloaded_utc": "2026-10-26T20:29:21+00:00",
+    "last_modified": "Sun, 25 Oct 2026 15:58:00 GMT",
+    "sha256": "7f6f40a14ba805b453b1d85c18fe12eec4225cfbf2ba21989ecd7c4e15a12043",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip"
+  },
   "detalhe_votacao_secao_2022.zip": {
     "bytes": 243822213,
     "downloaded_utc": "2026-10-26T20:03:30+00:00",

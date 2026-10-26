@@ -15,7 +15,6 @@ def test_run_json_registra_saidas_e_versoes(tmp_path):
 
 def test_verify_via_cli_grava_run_json(synth_dir, tmp_path, monkeypatch):
     from synth import UFS
-    monkeypatch.setattr('auditoria.verify.ALL', UFS[:-1])
     cli.main(['verify', '--dir', str(synth_dir), '--out', str(tmp_path), '--year', '2026', '--sem-prereg'])
     assert (tmp_path / 'run_verify_2026.json').exists() and (tmp_path / 'totais_nacionais_2026.csv').exists()
 
@@ -48,4 +47,13 @@ def test_confere_insumos_detecta_zip_alterado(tmp_path):
     assert confere_insumos(tmp_path)['a.zip']['bytes'] == 2
     (tmp_path / 'a.zip').write_bytes(b'adulterado')
     with pytest.raises(SystemExit, match='SHA-256'):
+        confere_insumos(tmp_path)
+
+
+def test_zip_fora_do_manifesto_para_o_pipeline(tmp_path):
+    import json, pytest
+    from auditoria.runinfo import confere_insumos
+    (tmp_path / 'MANIFEST.json').write_text(json.dumps({}))
+    (tmp_path / 'colocado_a_mao.zip').write_bytes(b'x')
+    with pytest.raises(SystemExit, match='sem registro'):
         confere_insumos(tmp_path)

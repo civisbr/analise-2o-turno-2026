@@ -3,6 +3,7 @@ import pathlib
 import sys
 
 from .balance import balanco
+from .build import build
 from .download import download
 from .load import resolve_ufs
 from .prereg import exige_prereg
@@ -32,21 +33,29 @@ def main(argv=None):
     v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
     v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
     v.add_argument('--year', default='2026', type=year_arg)
-    for sub_ in (z, b, v):
+    bd = sp.add_parser('build', help='fecha as fontes, grava seções em Parquet (privado) e a tabela municipal')
+    bd.add_argument('--dir', default='data/raw'); bd.add_argument('--out', default='data/derived')
+    bd.add_argument('--private-dir', default='data/private', help='saída por seção; nunca versionar')
+    bd.add_argument('--year', default='2026', type=year_arg)
+    for sub_ in (z, b, v, bd):
         sub_.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos')
     a = p.parse_args(argv)
-    if a.cmd in ('analyze', 'balanco', 'verify'):
+    if a.cmd in ('analyze', 'balanco', 'verify', 'build'):
+        if a.sem_prereg and (pathlib.Path(a.dir) / 'MANIFEST.json').exists():
+            p.error('--sem-prereg não vale para dados reais (há MANIFEST.json em --dir)')
         if a.sem_prereg:
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
-        elif a.cmd != 'verify':
+        elif a.cmd in ('analyze', 'balanco'):
             exige_prereg()   # verify só exige quando há 2º turno de 2026 nos dados
     insumos = confere_insumos(a.dir) if a.cmd != 'download' else None
     extra = {}
     ufs = resolve_ufs(a.ufs) if a.cmd in ('analyze', 'balanco') else None
-    if a.cmd == 'analyze' and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
+    if a.cmd in ('analyze', 'build') and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
         p.error('--private-dir não pode ficar dentro de --out (saída por seção não é versionável)')
     if a.cmd == 'download':
         download(a.dir, a.year)
+    elif a.cmd == 'build':
+        extra = build(a.dir, a.out, a.private_dir, a.year, exige=not a.sem_prereg)
     elif a.cmd == 'verify':
         extra = verify(a.dir, a.out, a.year, exige=not a.sem_prereg)
     elif a.cmd == 'analyze':

@@ -10,6 +10,20 @@ import numpy as np
 import pandas as pd
 
 
+def _munzona(V, T):
+    """Agregação por município-zona como o TSE publica: município sem zero à esquerda trocado por 7 dígitos."""
+    t = pd.DataFrame(T); t = t[t.CD_CARGO == '1']
+    k = ['NR_TURNO', 'CD_CARGO', 'SG_UF', 'CD_MUNICIPIO', 'NR_ZONA']
+    for c in ('QT_APTOS', 'QT_COMPARECIMENTO', 'QT_ABSTENCOES', 'QT_VOTOS_NOMINAIS', 'QT_VOTOS_BRANCOS', 'QT_VOTOS_NULOS'):
+        t[c] = t[c].astype(int)
+    m = t.groupby(k, as_index=False).sum(numeric_only=True)
+    m['QT_TOTAL_VOTOS_VALIDOS'] = m.QT_VOTOS_NOMINAIS
+    m['QT_VOTOS_NULOS_TECNICOS'] = 0
+    m['QT_TOTAL_VOTOS_NULOS'] = m.QT_VOTOS_NULOS
+    m['CD_MUNICIPIO'] = m.CD_MUNICIPIO.astype(int).map(lambda x: f'{x:07d}')
+    return m.drop(columns='QT_VOTOS_NOMINAIS').astype(str)
+
+
 def make(outdir, year, ufs, a, f, b, plant, seed):
     outdir = pathlib.Path(outdir); outdir.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(seed); o = 1 - a - f
@@ -51,6 +65,7 @@ def make(outdir, year, ufs, a, f, b, plant, seed):
             T.append(dict(NR_TURNO=str(turno), CD_CARGO='1', SG_UF=uf, CD_MUNICIPIO='00001', NR_ZONA='1', NR_SECAO='9999',
                           QT_APTOS=12, QT_COMPARECIMENTO=0, QT_ABSTENCOES=2, QT_VOTOS_NOMINAIS=0,
                           QT_VOTOS_BRANCOS=0, QT_VOTOS_NULOS=0))
+    mz = _munzona(V, T)
     # layout real do TSE: Presidente de todas as UFs no membro _BR; o detalhe é um zip nacional único
     for name, member, rows in ((f'votacao_secao_{year}_BR.zip', f'votacao_secao_{year}_BR.csv', V),
                                (f'detalhe_votacao_secao_{year}.zip', f'detalhe_votacao_secao_{year}_BR.csv', T)):
@@ -58,6 +73,8 @@ def make(outdir, year, ufs, a, f, b, plant, seed):
         with zipfile.ZipFile(outdir / name, 'w') as z:
             z.writestr(member, df.to_csv(sep=';', index=False).encode('latin1'))
             z.writestr('leiame.pdf', b'%PDF-')
+    with zipfile.ZipFile(outdir / f'detalhe_votacao_munzona_{year}.zip', 'w') as z:
+        z.writestr(f'detalhe_votacao_munzona_{year}_BR.csv', mz.to_csv(sep=';', index=False).encode('latin1'))
 
 
 UFS = ['BA', 'PE', 'SP', 'PA']

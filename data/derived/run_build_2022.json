@@ -1,0 +1,89 @@
+{
+  "comando": "build",
+  "ano": "2022",
+  "argv": [
+    "build",
+    "--year",
+    "2022",
+    "--dir",
+    "data/raw",
+    "--out",
+    "data/derived"
+  ],
+  "gerado_utc": "2026-10-26T20:45:02+00:00",
+  "commit": "5b4e87e595517304d769b1b2e270f0c71a3b7254",
+  "tree_clean": true,
+  "prereg_tag": null,
+  "versoes": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "pyarrow": "26.0.0"
+  },
+  "semente": null,
+  "insumos": {
+    "detalhe_votacao_munzona_2022.zip": {
+      "sha256": "dbf41c5e95c2efedc72848bd0ec70a47f419b539c82e893388314749617ea2f4",
+      "bytes": 4429327,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2022.zip",
+      "last_modified": "Sat, 24 Oct 2026 06:52:18 GMT"
+    },
+    "detalhe_votacao_munzona_2026.zip": {
+      "sha256": "7f6f40a14ba805b453b1d85c18fe12eec4225cfbf2ba21989ecd7c4e15a12043",
+      "bytes": 2511067,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip",
+      "last_modified": "Sun, 25 Oct 2026 15:58:00 GMT"
+    },
+    "detalhe_votacao_secao_2022.zip": {
+      "sha256": "ad22c50b9e6d9dfb096a2170680a190f1734895ba89d8977b95fd63ca02c03da",
+      "bytes": 243822213,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2022.zip",
+      "last_modified": "Fri, 31 Jul 2026 19:47:56 GMT"
+    },
+    "detalhe_votacao_secao_2026.zip": {
+      "sha256": "11a62c3a604e8b73fc328617b7688d2c635de1c76df02ba63b8f77879512f573",
+      "bytes": 176923175,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2026.zip",
+      "last_modified": "Wed, 07 Oct 2026 20:54:59 GMT"
+    },
+    "votacao_secao_2022_BR.zip": {
+      "sha256": "9353993de5cf03778aef44e01d4925e7ee105f5262491d344a2f0dbc956b0139",
+      "bytes": 271292455,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_BR.zip",
+      "last_modified": "Thu, 24 Nov 2022 14:26:58 GMT"
+    },
+    "votacao_secao_2026_BR.zip": {
+      "sha256": "2d42006d0f6c6e00bad83f5c23cd3d78cd3e3182dbc1ad6718222b6b132c23e1",
+      "bytes": 161616519,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2026_BR.zip",
+      "last_modified": "Tue, 06 Oct 2026 19:22:49 GMT"
+    }
+  },
+  "fechamento_secoes_divergentes": {
+    "válidos (votação) != nominais (detalhe)": 0,
+    "brancos (votação) != brancos (detalhe)": 0,
+    "nulos (votação) != nulos (detalhe)": 0,
+    "comparecimento != nominais + brancos + nulos": 0,
+    "comparecimento + abstenções > aptos": 0,
+    "munzona: zonas sem par (só numa das fontes)": 0,
+    "munzona: aptos": 0,
+    "munzona: comparecimento": 0,
+    "munzona: abstenções": 0,
+    "munzona: brancos": 0,
+    "munzona: nulos (sem técnicos)": 0,
+    "munzona: válidos != nominais − nulos técnicos": 0,
+    "munzona: total de nulos != nulos + técnicos": 0,
+    "nulos_tecnicos": {
+      "1": 0,
+      "2": 0
+    }
+  },
+  "saidas": {
+    "municipios_2022.csv": "3a5c971e62fcaee8f77adbd67e79f67f8c65f3f005d028605d4da0671c9eed09",
+    "descartes_2022.csv": "88be25d7dfbf415dad8febdd5bb393e8d4e3e335678455ec124f81aa063d51bf"
+  },
+  "conteudo_sha256": {
+    "secoes_2022": "c0d5b1fde4a82f8bbba2b8d525d7e108afb7c4a45e687b5dd902e6fce18fb71c",
+    "municipios_2022": "3a5c971e62fcaee8f77adbd67e79f67f8c65f3f005d028605d4da0671c9eed09"
+  }
+}
