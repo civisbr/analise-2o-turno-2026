@@ -95,3 +95,22 @@ def test_membro_ausente_para_o_pipeline(synth_dir, tmp_path):
     shutil.copy(synth_dir / 'votacao_secao_2026_BR.zip', tmp_path / 'votacao_secao_2022_BR.zip')
     with pytest.raises(SystemExit, match='membro'):
         load_year(tmp_path, 2022, ['BA'])
+
+
+def test_secao_so_no_detalhe_entra_nos_totais_mas_nao_na_analise(synth_dir, secoes_longas=None):
+    import numpy as np
+    from auditoria.load import load_sections
+    longo = load_sections(synth_dir, 2026, UFS)
+    vazias = longo[longo.NR_SECAO == '9999']
+    assert len(vazias) == 2 * len(UFS) and (vazias.valid == 0).all() and (vazias.comp == 0).all()
+    assert all(np.issubdtype(longo[c].dtype, np.integer) for c in ('lula', 'valid', 'apt', 'comp'))
+    assert '9999' not in set(load_year(synth_dir, 2026, UFS).NR_SECAO)
+
+
+def test_detalhe_com_votos_sem_votacao_para_o_pipeline(synth_dir, tmp_path):
+    import shutil
+    m = 'votacao_secao_2026_BR.zip'
+    _reescreve_zip(synth_dir / m, tmp_path / m, 'votacao_secao_2026_BR.csv', lambda df: df.iloc[200:])
+    shutil.copy(synth_dir / 'detalhe_votacao_secao_2026.zip', tmp_path)
+    with pytest.raises(SystemExit, match='sem linha na votação'):
+        load_year(tmp_path, 2026, ['BA'])

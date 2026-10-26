@@ -10,7 +10,7 @@ Data do rascunho: 26/10/2026.
 
 ## Declaração de acesso aos dados
 
-Antes deste documento foram vistos: (a) agregados nacionais divulgados pela imprensa nos dois turnos de 2026 (tabela do `project.md`, seção 2); (b) o layout e os nomes de colunas dos arquivos do TSE; (c) os totais nacionais do **1º turno** de 2026 por candidato (Lula, Flávio e os demais, incluindo o nº 28), brancos e nulos, obtidos agregando o arquivo por seção para validar a leitura. Nenhum dado de município ou seção, de nenhum turno, foi analisado. As perguntas abaixo foram formuladas depois de conhecer os agregados nacionais, não antes.
+Antes deste documento foram vistos: (a) agregados nacionais divulgados pela imprensa nos dois turnos de 2026 (tabela do `project.md`, seção 2); (b) o layout e os nomes de colunas dos arquivos do TSE; (c) os totais nacionais do **1º turno** de 2026 por candidato (Lula, Flávio e os demais, incluindo o nº 28), brancos e nulos, obtidos agregando o arquivo por seção para validar a leitura. (d) em 26/10/2026, `make verify` gerou e versionou os totais nacionais e por UF do 1º turno de 2026 e dos dois turnos de 2022, e a contagem de seções em que votação e detalhe divergem (zero); o fechamento é feito seção a seção, sem análise dos resultados por seção. Nenhum dado de município foi analisado e nenhum dado do 2º turno de 2026 foi lido. `verify` recusa gravar totais do 2º turno de 2026 antes da tag `prereg-v1`. As perguntas abaixo foram formuladas depois de conhecer os agregados nacionais, não antes.
 
 ## Perguntas, métodos e dados
 

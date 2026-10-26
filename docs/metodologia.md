@@ -19,9 +19,11 @@ Essa definição difere em 5.246 votos da totalização divulgada no 1º turno d
 
 ## Reprodução do baseline (Fase 1)
 
+Nos CSV derivados de 2022 a coluna `flavio` guarda os votos do candidato nº 22 (Bolsonaro).
+
 `make verify` soma os arquivos por seção (27 UFs + exterior `ZZ`) e fecha votação × detalhe. Resultado em 26/10/2026:
 
-| Total | Baseline (imprensa, 2026) | Arquivos TSE | Diferença |
+| Total | Baseline divulgado (2026: imprensa; 2022: totais do TSE) | Arquivos TSE | Diferença |
 |---|---|---|---|
 | 1º turno: Lula | 53.879.538 | 53.879.538 | 0 |
 | 1º turno: Flávio | 56.104.503 | 56.104.503 | 0 |
@@ -33,7 +35,7 @@ Essa definição difere em 5.246 votos da totalização divulgada no 1º turno d
 | 2022, 1º turno: Lula / Bolsonaro | 57.259.504 / 51.072.345 | 57.259.504 / 51.072.345 | 0 |
 | 2022, 2º turno: Lula / Bolsonaro | 60.345.999 / 58.206.354 | 60.345.999 / 58.206.354 | 0 |
 
-A abstenção oficial é a coluna `QT_ABSTENCOES`, que exclui os eleitores de seções não instaladas (`aptos − comparecimento` daria 423 a mais). O 2º turno de 2026 ainda não está publicado, então sua linha fica pendente.
+A abstenção oficial é a coluna `QT_ABSTENCOES`, que não conta 423 dos 495 aptos das 42 seções não instaladas (`aptos − comparecimento` daria 423 a mais). O 2º turno de 2026 ainda não está publicado, então sua linha fica pendente.
 
 ## Hora de encerramento por seção (Q6)
 

@@ -1,12 +1,12 @@
 import argparse
 import pathlib
-import subprocess
 import sys
 
 from .balance import balanco
 from .download import download
 from .load import resolve_ufs
-from .runinfo import write_run
+from .prereg import exige_prereg
+from .runinfo import confere_insumos, write_run
 from .swing import analyze
 from .verify import verify
 
@@ -15,16 +15,6 @@ def year_arg(s):
     if not (s.isdigit() and len(s) == 4):
         raise argparse.ArgumentTypeError(f'ano inválido: {s}')
     return s
-
-
-def exige_prereg():
-    def git(*args):
-        return subprocess.run(['git', *args], capture_output=True).returncode == 0
-
-    if not (git('rev-parse', '-q', '--verify', 'refs/tags/prereg-v1')
-            and git('diff', '--quiet', 'prereg-v1', '--', 'docs/pre-registro.md')):
-        sys.exit('tag prereg-v1 ausente ou pre-registro.md alterado depois dela: congele docs/pre-registro.md antes de analisar dados reais '
-                 '(--sem-prereg para dados sintéticos; o uso fica registrado na saída)')
 
 
 def main(argv=None):
@@ -42,27 +32,29 @@ def main(argv=None):
     v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
     v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
     v.add_argument('--year', default='2026', type=year_arg)
-    for sub_ in (z, b):
+    for sub_ in (z, b, v):
         sub_.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos')
     a = p.parse_args(argv)
-    if a.cmd in ('analyze', 'balanco'):
+    if a.cmd in ('analyze', 'balanco', 'verify'):
         if a.sem_prereg:
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
-        else:
-            exige_prereg()
+        elif a.cmd != 'verify':
+            exige_prereg()   # verify só exige quando há 2º turno de 2026 nos dados
+    insumos = confere_insumos(a.dir) if a.cmd != 'download' else None
+    extra = {}
     ufs = resolve_ufs(a.ufs) if a.cmd in ('analyze', 'balanco') else None
     if a.cmd == 'analyze' and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
         p.error('--private-dir não pode ficar dentro de --out (saída por seção não é versionável)')
     if a.cmd == 'download':
         download(a.dir, a.year)
     elif a.cmd == 'verify':
-        verify(a.dir, a.out, a.year)
+        extra = verify(a.dir, a.out, a.year, exige=not a.sem_prereg)
     elif a.cmd == 'analyze':
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
     else:
         balanco(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot)
     if a.cmd != 'download':
-        write_run(a.cmd, a.year, sys.argv[1:] if argv is None else argv, a.dir, a.out)
+        write_run(a.cmd, a.year, sys.argv[1:] if argv is None else argv, a.out, insumos, **extra)
 
 
 if __name__ == '__main__':

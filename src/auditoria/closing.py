@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 
 from .load import KEY, need
+from .robust import CLOSING_SEED
 
 
-def closing_test(d, path, boot=2000, seed=1):
+def closing_test(d, path, boot=2000, seed=CLOSING_SEED):
     c = pd.read_csv(path, dtype=str)
     need(c, KEY + ['fechamento'], path)
     c['fechamento'] = pd.to_datetime(c.fechamento)

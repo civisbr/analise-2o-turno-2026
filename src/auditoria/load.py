@@ -106,7 +106,13 @@ def load_sections(d, year, ufs, chunksize=1_000_000):
         if sem:
             sys.exit(f'{year}: {sem:,} seção(ões) de votação sem linha no detalhe; comparecimento seria subcontado')
         # seções não instaladas só existem no detalhe (sem votos): entram com votos zero para fechar os totais
-        g = g.merge(t, on=KEY + ['NR_TURNO'], how='outer')
+        g = g.merge(t, on=KEY + ['NR_TURNO'], how='outer', indicator=True)
+        so_detalhe = g._merge == 'right_only'
+        com_voto = so_detalhe & ((g.comp > 0) | (g.nominais + g.brancos_d + g.nulos_d > 0))
+        if com_voto.any():
+            sys.exit(f'{year}: {int(com_voto.sum()):,} seção(ões) com votos no detalhe e sem linha na votação; '
+                     'arquivos inconsistentes ou truncados')
+        g = g.drop(columns='_merge')
         g[VOTOS_COLS] = g[VOTOS_COLS].fillna(0).astype(int)
     else:
         print(f'[aviso] {year}: detalhe_votacao_secao ausente – análise de comparecimento desligada')
@@ -118,6 +124,11 @@ def load_sections(d, year, ufs, chunksize=1_000_000):
 def load_year(d, year, ufs, chunksize=1_000_000):
     """Retorna DataFrame por seção com as colunas de load_sections sufixadas por turno (1, 2)."""
     df = load_sections(d, year, ufs, chunksize)
+    # seção não instalada (sem comparecimento nem votos) fica fora das análises; só os totais a contam
+    vazias = (df.comp == 0) & (df.valid == 0)
+    if vazias.any():
+        print(f'{year}: {int(vazias.sum()):,} seção(ões) sem comparecimento e sem votos descartadas')
+        df = df[~vazias]
     print(f'{year}: turnos presentes nos arquivos: {sorted(df.NR_TURNO.unique())}')
     if not {'1', '2'} <= set(df.NR_TURNO.unique()):
         sys.exit(f'{year}: faltam turnos (precisa de 1 e 2). Se o 2º turno ainda não foi publicado, aguarde.')

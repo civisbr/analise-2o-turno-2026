@@ -1,6 +1,6 @@
 # Fontes divergentes
 
-Erros de portais encontrados durante o levantamento (25–26/10/2026). Cada item recebe captura de tela e a correção a partir do dado do TSE na Fase 1.
+Divergências entre fontes encontradas no levantamento (25–26/10/2026): erros de portais e diferenças entre a totalização divulgada e os arquivos de seção. Cada item recebe captura de tela arquivada (com SHA-256 e link de arquivo web) e a correção a partir do dado do TSE.
 
 | Data | Fonte | Divergência | Captura | Correção |
 |---|---|---|---|---|

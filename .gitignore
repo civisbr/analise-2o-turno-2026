@@ -9,7 +9,6 @@ data/raw/*
 !data/raw/.gitkeep
 
 data/private/
-data/derived/secoes_*
 data/raw/*.part
 .env
 .env.*
@@ -21,7 +20,10 @@ data/raw/*.part
 /synth2/
 
 # rede de segurança: nada por seção, nenhum zip/csv fora de data/derived
-**/secoes_*
 *.zip
 *.csv
 !data/derived/*.csv
+
+# por último: a última regra que casa vence, e nada por seção pode ser reaberto pela negação acima
+data/derived/secoes_*
+**/secoes_*

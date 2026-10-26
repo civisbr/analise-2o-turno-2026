@@ -1,5 +1,8 @@
 import numpy as np
 
+BOOT_SEED = 11      # bootstrap do balanço
+CLOSING_SEED = 1    # bootstrap e permutação do teste de fechamento
+
 
 def mad_sigma(x):
     """Desvio-padrão robusto (MAD escalado para equivaler ao dp sob normalidade)."""

@@ -27,7 +27,8 @@ def test_totais_nacionais_somam_as_ufs(secoes):
     nac, uf = totais(secoes)
     assert (uf.groupby('NR_TURNO').sum() == nac).all().all()
     assert (nac.terceira_via == nac.valid - nac.lula - nac.flavio).all()
-    assert (nac.abstencao == nac.apt - nac.comp).all()   # sintético não tem seção não instalada
+    # seções não instaladas têm aptos sem comparecimento nem abstenção registrada
+    assert (nac.abstencao < nac.apt - nac.comp).all()
 
 
 def test_verify_via_cli_para_se_nao_fecha(synth_dir, tmp_path, monkeypatch):
@@ -43,4 +44,13 @@ def test_verify_via_cli_para_se_nao_fecha(synth_dir, tmp_path, monkeypatch):
         z.writestr(m, df.to_csv(sep=';', index=False).encode('latin1'))
     monkeypatch.setattr('auditoria.verify.ALL', UFS[:-1])
     with pytest.raises(SystemExit, match='fechamento falhou'):
-        cli.main(['verify', '--dir', str(tmp_path), '--out', str(tmp_path / 'o'), '--year', '2026'])
+        cli.main(['verify', '--dir', str(tmp_path), '--out', str(tmp_path / 'o'), '--year', '2026', '--sem-prereg'])
+    assert not (tmp_path / 'o').exists()   # nada gravado quando o fechamento falha
+
+
+def test_verify_2026_com_segundo_turno_exige_prereg(synth_dir, tmp_path, monkeypatch):
+    monkeypatch.setattr('auditoria.verify.ALL', UFS[:-1])
+    monkeypatch.setattr('auditoria.prereg.ROOT', tmp_path)   # sem repositório git: tag ausente
+    with pytest.raises(SystemExit, match='prereg-v1'):
+        cli.main(['verify', '--dir', str(synth_dir), '--out', str(tmp_path / 'o'), '--year', '2026'])
+    assert not (tmp_path / 'o').exists()
