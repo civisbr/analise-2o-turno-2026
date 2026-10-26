@@ -22,7 +22,7 @@ Pipeline reproduzível sobre dados abertos do TSE que mede, com números, o que 
 ```bash
 make setup      # venv + dependências
 make test       # testes com dados sintéticos, sem rede
-make data       # baixa os arquivos nacionais do TSE para data/raw/
+make data       # baixa os arquivos do TSE, fecha as fontes e gera data/derived (2022) e data/private
 make analysis   # exige a tag prereg-v1 (pré-registro congelado)
 ```
 

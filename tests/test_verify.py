@@ -42,14 +42,12 @@ def test_verify_via_cli_para_se_nao_fecha(synth_dir, tmp_path, monkeypatch):
     df.loc[df.index[0], 'QT_VOTOS_BRANCOS'] = str(int(df.QT_VOTOS_BRANCOS.iloc[0]) + 1)
     with zipfile.ZipFile(tmp_path / 'detalhe_votacao_secao_2026.zip', 'w') as z:
         z.writestr(m, df.to_csv(sep=';', index=False).encode('latin1'))
-    monkeypatch.setattr('auditoria.verify.ALL', UFS[:-1])
     with pytest.raises(SystemExit, match='fechamento falhou'):
         cli.main(['verify', '--dir', str(tmp_path), '--out', str(tmp_path / 'o'), '--year', '2026', '--sem-prereg'])
     assert not (tmp_path / 'o').exists()   # nada gravado quando o fechamento falha
 
 
 def test_verify_2026_com_segundo_turno_exige_prereg(synth_dir, tmp_path, monkeypatch):
-    monkeypatch.setattr('auditoria.verify.ALL', UFS[:-1])
     monkeypatch.setattr('auditoria.prereg.ROOT', tmp_path)   # sem repositório git: tag ausente
     with pytest.raises(SystemExit, match='prereg-v1'):
         cli.main(['verify', '--dir', str(synth_dir), '--out', str(tmp_path / 'o'), '--year', '2026'])

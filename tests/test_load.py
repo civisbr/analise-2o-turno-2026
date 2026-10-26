@@ -114,3 +114,9 @@ def test_detalhe_com_votos_sem_votacao_para_o_pipeline(synth_dir, tmp_path):
     shutil.copy(synth_dir / 'detalhe_votacao_secao_2026.zip', tmp_path)
     with pytest.raises(SystemExit, match='sem linha na votação'):
         load_year(tmp_path, 2026, ['BA'])
+
+
+def test_membro_gigante_e_recusado(synth_dir, monkeypatch):
+    monkeypatch.setattr('auditoria.load.MAX_MEMBRO_BYTES', 10)
+    with pytest.raises(SystemExit, match='descompactado'):
+        load_year(synth_dir, 2026, ['BA'])

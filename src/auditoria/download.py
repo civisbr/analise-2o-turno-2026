@@ -11,7 +11,8 @@ import urllib.request
 HOST = 'cdn.tse.jus.br'
 BASE = f'https://{HOST}/estatistica/sead/odsele'
 # Presidente de todas as UFs fica nos arquivos nacionais; os zips por UF só têm cargos estaduais.
-FILES = ('votacao_secao/votacao_secao_{year}_BR.zip', 'detalhe_votacao_secao/detalhe_votacao_secao_{year}.zip')
+FILES = ('votacao_secao/votacao_secao_{year}_BR.zip', 'detalhe_votacao_secao/detalhe_votacao_secao_{year}.zip',
+         'detalhe_votacao_munzona/detalhe_votacao_munzona_{year}.zip')
 MANIFEST = 'MANIFEST.json'
 
 

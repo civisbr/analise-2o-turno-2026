@@ -6,7 +6,8 @@
   detalhe_votacao_secao/detalhe_votacao_secao_<ano>.zip   arquivo nacional único; membro
         detalhe_votacao_secao_<ano>_BR.csv (Presidente): QT_APTOS, QT_COMPARECIMENTO
   CSV com ';', aspas, latin1. NR_VOTAVEL: 13 = Lula, 22 = Flávio/Bolsonaro, 95 = branco, 96 = nulo.
-O exterior (ZZ) fica fora de ALL; tratamento previsto na Fase 2.
+  detalhe_votacao_munzona/detalhe_votacao_munzona_<ano>.zip: agregação do TSE por município-zona (munzona.py).
+O exterior (ZZ) fica fora de ALL; verify e build o somam à parte.
 """
 import pathlib
 import sys
@@ -22,6 +23,8 @@ ALL = sorted(NE + ['AC', 'AM', 'AP', 'DF', 'ES', 'GO', 'MG', 'MS', 'MT', 'PA', '
 KEY = ['SG_UF', 'CD_MUNICIPIO', 'NR_ZONA', 'NR_SECAO']
 LULA, FLAVIO = 13, 22
 NONVALID = (95, 96)
+MIN_SECOES_PUBLICAS = 10   # município ou grupo com menos seções não é publicado isolado (regra 7)
+MAX_MEMBRO_BYTES = 5 * 1024 ** 3   # teto de tamanho descompactado (zip bomb); o maior arquivo real tem ~1 GB
 VOTOS_COLS = ['lula', 'flavio', 'valid', 'branco', 'nulo']
 DETALHE_COLS = ['apt', 'comp', 'abst', 'nominais', 'brancos_d', 'nulos_d']
 
@@ -52,6 +55,8 @@ def read_member(zip_path, member, usecols, ufs, reduce, chunksize=1_000_000):
     with zipfile.ZipFile(zip_path) as z:
         if member not in z.namelist():
             sys.exit(f'{zip_path}: membro {member} ausente. Membros: {z.namelist()}')
+        if z.getinfo(member).file_size > MAX_MEMBRO_BYTES:
+            sys.exit(f'{zip_path}: membro {member} descompactado passa de {MAX_MEMBRO_BYTES:,} bytes')
         with z.open(member) as f:
             header = pd.read_csv(f, sep=';', encoding='latin1', dtype=str, nrows=0)
         need(header, usecols, f'{zip_path}:{member}')

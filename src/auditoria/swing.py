@@ -4,11 +4,8 @@ import numpy as np
 import pandas as pd
 
 from .closing import closing_test
-from .load import load_year
+from .load import MIN_SECOES_PUBLICAS, load_year
 from .robust import mad_sigma
-
-
-MIN_SECOES_PUBLICAS = 10
 
 
 def swing_table(wide, min_votes=50):
