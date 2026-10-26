@@ -30,6 +30,7 @@ site:
 	@echo "não implementado (Fase 5)"; exit 1
 
 verify:
-	@echo "não implementado (Fase 1/2)"; exit 1
+	$(PY) -m auditoria verify --dir $(RAW) --out $(OUT) --year 2026
+	$(PY) -m auditoria verify --dir $(RAW) --out $(OUT) --year 2022
 
 all: data analysis site verify

@@ -22,6 +22,8 @@ ALL = sorted(NE + ['AC', 'AM', 'AP', 'DF', 'ES', 'GO', 'MG', 'MS', 'MT', 'PA', '
 KEY = ['SG_UF', 'CD_MUNICIPIO', 'NR_ZONA', 'NR_SECAO']
 LULA, FLAVIO = 13, 22
 NONVALID = (95, 96)
+VOTOS_COLS = ['lula', 'flavio', 'valid', 'branco', 'nulo']
+DETALHE_COLS = ['apt', 'comp', 'abst', 'nominais', 'brancos_d', 'nulos_d']
 
 
 def resolve_ufs(s):
@@ -66,20 +68,25 @@ def _votos(ch):
     v['lula'] = np.where(v.n == LULA, v.q, 0)
     v['flavio'] = np.where(v.n == FLAVIO, v.q, 0)
     v['valid'] = np.where(v.n.isin(NONVALID), 0, v.q)
-    return v.groupby(KEY + ['NR_TURNO'], as_index=False)[['lula', 'flavio', 'valid']].sum()
+    v['branco'] = np.where(v.n == 95, v.q, 0)
+    v['nulo'] = np.where(v.n == 96, v.q, 0)
+    return v.groupby(KEY + ['NR_TURNO'], as_index=False)[VOTOS_COLS].sum()
 
 
 def _detalhe(ch):
-    t = ch.assign(apt=ch.QT_APTOS.astype(int), comp=ch.QT_COMPARECIMENTO.astype(int))
-    return t.groupby(KEY + ['NR_TURNO'], as_index=False)[['apt', 'comp']].sum()
+    t = ch.assign(apt=ch.QT_APTOS.astype(int), comp=ch.QT_COMPARECIMENTO.astype(int),
+                  abst=ch.QT_ABSTENCOES.astype(int),
+                  nominais=ch.QT_VOTOS_NOMINAIS.astype(int), brancos_d=ch.QT_VOTOS_BRANCOS.astype(int),
+                  nulos_d=ch.QT_VOTOS_NULOS.astype(int))
+    return t.groupby(KEY + ['NR_TURNO'], as_index=False)[DETALHE_COLS].sum()
 
 
 def _soma(parts, cols):
     return pd.concat(parts).groupby(KEY + ['NR_TURNO'], as_index=False)[cols].sum() if parts else None
 
 
-def load_year(d, year, ufs, chunksize=1_000_000):
-    """Retorna DataFrame por seção com colunas lula,flavio,valid,apt,comp sufixadas por turno (1, 2)."""
+def load_sections(d, year, ufs, chunksize=1_000_000):
+    """Uma linha por seção e turno (formato longo), com votação e, se houver, detalhe."""
     d = pathlib.Path(d)
     vs = d / f'votacao_secao_{year}_BR.zip'
     ds = d / f'detalhe_votacao_secao_{year}.zip'
@@ -87,21 +94,41 @@ def load_year(d, year, ufs, chunksize=1_000_000):
         sys.exit(f'{vs} ausente; rode o download')
     g = _soma(read_member(vs, f'votacao_secao_{year}_BR.csv',
                           KEY + ['NR_TURNO', 'CD_CARGO', 'NR_VOTAVEL', 'QT_VOTOS'], ufs, _votos, chunksize),
-              ['lula', 'flavio', 'valid'])
+              VOTOS_COLS)
     if g is None:
         sys.exit(f'nenhum dado de presidente carregado para {year} nas UFs pedidas')
     if ds.exists():
         t = _soma(read_member(ds, f'detalhe_votacao_secao_{year}_BR.csv',
-                              KEY + ['NR_TURNO', 'CD_CARGO', 'QT_APTOS', 'QT_COMPARECIMENTO'], ufs, _detalhe, chunksize),
-                  ['apt', 'comp'])
-        g = g.merge(t, on=KEY + ['NR_TURNO'], how='left')
-        sem = int(g.apt.isna().sum())
+                              KEY + ['NR_TURNO', 'CD_CARGO', 'QT_APTOS', 'QT_COMPARECIMENTO', 'QT_ABSTENCOES', 'QT_VOTOS_NOMINAIS',
+                                     'QT_VOTOS_BRANCOS', 'QT_VOTOS_NULOS'], ufs, _detalhe, chunksize),
+                  DETALHE_COLS)
+        sem = int((~g.set_index(KEY + ['NR_TURNO']).index.isin(t.set_index(KEY + ['NR_TURNO']).index)).sum())
         if sem:
             sys.exit(f'{year}: {sem:,} seção(ões) de votação sem linha no detalhe; comparecimento seria subcontado')
+        # seções não instaladas só existem no detalhe (sem votos): entram com votos zero para fechar os totais
+        g = g.merge(t, on=KEY + ['NR_TURNO'], how='outer', indicator=True)
+        so_detalhe = g._merge == 'right_only'
+        com_voto = so_detalhe & ((g.comp > 0) | (g.nominais + g.brancos_d + g.nulos_d > 0))
+        if com_voto.any():
+            sys.exit(f'{year}: {int(com_voto.sum()):,} seção(ões) com votos no detalhe e sem linha na votação; '
+                     'arquivos inconsistentes ou truncados')
+        g = g.drop(columns='_merge')
+        g[VOTOS_COLS] = g[VOTOS_COLS].fillna(0).astype(int)
     else:
         print(f'[aviso] {year}: detalhe_votacao_secao ausente – análise de comparecimento desligada')
-        g['apt'] = np.nan; g['comp'] = np.nan
-    df = g
+        for c in DETALHE_COLS:
+            g[c] = np.nan
+    return g
+
+
+def load_year(d, year, ufs, chunksize=1_000_000):
+    """Retorna DataFrame por seção com as colunas de load_sections sufixadas por turno (1, 2)."""
+    df = load_sections(d, year, ufs, chunksize)
+    # seção não instalada (sem comparecimento nem votos) fica fora das análises; só os totais a contam
+    vazias = (df.comp == 0) & (df.valid == 0)
+    if vazias.any():
+        print(f'{year}: {int(vazias.sum()):,} seção(ões) sem comparecimento e sem votos descartadas')
+        df = df[~vazias]
     print(f'{year}: turnos presentes nos arquivos: {sorted(df.NR_TURNO.unique())}')
     if not {'1', '2'} <= set(df.NR_TURNO.unique()):
         sys.exit(f'{year}: faltam turnos (precisa de 1 e 2). Se o 2º turno ainda não foi publicado, aguarde.')

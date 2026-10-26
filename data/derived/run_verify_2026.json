@@ -1,0 +1,60 @@
+{
+  "comando": "verify",
+  "ano": "2026",
+  "argv": [
+    "verify",
+    "--dir",
+    "data/raw",
+    "--out",
+    "data/derived",
+    "--year",
+    "2026"
+  ],
+  "gerado_utc": "2026-10-26T20:15:28+00:00",
+  "commit": "4144d97f5bec7a15566ef4139946432aa2502a92",
+  "tree_clean": true,
+  "prereg_tag": null,
+  "versoes": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0"
+  },
+  "semente": null,
+  "insumos": {
+    "detalhe_votacao_secao_2022.zip": {
+      "sha256": "ad22c50b9e6d9dfb096a2170680a190f1734895ba89d8977b95fd63ca02c03da",
+      "bytes": 243822213,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2022.zip",
+      "last_modified": "Fri, 31 Jul 2026 19:47:56 GMT"
+    },
+    "detalhe_votacao_secao_2026.zip": {
+      "sha256": "11a62c3a604e8b73fc328617b7688d2c635de1c76df02ba63b8f77879512f573",
+      "bytes": 176923175,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2026.zip",
+      "last_modified": "Wed, 07 Oct 2026 20:54:59 GMT"
+    },
+    "votacao_secao_2022_BR.zip": {
+      "sha256": "9353993de5cf03778aef44e01d4925e7ee105f5262491d344a2f0dbc956b0139",
+      "bytes": 271292455,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_BR.zip",
+      "last_modified": "Thu, 24 Nov 2022 14:26:58 GMT"
+    },
+    "votacao_secao_2026_BR.zip": {
+      "sha256": "2d42006d0f6c6e00bad83f5c23cd3d78cd3e3182dbc1ad6718222b6b132c23e1",
+      "bytes": 161616519,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2026_BR.zip",
+      "last_modified": "Tue, 06 Oct 2026 19:22:49 GMT"
+    }
+  },
+  "fechamento_secoes_divergentes": {
+    "válidos (votação) != nominais (detalhe)": 0,
+    "brancos (votação) != brancos (detalhe)": 0,
+    "nulos (votação) != nulos (detalhe)": 0,
+    "comparecimento != nominais + brancos + nulos": 0,
+    "comparecimento + abstenções > aptos": 0
+  },
+  "saidas": {
+    "totais_nacionais_2026.csv": "9f1482464d5c747d821e18aba589757da735556e3546cdc0e405a64f69906bac",
+    "totais_uf_2026.csv": "4c2da009a3647283bd8bb97b9bdd1a9c4e12a6a8adb7c6a2a1406732a1b22008"
+  }
+}

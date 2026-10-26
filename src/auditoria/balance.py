@@ -19,7 +19,7 @@ import sys
 import numpy as np
 
 from .load import load_year
-from .robust import boot_ci, mad_sigma, wls
+from .robust import BOOT_SEED, boot_ci, mad_sigma, wls
 
 
 def muni_table(wide):
@@ -86,7 +86,7 @@ def balance(wide, label, out, min_valid=200, boot=300):
         X = np.column_stack(list(dct.values()))
         for fe in ([True, False] if g is not None else [False]):
             gg = g if fe else None
-            beta = wls(y, X, v1, gg); lo, hi = boot_ci(y, X, v1, gg, boot, 11)
+            beta = wls(y, X, v1, gg); lo, hi = boot_ci(y, X, v1, gg, boot, BOOT_SEED)
             tag = 'com efeito fixo de UF' if fe else 'sem efeito fixo'
             print(f'\n  Modelo {name} ({tag}):')
             for k, nm in enumerate(dct):
