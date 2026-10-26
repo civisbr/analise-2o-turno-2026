@@ -3,24 +3,37 @@
   "ano": "2022",
   "argv": [
     "verify",
+    "--year",
+    "2022",
     "--dir",
     "data/raw",
     "--out",
-    "data/derived",
-    "--year",
-    "2022"
+    "data/derived"
   ],
-  "gerado_utc": "2026-10-26T20:15:56+00:00",
-  "commit": "4144d97f5bec7a15566ef4139946432aa2502a92",
+  "gerado_utc": "2026-10-26T20:45:37+00:00",
+  "commit": "5b4e87e595517304d769b1b2e270f0c71a3b7254",
   "tree_clean": true,
   "prereg_tag": null,
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
-    "pandas": "3.1.0"
+    "pandas": "3.1.0",
+    "pyarrow": "26.0.0"
   },
   "semente": null,
   "insumos": {
+    "detalhe_votacao_munzona_2022.zip": {
+      "sha256": "dbf41c5e95c2efedc72848bd0ec70a47f419b539c82e893388314749617ea2f4",
+      "bytes": 4429327,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2022.zip",
+      "last_modified": "Sat, 24 Oct 2026 06:52:18 GMT"
+    },
+    "detalhe_votacao_munzona_2026.zip": {
+      "sha256": "7f6f40a14ba805b453b1d85c18fe12eec4225cfbf2ba21989ecd7c4e15a12043",
+      "bytes": 2511067,
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip",
+      "last_modified": "Sun, 25 Oct 2026 15:58:00 GMT"
+    },
     "detalhe_votacao_secao_2022.zip": {
       "sha256": "ad22c50b9e6d9dfb096a2170680a190f1734895ba89d8977b95fd63ca02c03da",
       "bytes": 243822213,
@@ -51,10 +64,23 @@
     "brancos (votação) != brancos (detalhe)": 0,
     "nulos (votação) != nulos (detalhe)": 0,
     "comparecimento != nominais + brancos + nulos": 0,
-    "comparecimento + abstenções > aptos": 0
+    "comparecimento + abstenções > aptos": 0,
+    "munzona: zonas sem par (só numa das fontes)": 0,
+    "munzona: aptos": 0,
+    "munzona: comparecimento": 0,
+    "munzona: abstenções": 0,
+    "munzona: brancos": 0,
+    "munzona: nulos (sem técnicos)": 0,
+    "munzona: válidos != nominais − nulos técnicos": 0,
+    "munzona: total de nulos != nulos + técnicos": 0,
+    "nulos_tecnicos": {
+      "1": 0,
+      "2": 0
+    }
   },
   "saidas": {
     "totais_nacionais_2022.csv": "9a696ce239f3b30a1de29c1cb45f5bc65955bf9ff96be037be449c61a2e4db3f",
     "totais_uf_2022.csv": "da6969eeb504913422948be245a6e3aa71489af51929050f6c53215c193c0ce4"
-  }
+  },
+  "conteudo_sha256": null
 }
