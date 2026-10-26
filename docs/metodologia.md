@@ -13,7 +13,27 @@ Base: `https://cdn.tse.jus.br/estatistica/sead/odsele/`. O layout é o mesmo em 
 
 ## Votos válidos
 
-`QT_VOTOS` por candidato em `votacao_secao` inclui votos que o TSE contabiliza como **nulos** (votos anulados). No 1º turno o candidato nº 28 tem 5.246 votos nessa condição: ao somar 95 e 96 como únicos não válidos, `valid` fica 5.246 acima do total oficial (119.306.034 contra 119.300.788) e os nulos 5.246 abaixo (3.669.003 contra 3.674.249). Lula, Flávio e brancos fecham exatamente com o baseline e os outros 10 candidatos somam 9.316.747 depois de retirados esses 5.246 votos (o arquivo bruto soma 9.321.993 para os 11). **Pendente na Fase 1:** definir `valid` a partir do total oficial (`detalhe_votacao_secao`, `QT_VOTOS_NOMINAIS`) e testar o fechamento por UF.
+Os dois arquivos de seção concordam entre si, seção a seção (`make verify`): válidos de `votacao_secao` = `QT_VOTOS_NOMINAIS` de `detalhe_votacao_secao`, e comparecimento = nominais + brancos + nulos. A **definição adotada** é a dos arquivos de seção, porque é a única reproduzível a partir do dado aberto.
+
+Essa definição difere em 5.246 votos da totalização divulgada no 1º turno de 2026 (válidos 119.306.034 contra 119.300.788; nulos 3.669.003 contra 3.674.249). Os 5.246 são os votos do candidato nº 28, que constam como válidos nos arquivos de seção e como nulos na totalização divulgada. Efeito: terceira via de 9.321.993 (11 candidatos) em vez de 9.316.747 (10 candidatos). Os 5.246 são 0,06% da terceira via. No 2º turno há dois candidatos, então não há efeito equivalente.
+
+## Reprodução do baseline (Fase 1)
+
+`make verify` soma os arquivos por seção (27 UFs + exterior `ZZ`) e fecha votação × detalhe. Resultado em 26/10/2026:
+
+| Total | Baseline (imprensa, 2026) | Arquivos TSE | Diferença |
+|---|---|---|---|
+| 1º turno: Lula | 53.879.538 | 53.879.538 | 0 |
+| 1º turno: Flávio | 56.104.503 | 56.104.503 | 0 |
+| 1º turno: comparecimento | 125.275.835 | 125.275.835 | 0 |
+| 1º turno: abstenção (`QT_ABSTENCOES`) | 33.469.244 | 33.469.244 | 0 |
+| 1º turno: brancos | 2.300.798 | 2.300.798 | 0 |
+| 1º turno: válidos | 119.300.788 | 119.306.034 | +5.246 (candidato nº 28) |
+| 1º turno: nulos | 3.674.249 | 3.669.003 | −5.246 (candidato nº 28) |
+| 2022, 1º turno: Lula / Bolsonaro | 57.259.504 / 51.072.345 | 57.259.504 / 51.072.345 | 0 |
+| 2022, 2º turno: Lula / Bolsonaro | 60.345.999 / 58.206.354 | 60.345.999 / 58.206.354 | 0 |
+
+A abstenção oficial é a coluna `QT_ABSTENCOES`, que exclui os eleitores de seções não instaladas (`aptos − comparecimento` daria 423 a mais). O 2º turno de 2026 ainda não está publicado, então sua linha fica pendente.
 
 ## Hora de encerramento por seção (Q6)
 

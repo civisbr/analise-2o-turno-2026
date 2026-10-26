@@ -39,10 +39,12 @@ def make(outdir, year, ufs, a, f, b, plant, seed):
                     k = dict(NR_TURNO=str(turno), CD_CARGO='1', SG_UF=uf, CD_MUNICIPIO=f'{m:05d}', NR_ZONA='1', NR_SECAO=str(s))
                     V += [dict(k, NR_VOTAVEL=13, QT_VOTOS=L), dict(k, NR_VOTAVEL=22, QT_VOTOS=F), dict(k, NR_VOTAVEL=15, QT_VOTOS=oth),
                           dict(k, NR_VOTAVEL=95, QT_VOTOS=bn // 3), dict(k, NR_VOTAVEL=96, QT_VOTOS=bn - bn // 3)]
-                    T.append(dict(k, QT_APTOS=apt, QT_COMPARECIMENTO=cc))
+                    T.append(dict(k, QT_APTOS=apt, QT_COMPARECIMENTO=cc, QT_ABSTENCOES=apt - cc, QT_VOTOS_NOMINAIS=vv,
+                                  QT_VOTOS_BRANCOS=bn // 3, QT_VOTOS_NULOS=bn - bn // 3))
                     # isca: outro cargo na mesma seção, que o carregamento deve ignorar
                     V.append(dict(k, CD_CARGO='3', NR_VOTAVEL=13, QT_VOTOS=7777))
-                    T.append(dict(k, CD_CARGO='3', QT_APTOS=9, QT_COMPARECIMENTO=9))
+                    T.append(dict(k, CD_CARGO='3', QT_APTOS=9, QT_COMPARECIMENTO=9, QT_ABSTENCOES=0, QT_VOTOS_NOMINAIS=9,
+                                  QT_VOTOS_BRANCOS=0, QT_VOTOS_NULOS=0))
     # layout real do TSE: Presidente de todas as UFs no membro _BR; o detalhe é um zip nacional único
     for name, member, rows in ((f'votacao_secao_{year}_BR.zip', f'votacao_secao_{year}_BR.csv', V),
                                (f'detalhe_votacao_secao_{year}.zip', f'detalhe_votacao_secao_{year}_BR.csv', T)):

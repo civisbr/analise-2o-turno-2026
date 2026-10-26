@@ -6,7 +6,9 @@ import sys
 from .balance import balanco
 from .download import download
 from .load import resolve_ufs
+from .runinfo import write_run
 from .swing import analyze
+from .verify import verify
 
 
 def year_arg(s):
@@ -37,23 +39,30 @@ def main(argv=None):
     b.add_argument('--year', default='2026', type=year_arg); b.add_argument('--control-year', default='2022', type=year_arg)
     b.add_argument('--ufs', default='ALL', help='NE | ALL | AL,BA,... (padrão ALL: a pergunta é nacional)')
     b.add_argument('--boot', type=int, default=300); b.add_argument('--min-valid', type=int, default=200)
+    v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
+    v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
+    v.add_argument('--year', default='2026', type=year_arg)
     for sub_ in (z, b):
         sub_.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos')
     a = p.parse_args(argv)
-    if a.cmd != 'download':
+    if a.cmd in ('analyze', 'balanco'):
         if a.sem_prereg:
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
         else:
             exige_prereg()
-    ufs = resolve_ufs(a.ufs) if a.cmd != 'download' else None
+    ufs = resolve_ufs(a.ufs) if a.cmd in ('analyze', 'balanco') else None
     if a.cmd == 'analyze' and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
         p.error('--private-dir não pode ficar dentro de --out (saída por seção não é versionável)')
     if a.cmd == 'download':
         download(a.dir, a.year)
+    elif a.cmd == 'verify':
+        verify(a.dir, a.out, a.year)
     elif a.cmd == 'analyze':
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
     else:
         balanco(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot)
+    if a.cmd != 'download':
+        write_run(a.cmd, a.year, sys.argv[1:] if argv is None else argv, a.dir, a.out)
 
 
 if __name__ == '__main__':

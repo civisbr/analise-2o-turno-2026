@@ -6,9 +6,7 @@ Data do rascunho: 26/10/2026.
 
 ## Pendências conhecidas antes do congelamento
 
-- A definição de votos válidos do código ainda soma como válidos os votos de candidato com votos anulados (1º turno: 5.246 votos do candidato nº 28, que o TSE conta como nulos). Será corrigida na Fase 1 e testada contra o total oficial; a tag `prereg-v1` só é criada depois disso.
 - O número de reamostragens padrão da CLI (300) difere do pré-registrado (2.000); `make analysis` usa 2.000.
-- O registro de execução (`run.json`: commit, hashes de entrada, parâmetros, semente) ainda não é gerado.
 
 ## Declaração de acesso aos dados
 
@@ -32,7 +30,7 @@ Antes deste documento foram vistos: (a) agregados nacionais divulgados pela impr
 ## Definições e filtros
 
 - Cargo Presidente (`CD_CARGO` 1); candidatos: Lula (13) e Flávio Bolsonaro (22). 2022: Lula (13) e Bolsonaro (22).
-- Votos válidos, brancos e nulos conforme a totalização oficial do TSE (votos anulados contam como nulos).
+- Votos válidos, brancos e nulos conforme os arquivos de seção do TSE (`QT_VOTOS_NOMINAIS`, `QT_VOTOS_BRANCOS`, `QT_VOTOS_NULOS`). No 1º turno de 2026 isso difere em 5.246 votos da totalização divulgada (candidato nº 28); ver [`metodologia.md`](metodologia.md).
 - Municípios com válidos `< 200` em qualquer turno são excluídos de Q2–Q4 (`--min-valid 200`). Exterior (`ZZ`) fica fora de Q2–Q5 e é reportado à parte nos totais (Q1).
 - Seções com menos de 50 votos de Lula + Flávio em qualquer turno são excluídas de Q5.
 - Seções presentes em só um dos turnos são descartadas; o relatório informa quantas e quantos votos.
@@ -42,7 +40,7 @@ Antes deste documento foram vistos: (a) agregados nacionais divulgados pela impr
 
 - Seção atípica (Q5): `|z| > 4`. Município atípico (Q3): `q < 0,05` pelo procedimento de Benjamini-Hochberg sobre todos os municípios testados.
 - Refit robusto: excluir `|z| > 4` e reajustar; reportar os dois ajustes.
-- Bootstrap: 2.000 reamostragens por município na rodada final; semente fixa registrada em `run.json`. Com poucas UFs, sem erros-padrão agrupados por UF.
+- Bootstrap: 2.000 reamostragens por município na rodada final; semente fixa registrada em `run_<comando>_<ano>.json`. Com poucas UFs, sem erros-padrão agrupados por UF.
 - Coeficiente não identificado (dp do regressor dentro da UF `< 0,5 pp`): omitido da página.
 - Sensibilidade: `min-valid` (100, 200, 500), com e sem efeito fixo, com e sem refit robusto, só Nordeste, fora do Nordeste.
 
