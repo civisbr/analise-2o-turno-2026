@@ -3,54 +3,117 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Auditoria Pública – 2º turno 2026</title>
   <meta name="description" content="Análise independente, com dados abertos do TSE, do que mudou entre o 1º e o 2º turno da eleição presidencial de 2026.">
   <link rel="icon" type="image/png" href="assets/icon.png">
-  <style>
-    :root { --bg:#f6f8fa; --fg:#0d1117; --muted:#4b5563; --card:#fff; --line:#d0d7de; --accent:#2f8f2f; --warn:#8a5a00; }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) { --bg:#0b1220; --fg:#e6edf3; --muted:#9aa7b4; --card:#111a2c; --line:#24324a; --accent:#6fd36f; --warn:#f0b429; }
-    }
-    :root[data-theme="dark"] { --bg:#0b1220; --fg:#e6edf3; --muted:#9aa7b4; --card:#111a2c; --line:#24324a; --accent:#6fd36f; --warn:#f0b429; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, sans-serif; }
-    .wrap { max-width:46rem; margin:0 auto; padding:0 16px; }
-    header { padding:24px 0 8px; }
-    header img { display:block; width:min(320px, 80%); height:auto; border-radius:6px; }
-    .badge { display:inline-block; border:1px solid var(--warn); color:var(--warn); border-radius:6px; padding:2px 10px; font-size:.875rem; }
-    h1 { font-size:1.75rem; line-height:1.25; margin:24px 0 8px; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; margin:16px 0; }
-    ul { padding-left:1.25rem; }
-    a { color:var(--accent); }
-    footer { border-top:1px solid var(--line); margin-top:32px; padding:16px 0 32px; color:var(--muted); font-size:.9rem; }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <img src="assets/logo.png" alt="Auditoria Pública – 2º turno 2026" width="210" height="85">
-    </header>
-    <main>
-      <p><span class="badge">Versão preliminar · em revisão externa</span></p>
-      <h1>Números públicos. Transparência para todos.</h1>
-      <p>Projeto independente que analisa, com dados abertos do TSE, o que mudou entre o 1º e o 2º turno da eleição presidencial de 2026.</p>
-      <div class="card">
-        <strong>Como trabalhamos</strong>
-        <ul>
-          <li>Método a ser pré-registrado antes de qualquer análise dos dados reais.</li>
-          <li>Resultados positivos e negativos com o mesmo destaque, sempre com explicações alternativas.</li>
-          <li>Todo número da página é gerado por código, com fonte, comando e versão.</li>
-          <li>Granularidade pública: município.</li>
+  <header class="topo" id="topo">
+    <a class="marca" href="#topo" aria-label="Auditoria Pública – 2º turno 2026"><img src="assets/logo.png" alt="Auditoria Pública 2º turno 2026" width="210" height="85"></a>
+    <nav aria-label="Principal">
+      <a href="#topo" aria-current="page">Início</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#mapas">Mapas</a>
+      <a href="#dados">Dados</a>
+      <a href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Metodologia</a>
+      <a href="#sobre">Sobre</a>
+      <a href="https://github.com/civisbr/analise-2o-turno-2026#readme">FAQ</a>
+    </nav>
+    <div class="acoes">
+      <a class="btn-contorno" href="#sobre"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Entenda o projeto</a>
+      <button class="tema" type="button" id="tema" aria-label="Tema claro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="mapas">
+      <div class="hero-texto">
+        <h1>Números públicos.<br>Transparência para todos.</h1>
+        <p class="sub">Analisamos, com dados do TSE, o que mudou entre o 1º e o 2º turno das eleições presidenciais de 2026. Sem achismos. Sem lado. Apenas evidências.</p>
+        <ul class="selos">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.500-7-5-7-10V6z"/><path d="M8.500 12l2.500 2.500 4.500-5"/></svg><div><strong>Independente</strong><span>Não é oficial. Não é partidário.</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V12M10 20V6M15 20V10M20 20V4"/></svg><div><strong>Baseado em dados</strong><span>Fonte primária: TSE</span></div></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14 5.300M4 12a8 8 0 0 1 14-5.300"/><path d="M10 9l-2 3 2 3M14 9l2 3-2 3"/></svg><div><strong>Aberto e reproduzível</strong><span>Código e dados públicos</span></div></li>
         </ul>
+        <div class="cta">
+          <a class="btn-cheio" href="#resultados">Ver panorama geral <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn-contorno" href="#resultados"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-5.500-6-10a6 6 0 0 1 12 0c0 4.500-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>Explorar mapas <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
       </div>
-      <div class="card">
-        Os resultados serão publicados aqui depois da análise e da revisão externa. Este projeto não conclui fraude, manipulação ou irregularidade: trabalha com padrões atípicos e associações estatísticas.
+      <div class="hero-arte"><img src="assets/hero.png" alt="Mapa do Brasil em rede de pontos, com uma lupa sobre um gráfico de barras" width="535" height="376"></div>
+      <aside class="missao" id="sobre">
+        <h2>Nossa missão</h2>
+        <p>Ajudar qualquer pessoa a entender os números, fazer suas próprias conclusões e cobrar transparência.</p>
+        <hr>
+        <h3>Princípios</h3>
+        <ul class="checks">
+          <li>Dados abertos do TSE</li>
+          <li>Metodologia pré-registrada</li>
+          <li>Resultados positivos e negativos com o mesmo destaque</li>
+          <li>Explicações alternativas sempre consideradas</li>
+          <li>Rastreabilidade total</li>
+        </ul>
+        <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026#readme">Saiba mais sobre o projeto <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </aside>
+    </section>
+
+    <section class="painel" id="resultados" aria-labelledby="t-panorama">
+      <div class="painel-cab"><h2 id="t-panorama">Panorama nacional</h2><span id="atualizado" class="muted"></span></div>
+      <noscript><p class="muted">Os números desta página são carregados de <a href="data/painel.json">data/painel.json</a>; ative o JavaScript para vê-los aqui.</p></noscript>
+      <div class="kpis" id="kpis"></div>
+      <p class="aviso-ilustrativo" id="aviso" role="status" hidden>Valores de demonstração do layout: não são resultados publicados. Os números definitivos são gerados por código a partir dos dados do TSE.</p>
+
+      <div class="graficos">
+        <article class="cartao" aria-labelledby="t-ganho">
+          <h3 id="t-ganho">De onde veio o ganho dos finalistas?</h3>
+          <p class="muted peq">Decomposição do aumento de votos válidos</p>
+          <div class="ganho"><div id="donut" class="donut"></div><ul id="ganho-leg" class="legenda"></ul></div>
+          <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Ver metodologia completa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="cartao" aria-labelledby="t-div">
+          <h3 id="t-div">Divisão do ganho entre Lula e Flávio</h3>
+          <p class="muted peq">2026 comparado a 2022</p>
+          <div class="barras-emp"><div id="barras" class="barras"></div><ul class="legenda leg-lf"><li><i class="cor-verde"></i>Lula</li><li><i class="cor-azul"></i>Flávio</li></ul></div>
+          <p class="peq" id="div-txt"></p>
+          <a class="mais" href="#resultados">Entenda essa análise <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="cartao" aria-labelledby="t-atip">
+          <h3 id="t-atip">Municípios com padrão atípico</h3>
+          <p class="muted peq">% de municípios por nível de atipicidade (Q3)</p>
+          <div id="atipicos" class="hbarras"></div>
+          <a class="mais" href="#resultados">Explorar no mapa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
+        <article class="cartao" aria-labelledby="t-hip">
+          <h3 id="t-hip">Explique primeiro</h3>
+          <p class="muted peq">Hipóteses consideradas</p>
+          <ul class="hip">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20v-3a5 5 0 0 1 10 0v3M12 4v6M8 7l4-3 4 3"/></svg>Mobilização / entusiasmo</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 9l5 3-5 3z"/></svg>Abstenção seletiva</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 13l3 3 5-6"/></svg>Troca de voto útil</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h13l-3-3M19 15H6l3 3"/></svg>Transferência entre seções</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 20v-2a6 6 0 0 1 12 0v2z"/></svg>Outros fatores locais</li>
+          </ul>
+          <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ver todas as hipóteses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </article>
       </div>
-      <p><a href="https://github.com/civisbr/analise-2o-turno-2026">Código, pré-registro e metodologia no GitHub</a></p>
-    </main>
-    <footer>Projeto independente. Dados: TSE. Não é uma fonte oficial.</footer>
-  </div>
+    </section>
+
+    <section class="faixa" id="dados" aria-label="Transparência do projeto">
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.500"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg></span><div><strong>Dados e código abertos</strong><p>Todo o código, dados derivados e documentação estão disponíveis no GitHub.</p><a class="pill" href="https://github.com/civisbr/analise-2o-turno-2026">Ver repositório <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 19v-3.500M15 19v-3.500M9 15c-3 1-3-2-5-2M15 15c3 1 3-2 5-2"/></svg></a></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v3l6 5M18 8v3l-6 5"/></svg></span><div><strong>Status do projeto <span class="selo-prelim">Versão preliminar</span></strong><p>Em revisão por especialistas externos antes da divulgação ampla.</p></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6M10 8h2"/></svg></span><div><strong>Pré-registro</strong><p>Metodologia, hipóteses e critérios definidos antes de qualquer análise.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ler pré-registro <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a6 6 0 0 0-6 6v3M12 4a6 6 0 0 1 6 6v6M9 20c0-3 0-6 3-6s3 3 3 6M12 8a2 2 0 0 0-2 2v3"/></svg></span><div><strong>Transparência total</strong><p>Cada número desta página tem origem, comando e data. Sem números digitados à mão.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Como garantimos isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <span>Projeto independente. Dados: TSE. Não é uma fonte oficial.</span>
+    <span>© 2026 Auditoria Pública do 2º Turno 2026</span>
+    <span>Feito com dados abertos para uma democracia aberta.</span>
+  </footer>
 </body>
 </html>

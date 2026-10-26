@@ -1,0 +1,15 @@
+{
+  "ilustrativo": false,
+  "atualizado": null,
+  "kpis": [
+    {"id": "comparecimento", "rotulo": "Comparecimento 2º turno", "valor": null, "tipo": "pct", "linha2": {"valor": null, "tipo": "int", "sufixo": "eleitores"}, "delta": {"valor": null, "tipo": "pp", "sufixo": "vs 1º turno"}, "serie": null, "cor": "verde"},
+    {"id": "validos", "rotulo": "Votos válidos", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "delta": {"valor": null, "tipo": "pctsinal"}, "serie": null, "cor": "verde"},
+    {"id": "lula", "rotulo": "Lula", "ponto": "verde", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "pct", "sufixo": "dos válidos"}, "delta": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "serie": null, "cor": "verde"},
+    {"id": "flavio", "rotulo": "Flávio Bolsonaro", "ponto": "azul", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "pct", "sufixo": "dos válidos"}, "delta": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "serie": null, "cor": "azul"},
+    {"id": "abstencao", "rotulo": "Abstenção", "valor": null, "tipo": "pct", "linha2": {"valor": null, "tipo": "int", "sufixo": "eleitores"}, "delta": {"valor": null, "tipo": "pp", "sufixo": "vs 1º turno"}, "serie": null, "cor": "amarelo"},
+    {"id": "brancos_nulos", "rotulo": "Brancos / Nulos", "valor": null, "tipo": "par_pct", "linha2": {"valor": null, "tipo": "par_int"}, "delta": {"valor": null, "tipo": "pp"}, "serie": null, "cor": "roxo"}
+  ],
+  "ganho": null,
+  "divisao": null,
+  "atipicos": null
+}
