@@ -1,0 +1,30 @@
+{
+  "detalhe_votacao_secao_2022.zip": {
+    "bytes": 243822213,
+    "downloaded_utc": "2026-10-26T20:03:30+00:00",
+    "last_modified": "Fri, 31 Jul 2026 19:47:56 GMT",
+    "sha256": "ad22c50b9e6d9dfb096a2170680a190f1734895ba89d8977b95fd63ca02c03da",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2022.zip"
+  },
+  "detalhe_votacao_secao_2026.zip": {
+    "bytes": 176923175,
+    "downloaded_utc": "2026-10-26T20:03:08+00:00",
+    "last_modified": "Wed, 07 Oct 2026 20:54:59 GMT",
+    "sha256": "11a62c3a604e8b73fc328617b7688d2c635de1c76df02ba63b8f77879512f573",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2026.zip"
+  },
+  "votacao_secao_2022_BR.zip": {
+    "bytes": 271292455,
+    "downloaded_utc": "2026-10-26T20:03:20+00:00",
+    "last_modified": "Thu, 24 Nov 2022 14:26:58 GMT",
+    "sha256": "9353993de5cf03778aef44e01d4925e7ee105f5262491d344a2f0dbc956b0139",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_BR.zip"
+  },
+  "votacao_secao_2026_BR.zip": {
+    "bytes": 161616519,
+    "downloaded_utc": "2026-10-26T20:03:01+00:00",
+    "last_modified": "Tue, 06 Oct 2026 19:22:49 GMT",
+    "sha256": "2d42006d0f6c6e00bad83f5c23cd3d78cd3e3182dbc1ad6718222b6b132c23e1",
+    "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2026_BR.zip"
+  }
+}
