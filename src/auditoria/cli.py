@@ -45,7 +45,7 @@ def main(argv=None):
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
         else:
             exige_prereg()
-    ufs = resolve_ufs(a.ufs)
+    ufs = resolve_ufs(a.ufs) if a.cmd != 'download' else None
     if a.cmd == 'analyze' and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
         p.error('--private-dir não pode ficar dentro de --out (saída por seção não é versionável)')
     if a.cmd == 'download':
