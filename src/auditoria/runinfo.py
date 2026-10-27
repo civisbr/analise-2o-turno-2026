@@ -12,7 +12,7 @@ import pyarrow
 
 from .robust import BOOT_SEED, CLOSING_SEED
 
-SEEDS = {'balanco': BOOT_SEED, 'analyze': CLOSING_SEED}
+SEEDS = {'balanco': BOOT_SEED, 'analise': BOOT_SEED, 'analyze': CLOSING_SEED}
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]

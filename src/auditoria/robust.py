@@ -24,9 +24,13 @@ def wls(y, X, w, g=None):
     return beta if g is not None else beta[1:]
 
 
-def boot_ci(y, X, w, g, B, seed):
+def boot_draws(y, X, w, g, B, seed):
     rng = np.random.default_rng(seed); n = len(y); bs = []
     for _ in range(B):
         i = rng.integers(0, n, n)
         bs.append(wls(y[i], X[i], w[i], None if g is None else g[i]))
-    return np.percentile(bs, [2.5, 97.5], axis=0)
+    return np.array(bs)
+
+
+def boot_ci(y, X, w, g, B, seed):
+    return np.percentile(boot_draws(y, X, w, g, B, seed), [2.5, 97.5], axis=0)

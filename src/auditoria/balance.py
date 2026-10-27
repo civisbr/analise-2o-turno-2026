@@ -18,7 +18,7 @@ import sys
 
 import numpy as np
 
-from .load import load_year
+from .load import MIN_SECOES_PUBLICAS, load_year
 from .robust import BOOT_SEED, boot_ci, mad_sigma, wls
 
 
@@ -26,7 +26,10 @@ def muni_table(wide):
     d = wide.copy()
     d['mun'] = d.SG_UF + '-' + d.CD_MUNICIPIO
     cols = [c for c in d.columns if c[:-1] in ('lula', 'flavio', 'valid', 'apt', 'comp') and c[-1] in '12']
-    return d.groupby(['SG_UF', 'mun'], as_index=False)[cols].sum(min_count=1)
+    g = d.groupby(['SG_UF', 'mun'])
+    t = g[cols].sum(min_count=1)
+    t['secoes'] = g.size()
+    return t.reset_index()
 
 
 def identity_gap(m):
@@ -115,7 +118,8 @@ def balance(wide, label, out, min_valid=200, boot=300):
         print(f'   com comparecimento estável/em ALTA (precisa de outra explicação): {len(unexpl):,}')
         if len(unexpl):
             print(unexpl[['mun', 'valid1', 'dturn', 'dF', 'dL']].head(15).round(0).to_string(index=False))
-    m.to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
+    # Regra 7: município com poucas seções não é publicado isolado.
+    m[m.secoes >= MIN_SECOES_PUBLICAS].to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
     return res
 
 

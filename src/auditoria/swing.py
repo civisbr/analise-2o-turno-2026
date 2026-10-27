@@ -49,7 +49,7 @@ def summarize(d):
     muni['z_mun'] = z
     # Município com poucas seções: contagem de seções sinalizadas apontaria a seção (regra 7).
     small = muni.secoes < MIN_SECOES_PUBLICAS
-    muni.loc[small, ['flag_pos', 'flag_neg', 'excesso_liquido_votos']] = np.nan
+    muni.loc[small, ['flag_pos', 'flag_neg', 'excesso_liquido_votos', 'swing_mediano', 'swing_medio', 'votos_2t']] = np.nan
     muni = muni.drop(columns=['n1', 'wsw', 'wl1'])
     return flagged, muni.reindex(muni.z_mun.abs().sort_values(ascending=False, na_position='last').index)
 
