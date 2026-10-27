@@ -8,7 +8,7 @@
   },
   "detalhe_votacao_munzona_2026.zip": {
     "bytes": 2511067,
-    "downloaded_utc": "2026-10-26T20:29:21+00:00",
+    "downloaded_utc": "2026-10-27T10:09:04+00:00",
     "last_modified": "Sun, 25 Oct 2026 15:58:00 GMT",
     "sha256": "7f6f40a14ba805b453b1d85c18fe12eec4225cfbf2ba21989ecd7c4e15a12043",
     "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip"
@@ -21,10 +21,10 @@
     "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2022.zip"
   },
   "detalhe_votacao_secao_2026.zip": {
-    "bytes": 176923175,
-    "downloaded_utc": "2026-10-26T20:03:08+00:00",
-    "last_modified": "Wed, 07 Oct 2026 20:54:59 GMT",
-    "sha256": "11a62c3a604e8b73fc328617b7688d2c635de1c76df02ba63b8f77879512f573",
+    "bytes": 234357769,
+    "downloaded_utc": "2026-10-27T10:09:02+00:00",
+    "last_modified": "Mon, 26 Oct 2026 15:35:35 GMT",
+    "sha256": "8ef9ce3a85cde260471faf7a83a9b4f5ccf3993fdda942aacaa658574344789c",
     "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2026.zip"
   },
   "votacao_secao_2022_BR.zip": {
@@ -35,10 +35,10 @@
     "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2022_BR.zip"
   },
   "votacao_secao_2026_BR.zip": {
-    "bytes": 161616519,
-    "downloaded_utc": "2026-10-26T20:03:01+00:00",
-    "last_modified": "Tue, 06 Oct 2026 19:22:49 GMT",
-    "sha256": "2d42006d0f6c6e00bad83f5c23cd3d78cd3e3182dbc1ad6718222b6b132c23e1",
+    "bytes": 241891087,
+    "downloaded_utc": "2026-10-27T10:08:42+00:00",
+    "last_modified": "Mon, 26 Oct 2026 17:42:32 GMT",
+    "sha256": "c928321f63f2d095706fca73d4607c048d2ada23bda6876455d6911aaf1bc9c1",
     "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2026_BR.zip"
   }
 }
