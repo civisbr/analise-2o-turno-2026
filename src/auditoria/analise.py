@@ -94,7 +94,9 @@ def _ic(x):
 
 
 def q1(wide, ano):
-    """Decomposição contábil sem filtro de tamanho; o exterior (ZZ) sai em bloco próprio, fora do nacional."""
+    """Decomposição contábil sem filtro de tamanho; o exterior (ZZ) sai em bloco próprio, fora do nacional.
+    A tabela municipal usa a mesma supressão da tabela pública (UF-OUTROS com supressão complementar), para que
+    total da UF menos a soma dos municípios não isole um município pequeno."""
     m = add_flows(muni_table(wide))
     def bloco(t):
         out = {k: int(t[k].sum()) for k in ('pool', 'dvalid', 'dL', 'dF')}
@@ -107,6 +109,11 @@ def q1(wide, ano):
            'por_uf': {uf: bloco(g) for uf, g in br.groupby('SG_UF')}}
     if len(ext):
         out['exterior'] = bloco(ext)
+    from .build import agrega_pequenos   # build importa muni_table de balance
+    cols = ['secoes', 'valid1', 'valid2', 'pool', 'dvalid', 'dL', 'dF'] + \
+        (['comp1', 'comp2'] if br.comp1.notna().all() and br.comp2.notna().all() else [])
+    pub = agrega_pequenos(br[['SG_UF', 'mun'] + cols])
+    out['municipios'] = {r.mun: bloco(pub.loc[[i]]) for i, r in pub.iterrows()}
     return out
 
 
@@ -162,20 +169,32 @@ def q2(m26, m22, boot, a26='2026', a22='2022'):
                 saida.append({'modelo': modelo, 'efeito_fixo': fe, 'refit_robusto': robusto,
                               'n_' + a26: int(len(m26) - (ex26.sum() if robusto else 0)),
                               'n_' + a22: int(len(m22) - (ex22.sum() if robusto else 0)), 'coef': coef})
-    return {'ajustes': saida, 'explicado_alpha': _explicado(saida)}
+    return {'ajustes': saida, 'explicado': _explicado(saida)}
 
 
 def _explicado(ajustes):
-    """Critério do pré-registro: a diferença de α cai abaixo da metade com as covariáveis (modelo C
-    contra o A), ou o IC da diferença inclui zero. Avaliado com efeito fixo e sem refit robusto."""
-    d = {a['modelo']: a['coef']['alpha'] for a in ajustes if a['efeito_fixo'] and not a['refit_robusto']}
+    """Critério do pré-registro, aplicado a cada coeficiente: a diferença 2026 − 2022 cai abaixo da metade
+    do modelo A para o C, ou o IC da diferença no C inclui zero. α compara com α; β1 e β2 (modelo C)
+    comparam com o β único do A. Avaliado com efeito fixo e sem refit robusto."""
+    d = {a['modelo']: a['coef'] for a in ajustes if a['efeito_fixo'] and not a['refit_robusto']}
     if 'A' not in d or 'C' not in d:
         return None
-    base, cov = d['A']['dif'], d['C']['dif']
-    metade = abs(cov) < abs(base) / 2
-    zero = d['C']['ic_dif'][0] <= 0 <= d['C']['ic_dif'][1]
-    return {'dif_modelo_a': base, 'dif_modelo_c': cov, 'cai_abaixo_da_metade': bool(metade),
-            'ic_inclui_zero': bool(zero), 'explicado': bool(metade or zero)}
+    por_coef = {}
+    for nome, base_nome in (('alpha', 'alpha'), ('beta1', 'beta'), ('beta2', 'beta')):
+        if nome not in d['C'] or base_nome not in d['A']:
+            continue
+        if not (d['C'][nome].get('identificado', True) and d['A'][base_nome].get('identificado', True)):
+            por_coef[nome] = {'avaliavel': False}   # sem variação suficiente, o IC incluiria zero sem informação
+            continue
+        base, cov = d['A'][base_nome]['dif'], d['C'][nome]['dif']
+        metade = abs(cov) < abs(base) / 2
+        zero = d['C'][nome]['ic_dif'][0] <= 0 <= d['C'][nome]['ic_dif'][1]
+        por_coef[nome] = {'dif_modelo_a': base, 'dif_modelo_c': cov, 'cai_abaixo_da_metade': bool(metade),
+                          'ic_inclui_zero': bool(zero), 'explicado': bool(metade or zero)}
+    avaliados = {k: v for k, v in por_coef.items() if v.get('avaliavel', True)}
+    if not avaliados:
+        return None
+    return {'por_coeficiente': por_coef, 'explicado': bool(all(v['explicado'] for v in avaliados.values()))}
 
 
 def q3(m, secoes_por_mun):
