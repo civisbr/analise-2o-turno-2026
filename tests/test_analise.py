@@ -129,12 +129,16 @@ def test_run_registra_resultados_json(synth_dir, tmp_path):
 
 
 def test_explicado_metade_ou_ic_com_zero():
-    def aj(modelo, dif, ic):
-        return {'modelo': modelo, 'efeito_fixo': True, 'refit_robusto': False, 'coef': {'alpha': {'dif': dif, 'ic_dif': ic}}}
-    assert an._explicado([aj('A', .10, [.05, .15]), aj('C', .04, [.01, .07])])['explicado']
-    assert an._explicado([aj('A', .10, [.05, .15]), aj('C', .08, [-.01, .17])])['explicado']
-    assert not an._explicado([aj('A', .10, [.05, .15]), aj('C', .08, [.02, .14])])['explicado']
-    assert an._explicado([aj('A', .10, [.05, .15])]) is None
+    def aj(modelo, **coefs):
+        return {'modelo': modelo, 'efeito_fixo': True, 'refit_robusto': False,
+                'coef': {k: {'dif': d, 'ic_dif': ic} for k, (d, ic) in coefs.items()}}
+    A = aj('A', alpha=(.10, [.05, .15]), beta=(.20, [.10, .30]))
+    ok = aj('C', alpha=(.04, [.01, .07]), beta1=(.05, [.01, .09]), beta2=(.30, [-.1, .7]))
+    assert an._explicado([A, ok])['explicado']
+    ruim = aj('C', alpha=(.04, [.01, .07]), beta1=(.05, [.01, .09]), beta2=(.30, [.1, .5]))
+    r = an._explicado([A, ruim])
+    assert not r['explicado'] and not r['por_coeficiente']['beta2']['explicado'] and r['por_coeficiente']['alpha']['explicado']
+    assert an._explicado([A]) is None
 
 
 def test_sem_comparecimento_cai_para_modelo_a(wide22):
@@ -150,6 +154,18 @@ def test_exterior_fica_fora_de_q2_a_q5_e_aparece_em_q1(wide22):
     q = an.q1(w, 2022)
     assert 'exterior' in q and 'ZZ' not in q['por_uf']
     assert q['identidade_residuo'] == 0
+
+
+def test_q1_municipal_com_supressao_complementar(wide22):
+    q = an.q1(wide22, 2022)
+    mun = q['municipios']
+    assert mun
+    for uf, blo in q['por_uf'].items():
+        soma = sum(v['dL'] for k, v in mun.items() if k.startswith(uf + '-'))
+        assert soma == blo['dL']          # total preservado
+    outros = [k for k in mun if k.endswith('-OUTROS')]
+    for k in outros:                       # grupo agregado nunca é um município só
+        assert mun[k]['dvalid'] is not None
 
 
 def test_bh_com_empates_e_p_unico():
