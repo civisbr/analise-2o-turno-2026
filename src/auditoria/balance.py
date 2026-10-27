@@ -26,7 +26,10 @@ def muni_table(wide):
     d = wide.copy()
     d['mun'] = d.SG_UF + '-' + d.CD_MUNICIPIO
     cols = [c for c in d.columns if c[:-1] in ('lula', 'flavio', 'valid', 'apt', 'comp') and c[-1] in '12']
-    return d.groupby(['SG_UF', 'mun'], as_index=False)[cols].sum(min_count=1)
+    g = d.groupby(['SG_UF', 'mun'])
+    t = g[cols].sum(min_count=1)
+    t['secoes'] = g.size()
+    return t.reset_index()
 
 
 def identity_gap(m):
@@ -115,7 +118,14 @@ def balance(wide, label, out, min_valid=200, boot=300):
         print(f'   com comparecimento estável/em ALTA (precisa de outra explicação): {len(unexpl):,}')
         if len(unexpl):
             print(unexpl[['mun', 'valid1', 'dturn', 'dF', 'dL']].head(15).round(0).to_string(index=False))
-    m.to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
+    # Regra 7: município com poucas seções vai para '<UF>-OUTROS', com supressão complementar (como no build).
+    ints = ['secoes', 'valid1', 'valid2', 'lula1', 'lula2', 'flavio1', 'flavio2', 'pool', 'dvalid', 'dL', 'dF'] + \
+        (['comp1', 'comp2', 'dturn', 'dbn'] if have else [])
+    from .build import agrega_pequenos   # build importa muni_table daqui
+    pub = agrega_pequenos(m[['SG_UF', 'mun'] + ints])
+    pub = pub.merge(m[['mun', 'resid_votos', 'z_resid']], on='mun', how='left')
+    pub.loc[pub.municipios_agregados > 0, ['resid_votos', 'z_resid']] = np.nan
+    pub.to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
     return res
 
 

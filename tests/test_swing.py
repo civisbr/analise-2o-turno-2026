@@ -47,3 +47,13 @@ def test_municipio_pequeno_nao_expoe_contagem_de_secoes_sinalizadas(wide26):
     assert len(small) == 0 or small[['flag_pos', 'flag_neg', 'excesso_liquido_votos']].isna().all().all()
     big = muni[muni.secoes >= 10]
     assert big.flag_pos.notna().all()
+
+
+def test_resumo_mascara_municipio_com_poucas_secoes(wide26_noplant):
+    from auditoria.swing import summarize, swing_table
+    w = wide26_noplant
+    pequeno = w[(w.SG_UF == 'SP') & (w.CD_MUNICIPIO == '00005')].index[5:]
+    _, muni = summarize(swing_table(w.drop(index=pequeno)))
+    r = muni.loc['SP-00005']
+    assert r.secoes < 10 and r[['swing_mediano', 'swing_medio', 'votos_2t', 'flag_pos']].isna().all()
+    assert muni.loc['SP-00006'].swing_mediano == muni.loc['SP-00006'].swing_mediano

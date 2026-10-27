@@ -31,6 +31,7 @@ guard-prereg:
 
 analysis: guard-prereg
 	$(PY) -m auditoria balanco --dir $(RAW) --out $(OUT) --year 2026 --control-year 2022 --ufs ALL --boot 2000
+	$(PY) -m auditoria analise --dir $(RAW) --out $(OUT) --year 2026 --control-year 2022 --ufs ALL --boot 2000
 	$(PY) -m auditoria analyze --dir $(RAW) --out $(OUT) --year 2026 --control-year 2022 --ufs ALL
 
 site:
