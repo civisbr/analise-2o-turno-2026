@@ -19,6 +19,14 @@ def year_arg(s):
     return s
 
 
+def intervalo(lo, hi):
+    def f(s):
+        if not (s.isdigit() and lo <= int(s) <= hi):
+            raise argparse.ArgumentTypeError(f'valor fora de {lo}–{hi}: {s}')
+        return int(s)
+    return f
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog='auditoria'); sp = p.add_subparsers(dest='cmd', required=True)
     d = sp.add_parser('download'); d.add_argument('--year', default='2026', type=year_arg); d.add_argument('--dir', default='data/raw')
@@ -35,7 +43,7 @@ def main(argv=None):
     n.add_argument('--dir', default='data/raw'); n.add_argument('--out', default='data/derived')
     n.add_argument('--year', default='2026', type=year_arg); n.add_argument('--control-year', default='2022', type=year_arg)
     n.add_argument('--ufs', default='ALL'); n.add_argument('--min-valid', type=int, default=200)
-    n.add_argument('--boot', type=int, default=2000); n.add_argument('--sim', type=int, default=20)
+    n.add_argument('--boot', type=intervalo(20, 20000), default=2000); n.add_argument('--sim', type=intervalo(1, 1000), default=20)
     v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
     v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
     v.add_argument('--year', default='2026', type=year_arg)
@@ -49,6 +57,8 @@ def main(argv=None):
     if a.cmd in ('analyze', 'balanco', 'analise', 'verify', 'build'):
         if a.sem_prereg and (pathlib.Path(a.dir) / 'MANIFEST.json').exists():
             p.error('--sem-prereg não vale para dados reais (há MANIFEST.json em --dir)')
+        if a.sem_prereg and pathlib.Path(a.out).resolve() == pathlib.Path('data/derived').resolve():
+            p.error('--sem-prereg não pode gravar em data/derived (versionado); use outro --out')
         if a.sem_prereg:
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
         elif a.cmd in ('analyze', 'balanco', 'analise'):
@@ -68,6 +78,7 @@ def main(argv=None):
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
     elif a.cmd == 'analise':
         analise(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot, a.sim)
+        extra = {'arquivos': [pathlib.Path(a.out) / 'resultados.json']}
     else:
         balanco(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot)
     if a.cmd != 'download':

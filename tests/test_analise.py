@@ -49,10 +49,12 @@ def test_q2_diferenca_de_alfa_e_estrutura(res):
 
 
 def test_q3_recupera_municipios_plantados(res):
-    q3 = res[0]['q3']
+    q3 = res[0]['q3']['2026']
     assert {x['mun'] for x in q3['lista_publicavel']} >= {'BA-00003', 'BA-00007', 'BA-00011'}
     assert q3['sinalizados_nos_dois'] <= min(q3['sinalizados_q05_ajuste_cheio'], q3['sinalizados_q05_refit_robusto'])
     assert q3['esperado_p05_por_acaso'] == pytest.approx(0.05 * q3['testados'])
+    assert q3['observado_p05'] >= q3['sinalizados_nos_dois']
+    assert res[0]['q3']['2022']['testados'] > 0 and res[0]['q4']['2022']['elegiveis'] > 0
 
 
 def test_q3_sem_plantio_nao_sinaliza_o_plantado(wide26_noplant):
@@ -67,7 +69,7 @@ def test_q3_nao_lista_municipio_com_poucas_secoes(wide26):
 
 
 def test_q4_contagens_fecham(res):
-    q4 = res[0]['q4']
+    q4 = res[0]['q4']['2026']
     assert q4['comparecimento_em_queda'] + q4['comparecimento_estavel_ou_alta'] == q4['com_queda_de_flavio']
 
 
@@ -79,7 +81,7 @@ def test_q5_estrutura_e_ordem(res):
 
 
 def test_sensibilidade_cobre_a_grade(res):
-    s = res[0]['sensibilidade']
+    s = res[0]['sensibilidade']['ajustes']
     assert {x['min_valid'] for x in s} == {100, 200, 500}
     assert {x['regiao'] for x in s} >= {'todas'}
 
@@ -99,3 +101,57 @@ def test_cli_analise_exige_prereg_para_dado_real(tmp_path):
     (tmp_path / 'MANIFEST.json').write_text('{}')
     with pytest.raises(SystemExit):
         cli.main(['analise', '--dir', str(tmp_path), '--sem-prereg'])
+
+
+def test_cli_analise_sem_tag_encerra(tmp_path, monkeypatch):
+    from auditoria import cli
+    def sem_tag():
+        raise SystemExit('tag prereg-v1 ausente')
+    monkeypatch.setattr(cli, 'exige_prereg', sem_tag)
+    with pytest.raises(SystemExit, match='prereg-v1'):
+        cli.main(['analise', '--dir', str(tmp_path), '--out', str(tmp_path / 'o')])
+
+
+def test_sem_prereg_recusa_data_derived(tmp_path):
+    from auditoria import cli
+    with pytest.raises(SystemExit):
+        cli.main(['analise', '--dir', str(tmp_path), '--out', 'data/derived', '--sem-prereg'])
+
+
+def test_run_registra_resultados_json(synth_dir, tmp_path):
+    import os
+    from auditoria import cli
+    cli.main(['analise', '--dir', str(synth_dir), '--out', str(tmp_path), '--ufs', ','.join(UFS), '--boot', '20',
+              '--sim', '1', '--sem-prereg'])
+    run = json.loads((tmp_path / 'run_analise_2026.json').read_text())
+    assert list(run['saidas']) == ['resultados.json'] and set(run['semente']) == \
+        {'bootstrap_2026', 'bootstrap_2022', 'simulacao_q5'}
+
+
+def test_explicado_metade_ou_ic_com_zero():
+    def aj(modelo, dif, ic):
+        return {'modelo': modelo, 'efeito_fixo': True, 'refit_robusto': False, 'coef': {'alpha': {'dif': dif, 'ic_dif': ic}}}
+    assert an._explicado([aj('A', .10, [.05, .15]), aj('C', .04, [.01, .07])])['explicado']
+    assert an._explicado([aj('A', .10, [.05, .15]), aj('C', .08, [-.01, .17])])['explicado']
+    assert not an._explicado([aj('A', .10, [.05, .15]), aj('C', .08, [.02, .14])])['explicado']
+    assert an._explicado([aj('A', .10, [.05, .15])]) is None
+
+
+def test_sem_comparecimento_cai_para_modelo_a(wide22):
+    m = prepara(wide22.assign(comp1=float('nan'), comp2=float('nan')), 200)
+    z = an.z_residuos(m)
+    assert np.isfinite(z).all()
+
+
+def test_exterior_fica_fora_de_q2_a_q5_e_aparece_em_q1(wide22):
+    ext = wide22[wide22.SG_UF == 'BA'].assign(SG_UF='ZZ')
+    w = __import__('pandas').concat([wide22, ext])
+    assert 'ZZ' not in set(prepara(w, 200).SG_UF)
+    q = an.q1(w, 2022)
+    assert 'exterior' in q and 'ZZ' not in q['por_uf']
+    assert q['identidade_residuo'] == 0
+
+
+def test_bh_com_empates_e_p_unico():
+    assert benjamini_hochberg(np.array([0.01, 0.01, 0.01, 0.9])).tolist() == [True, True, True, False]
+    assert benjamini_hochberg(np.array([0.04])).tolist() == [True]

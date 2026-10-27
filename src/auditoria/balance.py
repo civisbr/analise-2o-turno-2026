@@ -18,7 +18,7 @@ import sys
 
 import numpy as np
 
-from .load import MIN_SECOES_PUBLICAS, load_year
+from .load import load_year
 from .robust import BOOT_SEED, boot_ci, mad_sigma, wls
 
 
@@ -118,8 +118,14 @@ def balance(wide, label, out, min_valid=200, boot=300):
         print(f'   com comparecimento estável/em ALTA (precisa de outra explicação): {len(unexpl):,}')
         if len(unexpl):
             print(unexpl[['mun', 'valid1', 'dturn', 'dF', 'dL']].head(15).round(0).to_string(index=False))
-    # Regra 7: município com poucas seções não é publicado isolado.
-    m[m.secoes >= MIN_SECOES_PUBLICAS].to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
+    # Regra 7: município com poucas seções vai para '<UF>-OUTROS', com supressão complementar (como no build).
+    ints = ['secoes', 'valid1', 'valid2', 'lula1', 'lula2', 'flavio1', 'flavio2', 'pool', 'dvalid', 'dL', 'dF'] + \
+        (['comp1', 'comp2', 'dturn', 'dbn'] if have else [])
+    from .build import agrega_pequenos   # build importa muni_table daqui
+    pub = agrega_pequenos(m[['SG_UF', 'mun'] + ints])
+    pub = pub.merge(m[['mun', 'resid_votos', 'z_resid']], on='mun', how='left')
+    pub.loc[pub.municipios_agregados > 0, ['resid_votos', 'z_resid']] = np.nan
+    pub.to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
     return res
 
 

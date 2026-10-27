@@ -64,4 +64,7 @@ def test_csv_municipal_omite_municipio_com_poucas_secoes(wide26_noplant, tmp_pat
     pequeno = w[(w.SG_UF == 'SP') & (w.CD_MUNICIPIO == '00005')].index[5:]
     run_balance(w.drop(index=pequeno), '2026 (principal)', tmp_path)
     m = pd.read_csv(tmp_path / 'balanco_municipios_2026.csv')
-    assert 'SP-00005' not in set(m.mun) and 'SP-00006' in set(m.mun)
+    assert 'SP-00005' not in set(m.mun) and 'SP-OUTROS' in set(m.mun)
+    outros = m[m.mun == 'SP-OUTROS'].iloc[0]
+    assert outros.municipios_agregados >= 2 and outros.secoes >= 10 and np.isnan(outros.z_resid)
+    assert m.dL.sum() == with_flows(w.drop(index=pequeno)).query('valid1 >= 200 and valid2 >= 200').dL.sum()
