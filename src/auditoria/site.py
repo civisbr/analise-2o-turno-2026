@@ -174,7 +174,7 @@ def tabelas_html(p):
             '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '  <meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src \'self\'; style-src \'self\'; '
             'base-uri \'none\'; form-action \'none\'">\n'
-            '  <title>Auditoria Pública – 2º turno 2026: tabelas</title>\n  <link rel="stylesheet" href="../style.css">\n</head>\n<body>\n'
+            '  <title>Auditoria Pública – 2º turno 2026: tabelas</title>\n  <link rel="icon" type="image/png" href="../assets/icon.png">\n  <link rel="stylesheet" href="../style.css">\n</head>\n<body>\n'
             '  <main class="painel sem-js">\n'
             f'    <div class="painel-cab"><h1>Tabelas, sem JavaScript</h1><span class="muted">Atualizado em {e(p["atualizado"])}</span></div>\n'
             + aviso + '    <p class="nota">Versão preliminar. Associações entre municípios e seções, com 2022 como controle; '
