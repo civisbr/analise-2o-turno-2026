@@ -10,10 +10,10 @@
     "--out",
     "data/derived"
   ],
-  "gerado_utc": "2026-10-26T20:45:59+00:00",
-  "commit": "5b4e87e595517304d769b1b2e270f0c71a3b7254",
-  "tree_clean": true,
-  "prereg_tag": null,
+  "gerado_utc": "2026-10-28T03:48:22+00:00",
+  "commit": "5f1a087546671a3e1c4cba93c61fa6f3feb4ce8b",
+  "tree_clean": false,
+  "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
@@ -29,10 +29,10 @@
       "last_modified": "Sat, 24 Oct 2026 06:52:18 GMT"
     },
     "detalhe_votacao_munzona_2026.zip": {
-      "sha256": "7f6f40a14ba805b453b1d85c18fe12eec4225cfbf2ba21989ecd7c4e15a12043",
-      "bytes": 2511067,
+      "sha256": "9272a7afe24e08adec549b77b03c93622ed2586ab78765026156e3c0f01e53e1",
+      "bytes": 3154974,
       "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_munzona/detalhe_votacao_munzona_2026.zip",
-      "last_modified": "Sun, 25 Oct 2026 15:58:00 GMT"
+      "last_modified": "Tue, 27 Oct 2026 19:47:21 GMT"
     },
     "detalhe_votacao_secao_2022.zip": {
       "sha256": "ad22c50b9e6d9dfb096a2170680a190f1734895ba89d8977b95fd63ca02c03da",
@@ -41,10 +41,10 @@
       "last_modified": "Fri, 31 Jul 2026 19:47:56 GMT"
     },
     "detalhe_votacao_secao_2026.zip": {
-      "sha256": "11a62c3a604e8b73fc328617b7688d2c635de1c76df02ba63b8f77879512f573",
-      "bytes": 176923175,
+      "sha256": "8ef9ce3a85cde260471faf7a83a9b4f5ccf3993fdda942aacaa658574344789c",
+      "bytes": 234357769,
       "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/detalhe_votacao_secao/detalhe_votacao_secao_2026.zip",
-      "last_modified": "Wed, 07 Oct 2026 20:54:59 GMT"
+      "last_modified": "Mon, 26 Oct 2026 15:35:35 GMT"
     },
     "votacao_secao_2022_BR.zip": {
       "sha256": "9353993de5cf03778aef44e01d4925e7ee105f5262491d344a2f0dbc956b0139",
@@ -53,10 +53,10 @@
       "last_modified": "Thu, 24 Nov 2022 14:26:58 GMT"
     },
     "votacao_secao_2026_BR.zip": {
-      "sha256": "2d42006d0f6c6e00bad83f5c23cd3d78cd3e3182dbc1ad6718222b6b132c23e1",
-      "bytes": 161616519,
+      "sha256": "c928321f63f2d095706fca73d4607c048d2ada23bda6876455d6911aaf1bc9c1",
+      "bytes": 241891087,
       "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_secao/votacao_secao_2026_BR.zip",
-      "last_modified": "Tue, 06 Oct 2026 19:22:49 GMT"
+      "last_modified": "Mon, 26 Oct 2026 17:42:32 GMT"
     }
   },
   "fechamento_secoes_divergentes": {
@@ -74,12 +74,13 @@
     "munzona: válidos != nominais − nulos técnicos": 0,
     "munzona: total de nulos != nulos + técnicos": 0,
     "nulos_tecnicos": {
-      "1": 5246
+      "1": 5246,
+      "2": 0
     }
   },
   "saidas": {
-    "totais_nacionais_2026.csv": "9f1482464d5c747d821e18aba589757da735556e3546cdc0e405a64f69906bac",
-    "totais_uf_2026.csv": "4c2da009a3647283bd8bb97b9bdd1a9c4e12a6a8adb7c6a2a1406732a1b22008"
+    "totais_nacionais_2026.csv": "f5db6a0437f3440571145ecfbbc76c0dcccccf8b926cc08320ed566f334312e8",
+    "totais_uf_2026.csv": "cec8a20ee2d5fe08f609d72e2445d694e63077a8e700ba1373fb9b84b21b075d"
   },
   "conteudo_sha256": null
 }
