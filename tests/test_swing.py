@@ -57,3 +57,30 @@ def test_resumo_mascara_municipio_com_poucas_secoes(wide26_noplant):
     r = muni.loc['SP-00005']
     assert r.secoes < 10 and r[['swing_mediano', 'swing_medio', 'votos_2t', 'flag_pos']].isna().all()
     assert muni.loc['SP-00006'].swing_mediano == muni.loc['SP-00006'].swing_mediano
+
+
+def _municipio(cd, lula1, flavio1, lula2, flavio2):
+    n = len(lula1)
+    return pd.DataFrame({'SG_UF': ['BA'] * n, 'CD_MUNICIPIO': [cd] * n, 'lula1': lula1, 'flavio1': flavio1,
+                         'lula2': lula2, 'flavio2': flavio2, 'comp1': [300] * n, 'comp2': [300] * n,
+                         'apt1': [400] * n, 'apt2': [400] * n})
+
+
+def test_secao_unanime_nos_dois_turnos_nao_gera_nan_nem_inf(wide26):
+    w = wide26.copy()
+    i = w.index[0]
+    w.loc[i, ['lula1', 'lula2']] = [200, 200]; w.loc[i, ['flavio1', 'flavio2']] = [0, 0]
+    d = swing_table(w)
+    assert np.isfinite(d.attrs['kappa']) and np.isfinite(d.z).all() and d.z.loc[i] == 0
+
+
+def test_se_zero_com_mediana_zero_nao_gera_nan():
+    # mediana do município 0 e se=0: 0/0 contaminava o MAD (kappa NaN) com dados reais de 2022
+    rng = np.random.default_rng(0)
+    base = [_municipio(str(k), 100 + rng.integers(0, 30, 40), 100 + rng.integers(0, 30, 40),
+                       100 + rng.integers(0, 30, 40), 100 + rng.integers(0, 30, 40)) for k in range(5)]
+    unanimes = _municipio('99', [200, 200, 200, 150, 120], [0, 0, 0, 150, 130], [200, 200, 200, 160, 110], [0, 0, 0, 140, 140])
+    d = swing_table(pd.concat(base + [unanimes], ignore_index=True))
+    u = d[(d.CD_MUNICIPIO == '99') & (d.se == 0)]
+    assert len(u) == 3 and u.ref.eq(0).all()
+    assert np.isfinite(d.attrs['kappa']) and np.isfinite(d.z).all() and u.z.eq(0).all()

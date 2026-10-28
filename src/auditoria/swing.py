@@ -20,7 +20,7 @@ def swing_table(wide, min_votes=50):
     d['mun'] = d.SG_UF + '-' + d.CD_MUNICIPIO
     d['ref'] = d.groupby('mun').swing.transform('median')           # swing típico do município
     d['resid'] = d.swing - d.ref
-    r = d.resid / d.se
+    r = (d.resid / d.se).where(d.se > 0, 0.0)                       # se=0 (p=0 ou 1 nos dois turnos): z indefinido, a seção não é sinalizável
     kappa = mad_sigma(r)                                            # sobredispersão robusta
     d['z'] = r / kappa
     d.attrs['kappa'] = kappa
