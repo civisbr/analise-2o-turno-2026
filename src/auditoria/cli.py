@@ -80,6 +80,7 @@ def main(argv=None):
         extra = verify(a.dir, a.out, a.year, exige=not a.sem_prereg)
     elif a.cmd == 'analyze':
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
+        extra = {'arquivos': [pathlib.Path(a.out) / f'swing_municipios_{a.year}.csv']}
     elif a.cmd == 'site':
         if a.sem_prereg and pathlib.Path(a.out).resolve().is_relative_to(pathlib.Path('site').resolve()):
             p.error('--sem-prereg não pode gravar em site/ (publicado); use outro --out')
@@ -91,6 +92,7 @@ def main(argv=None):
         extra = {'arquivos': [pathlib.Path(a.out) / 'resultados.json']}
     else:
         balanco(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot)
+        extra = {'arquivos': [pathlib.Path(a.out) / f'balanco_municipios_{ano}.csv' for ano in (a.year, a.control_year) if ano]}
     if a.cmd == 'site':
         write_run('site', 2026, sys.argv[1:] if argv is None else argv, a.derived, insumos, **extra)
     elif a.cmd != 'download':

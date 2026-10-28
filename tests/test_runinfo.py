@@ -57,3 +57,16 @@ def test_zip_fora_do_manifesto_para_o_pipeline(tmp_path):
     (tmp_path / 'colocado_a_mao.zip').write_bytes(b'x')
     with pytest.raises(SystemExit, match='sem registro'):
         confere_insumos(tmp_path)
+
+
+def test_run_de_cada_comando_registra_so_as_proprias_saidas(synth_dir, tmp_path):
+    from synth import UFS
+    ufs = ','.join(UFS)
+    (tmp_path / 'outro_comando.csv').write_text('x\n1\n')
+    cli.main(['balanco', '--dir', str(synth_dir), '--out', str(tmp_path), '--ufs', ufs, '--boot', '20', '--sem-prereg'])
+    cli.main(['analyze', '--dir', str(synth_dir), '--out', str(tmp_path), '--year', '2026', '--ufs', ufs,
+              '--private-dir', str(tmp_path.parent / (tmp_path.name + '_priv')), '--sem-prereg'])
+    bal = json.loads((tmp_path / 'run_balanco_2026.json').read_text())['saidas']
+    ana = json.loads((tmp_path / 'run_analyze_2026.json').read_text())['saidas']
+    assert set(bal) == {'balanco_municipios_2026.csv', 'balanco_municipios_2022.csv'}
+    assert set(ana) == {'swing_municipios_2026.csv'}
