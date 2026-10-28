@@ -1,0 +1,27 @@
+name: Crítica metodológica
+description: Objeção ao método, às hipóteses ou à interpretação.
+title: "[método] "
+labels: ["metodologia"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        O pré-registro está congelado pela tag `prereg-v1`. Críticas aceitas viram errata ou nova análise declarada como exploratória, sem trocar o método depois de ver o resultado.
+  - type: dropdown
+    id: pergunta
+    attributes:
+      label: Pergunta afetada
+      options: ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Texto da página", "Geral"]
+    validations:
+      required: true
+  - type: textarea
+    id: critica
+    attributes:
+      label: Qual é o problema
+    validations:
+      required: true
+  - type: textarea
+    id: alternativa
+    attributes:
+      label: Alternativa proposta
+      description: Método ou verificação que você faria, e o que esperaria encontrar.

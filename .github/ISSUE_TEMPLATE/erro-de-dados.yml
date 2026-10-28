@@ -1,0 +1,30 @@
+name: Erro de dados ou de cálculo
+description: Um número publicado não bate com o TSE ou não é reproduzível.
+title: "[dados] "
+labels: ["erro-de-dados"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Erros confirmados viram errata em `docs/erratas.md`, com data, motivo e efeito. Nada é editado em silêncio.
+  - type: input
+    id: onde
+    attributes:
+      label: Onde aparece
+      description: Página, arquivo de `data/derived/` ou trecho do código.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que você esperava e o que viu
+      description: Cole os dois números e a fonte do valor esperado (arquivo do TSE, coluna e filtro).
+    validations:
+      required: true
+  - type: textarea
+    id: reproducao
+    attributes:
+      label: Como reproduzir
+      description: Comandos executados e versão (hash do commit).
+    validations:
+      required: true
