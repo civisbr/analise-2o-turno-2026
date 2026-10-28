@@ -1,0 +1,22 @@
+name: Revisão externa
+description: Parecer de quem revisou o método e os resultados.
+title: "[revisão] "
+labels: ["revisao-externa"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Área de atuação
+      description: Por exemplo, estatística ou ciência política. Nome e vínculo são opcionais.
+  - type: textarea
+    id: pontos
+    attributes:
+      label: Pontos a corrigir
+      description: Um por linha, indicando a pergunta (Q1 a Q6) ou o trecho da página.
+    validations:
+      required: true
+  - type: textarea
+    id: conflitos
+    attributes:
+      label: Vínculos ou conflitos de interesse
+      description: Declare, se houver.
