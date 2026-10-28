@@ -1,6 +1,7 @@
 import json
 
 import numpy as np
+import polars as pl
 import pytest
 
 from auditoria import analise as an
@@ -58,13 +59,14 @@ def test_q3_recupera_municipios_plantados(res):
 
 
 def test_q3_sem_plantio_nao_sinaliza_o_plantado(wide26_noplant):
-    q3 = an.q3(prepara(wide26_noplant, 200), {m: 50 for m in prepara(wide26_noplant, 200).mun})
+    m = prepara(wide26_noplant, 200)
+    q3 = an.q3(m, {x: 50 for x in m['mun']})
     assert not {x['mun'] for x in q3['lista_publicavel']} & {'BA-00003', 'BA-00007', 'BA-00011'}
 
 
 def test_q3_nao_lista_municipio_com_poucas_secoes(wide26):
     m = prepara(wide26, 200)
-    q3 = an.q3(m, {x: 3 for x in m.mun})
+    q3 = an.q3(m, {x: 3 for x in m['mun']})
     assert q3['lista_publicavel'] == [] and q3['sinalizados_nos_dois'] > 0
 
 
@@ -142,15 +144,15 @@ def test_explicado_metade_ou_ic_com_zero():
 
 
 def test_sem_comparecimento_cai_para_modelo_a(wide22):
-    m = prepara(wide22.assign(comp1=float('nan'), comp2=float('nan')), 200)
+    m = prepara(wide22.with_columns(comp1=pl.lit(None, dtype=pl.Float64), comp2=pl.lit(None, dtype=pl.Float64)), 200)
     z = an.z_residuos(m)
     assert np.isfinite(z).all()
 
 
 def test_exterior_fica_fora_de_q2_a_q5_e_aparece_em_q1(wide22):
-    ext = wide22[wide22.SG_UF == 'BA'].assign(SG_UF='ZZ')
-    w = __import__('pandas').concat([wide22, ext])
-    assert 'ZZ' not in set(prepara(w, 200).SG_UF)
+    ext = wide22.filter(pl.col('SG_UF') == 'BA').with_columns(SG_UF=pl.lit('ZZ'))
+    w = pl.concat([wide22, ext])
+    assert 'ZZ' not in set(prepara(w, 200)['SG_UF'])
     q = an.q1(w, 2022)
     assert 'exterior' in q and 'ZZ' not in q['por_uf']
     assert q['identidade_residuo'] == 0
@@ -176,10 +178,11 @@ def test_bh_com_empates_e_p_unico():
 def test_lista_nominal_usa_a_menor_contagem_de_secoes(wide22):
     from auditoria.load import MIN_SECOES_PUBLICAS
     from auditoria.swing import secoes_por_municipio
-    w = wide22.copy()
-    mun = (w.SG_UF + '-' + w.CD_MUNICIPIO)
-    alvo = mun.value_counts().index[-1]
-    idx = w.index[mun == alvo]
-    w.loc[idx[0], ['lula1', 'flavio1']] = [10, 10]   # fica abaixo de 50 votos: fora do swing
+    mun = pl.col('SG_UF') + '-' + pl.col('CD_MUNICIPIO')
+    contagem = wide22.group_by(mun.alias('mun')).agg(pl.len().alias('n')).sort(['n', 'mun'])
+    alvo, n = contagem.row(0)
+    primeira = (mun == alvo) & ((mun == alvo).cum_sum() == 1)
+    w = wide22.with_columns(lula1=pl.when(primeira).then(10).otherwise(pl.col('lula1')),
+                            flavio1=pl.when(primeira).then(10).otherwise(pl.col('flavio1')))   # abaixo de 50 votos: fora do swing
     pub = an._secoes_publicas(w)
-    assert pub[alvo] == min(len(idx), secoes_por_municipio(w)[alvo]) == len(idx) - 1
+    assert pub[alvo] == min(n, secoes_por_municipio(w)[alvo]) == n - 1

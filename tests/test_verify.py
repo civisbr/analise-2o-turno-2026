@@ -1,3 +1,4 @@
+import polars as pl
 import pytest
 
 from auditoria import cli
@@ -16,8 +17,8 @@ def test_sintetico_fecha_votacao_e_detalhe(secoes):
 
 
 def test_detalhe_divergente_e_detectado(secoes):
-    g = secoes.copy()
-    g.loc[g.index[:3], 'nominais'] += 1
+    g = secoes.with_row_index('_i').with_columns(
+        nominais=pl.when(pl.col('_i') < 3).then(pl.col('nominais') + 1).otherwise(pl.col('nominais'))).drop('_i')
     r = reconcile(g)
     assert r['válidos (votação) != nominais (detalhe)'] == 3
     assert r['comparecimento != nominais + brancos + nulos'] == 3
@@ -25,23 +26,25 @@ def test_detalhe_divergente_e_detectado(secoes):
 
 def test_totais_nacionais_somam_as_ufs(secoes):
     nac, uf = totais(secoes)
-    assert (uf.groupby('NR_TURNO').sum() == nac).all().all()
-    assert (nac.terceira_via == nac.valid - nac.lula - nac.flavio).all()
+    cols = [c for c in nac.columns if c != 'NR_TURNO']
+    assert uf.group_by('NR_TURNO').agg(pl.col(cols).sum()).sort('NR_TURNO').equals(nac)
+    assert (nac['terceira_via'] == nac['valid'] - nac['lula'] - nac['flavio']).all()
     # seções não instaladas têm aptos sem comparecimento nem abstenção registrada
-    assert (nac.abstencao < nac.apt - nac.comp).all()
+    assert (nac['abstencao'] < nac['apt'] - nac['comp']).all()
 
 
 def test_verify_via_cli_para_se_nao_fecha(synth_dir, tmp_path, monkeypatch):
     import io, shutil, zipfile
-    import pandas as pd
     for f in ('votacao_secao_2026_BR.zip',):
         shutil.copy(synth_dir / f, tmp_path / f)
     m = 'detalhe_votacao_secao_2026_BR.csv'
     with zipfile.ZipFile(synth_dir / 'detalhe_votacao_secao_2026.zip') as z:
-        df = pd.read_csv(io.BytesIO(z.read(m)), sep=';', encoding='latin1', dtype=str)
-    df.loc[df.index[0], 'QT_VOTOS_BRANCOS'] = str(int(df.QT_VOTOS_BRANCOS.iloc[0]) + 1)
+        df = pl.read_csv(io.BytesIO(z.read(m)), separator=';', encoding='utf8-lossy', infer_schema=False)
+    df = df.with_row_index('_i').with_columns(
+        QT_VOTOS_BRANCOS=pl.when(pl.col('_i') == 0).then((pl.col('QT_VOTOS_BRANCOS').cast(pl.Int64) + 1).cast(pl.Utf8))
+        .otherwise(pl.col('QT_VOTOS_BRANCOS'))).drop('_i')
     with zipfile.ZipFile(tmp_path / 'detalhe_votacao_secao_2026.zip', 'w') as z:
-        z.writestr(m, df.to_csv(sep=';', index=False).encode('latin1'))
+        z.writestr(m, df.write_csv(separator=';').encode('latin1'))
     with pytest.raises(SystemExit, match='fechamento falhou'):
         cli.main(['verify', '--dir', str(tmp_path), '--out', str(tmp_path / 'o'), '--year', '2026', '--sem-prereg'])
     assert not (tmp_path / 'o').exists()   # nada gravado quando o fechamento falha

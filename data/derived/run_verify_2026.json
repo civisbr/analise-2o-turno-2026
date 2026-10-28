@@ -10,15 +10,14 @@
     "--out",
     "data/derived"
   ],
-  "gerado_utc": "2026-10-28T20:18:24+00:00",
-  "commit": "0903964d9e47f9a690ae46fe899e9dd520407472",
+  "gerado_utc": "2026-10-28T21:43:20+00:00",
+  "commit": "fc5be1ded51fa94ac950d9d614a182b4a635f92c",
   "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
-    "pandas": "3.1.0",
-    "pyarrow": "26.0.0"
+    "polars": "2.1.0"
   },
   "semente": null,
   "insumos": {

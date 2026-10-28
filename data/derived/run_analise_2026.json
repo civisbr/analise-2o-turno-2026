@@ -16,15 +16,14 @@
     "--boot",
     "2000"
   ],
-  "gerado_utc": "2026-10-28T20:26:48+00:00",
-  "commit": "0903964d9e47f9a690ae46fe899e9dd520407472",
+  "gerado_utc": "2026-10-28T21:52:51+00:00",
+  "commit": "fc5be1ded51fa94ac950d9d614a182b4a635f92c",
   "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
-    "pandas": "3.1.0",
-    "pyarrow": "26.0.0"
+    "polars": "2.1.0"
   },
   "semente": {
     "bootstrap_2026": 11,
@@ -71,7 +70,7 @@
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {
-    "resultados.json": "33661792d3bcf7a03c934dac39308c5a98f7c63e68c32e432162c03725e1d75b"
+    "resultados.json": "f39b927b6de624c94f16483e388fb04881e608143e0dda2967a0cc17ff24a62e"
   },
   "conteudo_sha256": null
 }

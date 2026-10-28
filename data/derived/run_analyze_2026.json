@@ -16,15 +16,14 @@
     "--private-dir",
     "<externo>"
   ],
-  "gerado_utc": "2026-10-28T20:28:21+00:00",
-  "commit": "0903964d9e47f9a690ae46fe899e9dd520407472",
+  "gerado_utc": "2026-10-28T22:01:37+00:00",
+  "commit": "98d523cbe64e192d2d3a4a4cfd6fa23a97231cfb",
   "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
-    "pandas": "3.1.0",
-    "pyarrow": "26.0.0"
+    "polars": "2.1.0"
   },
   "semente": 1,
   "insumos": {
@@ -67,17 +66,7 @@
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {
-    "balanco_municipios_2022.csv": "b1342328973519e3aafe1fbc4f329390a84332ca104a6e7b9533b7caf9081ab6",
-    "balanco_municipios_2026.csv": "0d7e76d29210cb5c49d2f43c15a7a1c5fe1281d19c9d18ed81a53f40e7f99662",
-    "descartes_2022.csv": "88be25d7dfbf415dad8febdd5bb393e8d4e3e335678455ec124f81aa063d51bf",
-    "descartes_2026.csv": "2cb5f3c89682ec60c20b8af9658312ebbf6274b6ae3ee266792bceabf97ccca4",
-    "municipios_2022.csv": "3a5c971e62fcaee8f77adbd67e79f67f8c65f3f005d028605d4da0671c9eed09",
-    "municipios_2026.csv": "368a12e95190114bc58bfe9f562c16891c5101b10c10ab0ca912f796f0c72ec9",
-    "swing_municipios_2026.csv": "12e4527f7dc4915d17a94f36a8caf1da79d9eff5e2954597437d1e6fae5d0c9b",
-    "totais_nacionais_2022.csv": "9a696ce239f3b30a1de29c1cb45f5bc65955bf9ff96be037be449c61a2e4db3f",
-    "totais_nacionais_2026.csv": "f5db6a0437f3440571145ecfbbc76c0dcccccf8b926cc08320ed566f334312e8",
-    "totais_uf_2022.csv": "da6969eeb504913422948be245a6e3aa71489af51929050f6c53215c193c0ce4",
-    "totais_uf_2026.csv": "cec8a20ee2d5fe08f609d72e2445d694e63077a8e700ba1373fb9b84b21b075d"
+    "swing_municipios_2026.csv": "4f6312e0c2b99f0edb5d6b1aefe1d300a535242694493ff18228a738f42718f8"
   },
   "conteudo_sha256": null
 }

@@ -8,11 +8,11 @@ import math
 import pathlib
 
 import numpy as np
-import pandas as pd
+import polars as pl
 
-from .balance import add_flows, identity_gap, muni_table
+from .balance import add_flows, identity_gap, muni_table, tem_comparecimento, uf_array
 from .load import MIN_SECOES_PUBLICAS, NE, load_year
-from .robust import BOOT_SEED, mad_sigma, wls
+from .robust import BOOT_SEED, mad_positivo, wls
 from .swing import secoes_por_municipio, swing_table
 
 Z_ATIPICO = 4.0
@@ -23,21 +23,29 @@ MODELOS = ('A', 'B', 'C')
 
 def prepara(wide, min_valid):
     """Tabela municipal elegível para Q2–Q4. Exterior (ZZ) fica de fora; Q1 usa tabela própria."""
-    m = add_flows(muni_table(wide[wide.SG_UF != 'ZZ']))
-    m = m[(m.valid1 >= min_valid) & (m.valid2 >= min_valid)].reset_index(drop=True)
-    m['tem_comp'] = m.comp1.notna() & m.comp2.notna()
-    m['dturn'] = m.comp2 - m.comp1
-    m['dbn'] = -((m.comp2 - m.valid2) - (m.comp1 - m.valid1))      # queda de brancos+nulos (>0 = caiu)
-    return m
+    m = add_flows(muni_table(wide.filter(pl.col('SG_UF') != 'ZZ')))
+    m = m.filter((pl.col('valid1') >= min_valid) & (pl.col('valid2') >= min_valid))
+    return m.with_columns(
+        tem_comp=pl.col('comp1').is_not_null() & pl.col('comp2').is_not_null(),
+        dturn=pl.col('comp2') - pl.col('comp1'),
+        dbn=-((pl.col('comp2') - pl.col('valid2')) - (pl.col('comp1') - pl.col('valid1'))))   # queda de brancos+nulos (>0 = caiu)
+
+
+def _v1(m):
+    return m['valid1'].to_numpy().astype(float)
+
+
+def _razao(m, col):
+    return (m[col] / m['valid1']).to_numpy()
 
 
 def regressores(m, modelo):
-    v1 = m.valid1.values.astype(float)
-    c = {'alpha': m.pool / v1}
+    v1 = _v1(m)
+    c = {'alpha': _razao(m, 'pool')}
     if modelo == 'A':
-        c['beta'] = m.dvalid / v1
+        c['beta'] = _razao(m, 'dvalid')
     else:
-        c['beta1'] = m.dturn / v1; c['beta2'] = m.dbn / v1
+        c['beta1'] = _razao(m, 'dturn'); c['beta2'] = _razao(m, 'dbn')
     if modelo == 'C':
         lv = np.log(v1); c['log_tamanho'] = lv - np.average(lv, weights=v1)
     return list(c), np.column_stack([np.asarray(x, float) for x in c.values()])
@@ -55,15 +63,15 @@ def dp_pp(x, v1, g):
 def ajusta(m, modelo, fe, excluir=None):
     """Retorna nomes, coeficientes e a máscara usada. excluir = máscara de linhas fora (refit robusto)."""
     nomes, X = regressores(m, modelo)
-    y = (m.dL / m.valid1).values; v1 = m.valid1.values.astype(float)
-    g = m.SG_UF.values if fe and m.SG_UF.nunique() > 1 else None
-    ok = np.ones(len(m), bool) if excluir is None else ~excluir
+    y = _razao(m, 'dL'); v1 = _v1(m)
+    g = uf_array(m) if fe and m['SG_UF'].n_unique() > 1 else None
+    ok = np.ones(m.height, bool) if excluir is None else ~excluir
     return nomes, wls(y[ok], X[ok], v1[ok], None if g is None else g[ok]), ok, (y, X, v1, g)
 
 
 def z_residuos(m, fe=True, excluir=None):
     """z robusto (MAD) dos resíduos do modelo B, com efeito fixo de UF no ajuste e na centralização."""
-    nomes, beta, ok, (y, X, v1, g) = ajusta(m, 'B' if m.tem_comp.all() else 'A', fe, excluir)
+    nomes, beta, ok, (y, X, v1, g) = ajusta(m, 'B' if m['tem_comp'].all() else 'A', fe, excluir)
     r = y - X @ beta; w = v1 * ok
     if g is not None:
         for k in np.unique(g):
@@ -73,7 +81,7 @@ def z_residuos(m, fe=True, excluir=None):
     else:
         r -= (w / w.sum()) @ r
     rs = r * np.sqrt(v1)
-    return rs / mad_sigma(rs)
+    return rs / mad_positivo(rs, 'z_residuos')
 
 
 def p_bicaudal(z):
@@ -98,33 +106,33 @@ def q1(wide, ano):
     A tabela municipal usa a mesma supressão da tabela pública (UF-OUTROS com supressão complementar), para que
     total da UF menos a soma dos municípios não isole um município pequeno."""
     m = add_flows(muni_table(wide))
+
     def bloco(t):
         out = {k: int(t[k].sum()) for k in ('pool', 'dvalid', 'dL', 'dF')}
-        if t.comp1.notna().all() and t.comp2.notna().all():
-            out['dcomparecimento'] = int((t.comp2 - t.comp1).sum())
-            out['queda_brancos_nulos'] = int(-(((t.comp2 - t.valid2) - (t.comp1 - t.valid1)).sum()))
+        if tem_comparecimento(t):
+            out['dcomparecimento'] = int((t['comp2'] - t['comp1']).sum())
+            out['queda_brancos_nulos'] = int(-(((t['comp2'] - t['valid2']) - (t['comp1'] - t['valid1'])).sum()))
         return out
-    ext = m[m.SG_UF == 'ZZ']; br = m[m.SG_UF != 'ZZ']
+    ext = m.filter(pl.col('SG_UF') == 'ZZ'); br = m.filter(pl.col('SG_UF') != 'ZZ')
     out = {'ano': int(ano), 'identidade_residuo': int(identity_gap(m)), 'nacional': bloco(br),
-           'por_uf': {uf: bloco(g) for uf, g in br.groupby('SG_UF')}}
-    if len(ext):
+           'por_uf': {uf: bloco(g) for (uf,), g in sorted(br.partition_by('SG_UF', as_dict=True).items())}}
+    if ext.height:
         out['exterior'] = bloco(ext)
     from .build import agrega_pequenos   # build importa muni_table de balance
-    cols = ['secoes', 'valid1', 'valid2', 'pool', 'dvalid', 'dL', 'dF'] + \
-        (['comp1', 'comp2'] if br.comp1.notna().all() and br.comp2.notna().all() else [])
-    pub = agrega_pequenos(br[['SG_UF', 'mun'] + cols])
-    out['municipios'] = {r.mun: bloco(pub.loc[[i]]) for i, r in pub.iterrows()}
+    cols = ['secoes', 'valid1', 'valid2', 'pool', 'dvalid', 'dL', 'dF'] + (['comp1', 'comp2'] if tem_comparecimento(br) else [])
+    pub = agrega_pequenos(br.select(['SG_UF', 'mun'] + cols))
+    out['municipios'] = {row['mun']: bloco(pub.slice(i, 1)) for i, row in enumerate(pub.iter_rows(named=True))}
     return out
 
 
 def boot_pareado(m26, m22, ok26, ok22, modelo, fe, B, seed):
     """Reamostra municípios (nomes) em comum para os dois anos: os mesmos municípios entram nas duas
     amostras, então a covariância entre 2026 e 2022 fica na diferença."""
-    nomes = np.array(sorted(set(m26.mun) | set(m22.mun)))
+    nomes = np.array(sorted(set(m26['mun']) | set(m22['mun'])))
     pos = []
     for m, ok in ((m26, ok26), (m22, ok22)):
-        ix = pd.Series(np.arange(len(m)), index=m.mun.values)[ok]
-        pos.append(ix.reindex(nomes).fillna(-1).astype(int).values)
+        por_nome = {n: i for i, n in enumerate(m['mun']) if ok[i]}
+        pos.append(np.array([por_nome.get(n, -1) for n in nomes], dtype=int))
     dados = []
     for m, ok in ((m26, ok26), (m22, ok22)):
         _, _, _, (y, X, v1, g) = ajusta(m, modelo, fe)
@@ -145,18 +153,18 @@ def q2(m26, m22, boot, a26='2026', a22='2022'):
     z26 = z_residuos(m26); z22 = z_residuos(m22)
     ex26 = np.abs(z26) > Z_ATIPICO; ex22 = np.abs(z22) > Z_ATIPICO
     for modelo in MODELOS:
-        if modelo != 'A' and not (m26.tem_comp.all() and m22.tem_comp.all()):
+        if modelo != 'A' and not (m26['tem_comp'].all() and m22['tem_comp'].all()):
             continue
         for fe in (True, False):
             for robusto in (False, True):
-                if fe and (m26.SG_UF.nunique() == 1 or m22.SG_UF.nunique() == 1):
+                if fe and (m26['SG_UF'].n_unique() == 1 or m22['SG_UF'].n_unique() == 1):
                     continue   # com uma UF só o efeito fixo é igual ao ajuste sem ele
                 res = {}
-                ok26, ok22 = (~ex26, ~ex22) if robusto else (np.ones(len(m26), bool), np.ones(len(m22), bool))
+                ok26, ok22 = (~ex26, ~ex22) if robusto else (np.ones(m26.height, bool), np.ones(m22.height, bool))
                 d26, d22 = boot_pareado(m26, m22, ok26, ok22, modelo, fe, boot, BOOT_SEED)
                 for ano, m, ex, ok, d in ((a26, m26, ex26, ok26, d26), (a22, m22, ex22, ok22, d22)):
                     nomes, beta, _, (y, X, v1, g) = ajusta(m, modelo, fe, ex if robusto else None)
-                    ident = [dp_pp(X[:, k], v1, m.SG_UF.values) >= MIN_DP_PP for k in range(len(nomes))]
+                    ident = [dp_pp(X[:, k], v1, uf_array(m)) >= MIN_DP_PP for k in range(len(nomes))]
                     res[ano] = (nomes, beta, d, ident)
                 nomes = res[a26][0]; coef = {}
                 for k, nm in enumerate(nomes):
@@ -167,8 +175,8 @@ def q2(m26, m22, boot, a26='2026', a22='2022'):
                                 a22: float(res[a22][1][k]), 'ic_' + a22: [float(l2), float(h2)],
                                 'dif': float(res[a26][1][k] - res[a22][1][k]), 'ic_dif': [float(lo), float(hi)]}
                 saida.append({'modelo': modelo, 'efeito_fixo': fe, 'refit_robusto': robusto,
-                              'n_' + a26: int(len(m26) - (ex26.sum() if robusto else 0)),
-                              'n_' + a22: int(len(m22) - (ex22.sum() if robusto else 0)), 'coef': coef})
+                              'n_' + a26: int(m26.height - (ex26.sum() if robusto else 0)),
+                              'n_' + a22: int(m22.height - (ex22.sum() if robusto else 0)), 'coef': coef})
     return {'ajustes': saida, 'explicado': _explicado(saida)}
 
 
@@ -197,62 +205,68 @@ def _explicado(ajustes):
     return {'por_coeficiente': por_coef, 'explicado': bool(all(v['explicado'] for v in avaliados.values()))}
 
 
+def _publicavel(m, secoes_por_mun):
+    return np.array([secoes_por_mun.get(x, 0) for x in m['mun']]) >= MIN_SECOES_PUBLICAS
+
+
 def q3(m, secoes_por_mun):
     z_cheio = z_residuos(m); z_rob = z_residuos(m, excluir=np.abs(z_cheio) > Z_ATIPICO)
     sel_cheio = benjamini_hochberg(p_bicaudal(z_cheio)); sel_rob = benjamini_hochberg(p_bicaudal(z_rob))
     manter = sel_cheio & sel_rob
-    pub = m.mun.map(secoes_por_mun).fillna(0).values >= MIN_SECOES_PUBLICAS
-    n = len(m)
-    lista = m[manter & pub].assign(z=z_cheio[manter & pub]).sort_values('z', key=np.abs, ascending=False)
+    pub = _publicavel(m, secoes_por_mun)
+    n = m.height
+    lista = (m.filter(pl.Series(manter & pub)).with_columns(z=pl.Series(z_cheio[manter & pub]))
+              .sort([pl.col('z').abs(), 'mun'], descending=[True, False]))
     return {'testados': int(n), 'sinalizados_q05_ajuste_cheio': int(sel_cheio.sum()),
             'sinalizados_q05_refit_robusto': int(sel_rob.sum()), 'sinalizados_nos_dois': int(manter.sum()),
             'observado_p05': int((p_bicaudal(z_cheio) < Q_FDR).sum()),
             'esperado_p05_por_acaso': float(Q_FDR * n),
             'falsos_esperados_ate': float(Q_FDR * manter.sum()),
-            'lista_publicavel': [{'mun': r.mun, 'z': float(r.z)} for r in lista.itertuples()]}
+            'lista_publicavel': [{'mun': mun, 'z': float(z)} for mun, z in lista.select('mun', 'z').iter_rows()]}
 
 
 def q4(m, secoes_por_mun):
-    neg = m[m.dF < 0]
-    pub = neg.mun.map(secoes_por_mun).fillna(0) >= MIN_SECOES_PUBLICAS
-    out = {'elegiveis': int(len(m)), 'com_queda_de_flavio': int(len(neg))}
-    if m.tem_comp.all():
-        sem = neg[neg.dturn >= 0]
-        out.update({'comparecimento_em_queda': int((neg.dturn < 0).sum()),
-                    'comparecimento_estavel_ou_alta': int(len(sem)),
-                    'lista_estavel_ou_alta': [{'mun': r.mun, 'dF': int(r.dF), 'dturn': int(r.dturn)}
-                                              for r in sem[pub[sem.index]].sort_values('dF').itertuples()]})
+    neg = m.filter(pl.col('dF') < 0)
+    out = {'elegiveis': int(m.height), 'com_queda_de_flavio': int(neg.height)}
+    if m['tem_comp'].all():
+        sem = neg.filter(pl.col('dturn') >= 0)
+        pub = _publicavel(sem, secoes_por_mun)
+        out.update({'comparecimento_em_queda': int(neg.filter(pl.col('dturn') < 0).height),
+                    'comparecimento_estavel_ou_alta': int(sem.height),
+                    'lista_estavel_ou_alta': [{'mun': mun, 'dF': int(df_), 'dturn': int(dt)}
+                                              for mun, df_, dt in sem.filter(pl.Series(pub)).sort(['dF', 'mun'])
+                                              .select('mun', 'dF', 'dturn').iter_rows()]})
     return out
 
 
 def _fracoes(d):
-    f = (np.abs(d.z) > Z_ATIPICO)
-    por_uf = {uf: {'secoes': int(len(g)), 'fracao': float((np.abs(g.z) > Z_ATIPICO).mean())}
-              for uf, g in d.groupby('SG_UF')}
-    return float(f.mean()), por_uf
+    atipica = pl.col('z').abs() > Z_ATIPICO
+    por_uf = {uf: {'secoes': int(g.height), 'fracao': float(g.select(atipica.mean()).item())}
+              for (uf,), g in sorted(d.partition_by('SG_UF', as_dict=True).items())}
+    return float(d.select(atipica.mean()).item()), por_uf
 
 
 def _simula(d, kappa, rng):
     """Seção sob o modelo nulo: mesma taxa de Lula nos dois turnos, binomial mais sobredispersão κ."""
-    n1 = (d.lula1 + d.flavio1).values; n2 = (d.lula2 + d.flavio2).values
-    p = ((d.s1 + d.s2) / 2).values
-    extra = rng.normal(0, 1, len(d)) * d.se.values / 100 * math.sqrt(max(kappa ** 2 - 1, 0))
+    n1 = (d['lula1'] + d['flavio1']).to_numpy(); n2 = (d['lula2'] + d['flavio2']).to_numpy()
+    p = ((d['s1'] + d['s2']) / 2).to_numpy()
+    extra = rng.normal(0, 1, d.height) * d['se'].to_numpy() / 100 * math.sqrt(max(kappa ** 2 - 1, 0))
     p2 = np.clip(p + extra, 0, 1)
-    s = d[['SG_UF', 'CD_MUNICIPIO', 'comp1', 'comp2', 'apt1', 'apt2']].copy()
-    s['lula1'] = rng.binomial(n1, p); s['flavio1'] = n1 - s.lula1
-    s['lula2'] = rng.binomial(n2, p2); s['flavio2'] = n2 - s.lula2
-    return swing_table(s)
+    lula1 = rng.binomial(n1, p); lula2 = rng.binomial(n2, p2)
+    s = d.select(['SG_UF', 'CD_MUNICIPIO', 'comp1', 'comp2', 'apt1', 'apt2']).with_columns(
+        lula1=pl.Series(lula1), flavio1=pl.Series(n1 - lula1), lula2=pl.Series(lula2), flavio2=pl.Series(n2 - lula2))
+    return swing_table(s)[0]
 
 
 def q5(w26, w22, n_sim, a26='2026', a22='2022'):
-    d26 = swing_table(w26[w26.SG_UF != 'ZZ']); d22 = swing_table(w22[w22.SG_UF != 'ZZ'])
+    d26, k26 = swing_table(w26.filter(pl.col('SG_UF') != 'ZZ')); d22, k22 = swing_table(w22.filter(pl.col('SG_UF') != 'ZZ'))
     f26, uf26 = _fracoes(d26); f22, uf22 = _fracoes(d22)
     rng = np.random.default_rng(BOOT_SEED + 2)
-    sim = [float((np.abs(_simula(d26, d26.attrs['kappa'], rng).z) > Z_ATIPICO).mean()) for _ in range(n_sim)]
+    sim = [float(_simula(d26, k26, rng).select((pl.col('z').abs() > Z_ATIPICO).mean()).item()) for _ in range(n_sim)]
     esp = float(np.mean(sim)) if sim else None
     max22 = max((v['fracao'] for v in uf22.values()), default=0.0)
-    return {'secoes_' + a26: int(len(d26)), 'secoes_' + a22: int(len(d22)),
-            'kappa_' + a26: float(d26.attrs['kappa']), 'kappa_' + a22: float(d22.attrs['kappa']),
+    return {'secoes_' + a26: int(d26.height), 'secoes_' + a22: int(d22.height),
+            'kappa_' + a26: float(k26), 'kappa_' + a22: float(k22),
             'fracao_' + a26: f26, 'fracao_' + a22: f22, 'por_uf_' + a26: uf26, 'por_uf_' + a22: uf22,
             'maximo_por_uf_' + a22: float(max22), 'esperado_por_acaso_simulacao': esp,
             'simulacoes': int(n_sim), 'esperado_normal_teorico': math.erfc(Z_ATIPICO / math.sqrt(2)),
@@ -267,16 +281,16 @@ def sensibilidade(w26, w22, a26='2026', a22='2022'):
             ms = []
             for w in (w26, w22):
                 if filtro is not None:
-                    w = w[w.SG_UF.isin(NE) == filtro]
+                    w = w.filter(pl.col('SG_UF').is_in(NE) == filtro)
                 ms.append(prepara(w, mv))
-            if any(len(x) < 30 or not x.tem_comp.all() for x in ms):
+            if any(x.height < 30 or not x['tem_comp'].all() for x in ms):
                 puladas.append({'min_valid': mv, 'regiao': regiao})
                 continue
             ex = [np.abs(z_residuos(x)) > Z_ATIPICO for x in ms]
             for fe in (True, False):
                 for robusto in (False, True):
                     b = [ajusta(x, 'B', fe, e if robusto else None)[1] for x, e in zip(ms, ex)]
-                    ident = [all(dp_pp(regressores(x, 'B')[1][:, k], x.valid1.values.astype(float), x.SG_UF.values) >= MIN_DP_PP
+                    ident = [all(dp_pp(regressores(x, 'B')[1][:, k], _v1(x), uf_array(x)) >= MIN_DP_PP
                                  for x in ms) for k in range(3)]
                     saida.append({'min_valid': mv, 'regiao': regiao, 'efeito_fixo': fe, 'refit_robusto': robusto,
                                   'identificado': {'alpha': ident[0], 'beta1': ident[1], 'beta2': ident[2]},
@@ -302,8 +316,9 @@ def _arredonda(x):
 
 def _secoes_publicas(w):
     """Município publicável por lista nominal: pelo menos 10 seções em todas as contagens usadas (tabela municipal e swing)."""
-    todas = w.assign(mun=w.SG_UF + '-' + w.CD_MUNICIPIO).groupby('mun').size()
-    return todas.combine(secoes_por_municipio(w[w.SG_UF != 'ZZ']), min, fill_value=0).to_dict()
+    todas = {mun: n for mun, n in w.with_columns(mun=pl.col('SG_UF') + '-' + pl.col('CD_MUNICIPIO')).group_by('mun').agg(pl.len()).iter_rows()}
+    swing = secoes_por_municipio(w.filter(pl.col('SG_UF') != 'ZZ'))
+    return {mun: min(n, swing.get(mun, 0)) for mun, n in todas.items()}
 
 
 def analise(dir, out, year, control_year, ufs, min_valid=200, boot=2000, n_sim=20):

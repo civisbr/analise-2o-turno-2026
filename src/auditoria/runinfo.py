@@ -7,8 +7,7 @@ import subprocess
 import sys
 
 import numpy as np
-import pandas as pd
-import pyarrow
+import polars as pl
 
 from .robust import BOOT_SEED, CLOSING_SEED
 
@@ -75,7 +74,7 @@ def write_run(cmd, year, argv, out_dir, insumos, fechamento=None, arquivos=None,
         'commit': _git('rev-parse', 'HEAD'),
         'tree_clean': _git('status', '--porcelain', '--', ':/', ':(exclude,top)data/derived', ':(exclude,top)site/data') == '',
         'prereg_tag': _git('rev-parse', '-q', '--verify', 'refs/tags/prereg-v1^{commit}'),
-        'versoes': {'python': platform.python_version(), 'numpy': np.__version__, 'pandas': pd.__version__, 'pyarrow': pyarrow.__version__},
+        'versoes': {'python': platform.python_version(), 'numpy': np.__version__, 'polars': pl.__version__},
         'semente': SEEDS.get(cmd),
         'insumos': insumos,
         'fechamento_secoes_divergentes': fechamento,

@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 
 BOOT_SEED = 11      # bootstrap do balanço
@@ -7,6 +9,14 @@ CLOSING_SEED = 1    # bootstrap e permutação do teste de fechamento
 def mad_sigma(x):
     """Desvio-padrão robusto (MAD escalado para equivaler ao dp sob normalidade)."""
     return 1.4826 * np.median(np.abs(x - np.median(x)))
+
+
+def mad_positivo(x, onde):
+    """MAD escalado, ou para: com MAD zero ou indefinido o z robusto viraria inf/NaN (e NaN > 4 é verdadeiro no polars)."""
+    s = mad_sigma(x)
+    if not np.isfinite(s) or s <= 0:
+        sys.exit(f'{onde}: MAD zero ou indefinido; o z robusto não é calculável')
+    return float(s)
 
 
 def wls(y, X, w, g=None):

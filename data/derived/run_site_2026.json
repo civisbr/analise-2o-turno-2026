@@ -4,21 +4,20 @@
   "argv": [
     "site"
   ],
-  "gerado_utc": "2026-10-28T20:58:25+00:00",
-  "commit": "d23816443d2d653a79a833c52f80b5aaffd867eb",
+  "gerado_utc": "2026-10-28T21:54:59+00:00",
+  "commit": "fc5be1ded51fa94ac950d9d614a182b4a635f92c",
   "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
     "numpy": "2.5.4",
-    "pandas": "3.1.0",
-    "pyarrow": "26.0.0"
+    "polars": "2.1.0"
   },
   "semente": null,
   "insumos": {
-    "resultados.json": "33661792d3bcf7a03c934dac39308c5a98f7c63e68c32e432162c03725e1d75b",
+    "resultados.json": "f39b927b6de624c94f16483e388fb04881e608143e0dda2967a0cc17ff24a62e",
     "totais_nacionais_2026.csv": "f5db6a0437f3440571145ecfbbc76c0dcccccf8b926cc08320ed566f334312e8",
-    "run_analise_2026.json": "86cdb33083ba60dd3b89e0c49e87d0be1c9f7f7f6cf7c948b3820c9c802fa1b8"
+    "run_analise_2026.json": "fb0209577ab6c5c090960b3aa193e63ca22f5c2423b81f4852b435f6a0f17746"
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {

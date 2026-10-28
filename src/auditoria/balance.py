@@ -17,62 +17,72 @@ import pathlib
 import sys
 
 import numpy as np
+import polars as pl
 
 from .load import load_year
-from .robust import BOOT_SEED, boot_ci, mad_sigma, wls
+from .robust import BOOT_SEED, boot_ci, mad_positivo, wls
+
+PREFIXOS = ('lula', 'flavio', 'valid', 'apt', 'comp')
 
 
 def muni_table(wide):
-    d = wide.copy()
-    d['mun'] = d.SG_UF + '-' + d.CD_MUNICIPIO
-    cols = [c for c in d.columns if c[:-1] in ('lula', 'flavio', 'valid', 'apt', 'comp') and c[-1] in '12']
-    g = d.groupby(['SG_UF', 'mun'])
-    t = g[cols].sum(min_count=1)
-    t['secoes'] = g.size()
-    return t.reset_index()
+    d = wide.with_columns(mun=pl.col('SG_UF') + '-' + pl.col('CD_MUNICIPIO'))
+    cols = [c for c in d.columns if c[:-1] in PREFIXOS and c[-1] in '12']
+    # soma vazia (sem detalhe: comparecimento todo nulo) fica nula, não 0
+    somas = [pl.when(pl.col(c).count() > 0).then(pl.col(c).sum()).alias(c) for c in cols]
+    return (d.group_by(['SG_UF', 'mun']).agg(somas + [pl.len().cast(pl.Int64).alias('secoes')])
+             .sort(['SG_UF', 'mun']))
 
 
 def identity_gap(m):
     """ΔLula + ΔFlávio − (terceira via + Δválidos). Zero em qualquer eleição com dados íntegros."""
-    return m.dL.sum() + m.dF.sum() - m.pool.sum() - m.dvalid.sum()
+    return m['dL'].sum() + m['dF'].sum() - m['pool'].sum() - m['dvalid'].sum()
 
 
 def add_flows(m):
-    m['pool'] = m.valid1 - m.lula1 - m.flavio1
-    m['dvalid'] = m.valid2 - m.valid1
-    m['dL'] = m.lula2 - m.lula1; m['dF'] = m.flavio2 - m.flavio1
-    return m
+    return m.with_columns(pool=pl.col('valid1') - pl.col('lula1') - pl.col('flavio1'),
+                          dvalid=pl.col('valid2') - pl.col('valid1'),
+                          dL=pl.col('lula2') - pl.col('lula1'), dF=pl.col('flavio2') - pl.col('flavio1'))
+
+
+def tem_comparecimento(m):
+    return m['comp1'].null_count() == 0 and m['comp2'].null_count() == 0
+
+
+def uf_array(m):
+    return m['SG_UF'].to_numpy().astype(str)
 
 
 def balance(wide, label, out, min_valid=200, boot=300):
     m = add_flows(muni_table(wide))
-    bad = m[m.dL + m.dF - m.pool - m.dvalid != 0]
-    if len(bad):
-        sys.exit(f'{label}: identidade contábil não fecha em {len(bad)} município(s) (ex.: {bad.mun.iloc[0]}); '
+    bad = m.filter(pl.col('dL') + pl.col('dF') - pl.col('pool') - pl.col('dvalid') != 0)
+    if bad.height:
+        sys.exit(f'{label}: identidade contábil não fecha em {bad.height} município(s) (ex.: {bad["mun"][0]}); '
                  'dados inconsistentes, pipeline parado')
-    m = m[(m.valid1 >= min_valid) & (m.valid2 >= min_valid)].reset_index(drop=True)
-    v1 = m.valid1.values.astype(float)
-    have = bool(m.comp1.notna().all() and m.comp2.notna().all())
+    m = m.filter((pl.col('valid1') >= min_valid) & (pl.col('valid2') >= min_valid))
+    v1 = m['valid1'].to_numpy().astype(float)
+    have = tem_comparecimento(m)
     if have:
-        m['dturn'] = m.comp2 - m.comp1
-        m['dbn'] = -((m.comp2 - m.valid2) - (m.comp1 - m.valid1))     # queda de brancos+nulos (>0 = caiu)
+        m = m.with_columns(dturn=pl.col('comp2') - pl.col('comp1'),
+                           dbn=-((pl.col('comp2') - pl.col('valid2')) - (pl.col('comp1') - pl.col('valid1'))))   # queda de brancos+nulos (>0 = caiu)
     tot = {k: m[k].sum() for k in ('pool', 'dvalid', 'dL', 'dF')}
-    print(f'\n===== {label}: {len(m):,} municípios (válidos 1T ≥ {min_valid}) =====')
+    print(f'\n===== {label}: {m.height:,} municípios (válidos 1T ≥ {min_valid}) =====')
     print(f'terceira via 1T: {tot["pool"]:,.0f} | Δválidos: {tot["dvalid"]:+,.0f} | ΔLula: {tot["dL"]:+,.0f} | '
           f'ΔFlávio/Bolsonaro: {tot["dF"]:+,.0f}')
     print(f'ΔLula/(ΔLula+ΔFlávio) = {tot["dL"]/(tot["dL"]+tot["dF"]):.1%}   '
           f'identidade ΔL+ΔF − (terceira via + Δválidos) = {identity_gap(m):+,.0f} (deve ser 0)')
     print('\nPor UF:  terceira via   Δválidos       ΔLula     ΔFlávio   %Lula do ganho')
-    for uf, g in m.groupby('SG_UF'):
-        dl, df_ = g.dL.sum(), g.dF.sum()
-        print(f'  {uf}  {g.pool.sum():11,.0f} {g.dvalid.sum():+11,.0f} {dl:+11,.0f} {df_:+11,.0f}   {dl/(dl+df_):6.1%}')
-    y = (m.dL / v1).values
-    cols = {'parcela de Lula por voto da terceira via (a)': (m.pool / v1).values}
-    models = {'A': {**cols, 'parcela de Lula por voto válido novo (b)': (m.dvalid / v1).values}}
+    for (uf,), g in sorted(m.partition_by('SG_UF', as_dict=True).items()):
+        dl, df_ = g['dL'].sum(), g['dF'].sum()
+        print(f'  {uf}  {g["pool"].sum():11,.0f} {g["dvalid"].sum():+11,.0f} {dl:+11,.0f} {df_:+11,.0f}   {dl/(dl+df_):6.1%}')
+    y = (m['dL'] / m['valid1']).to_numpy()
+    num = lambda e: (e / m['valid1']).to_numpy()
+    cols = {'parcela de Lula por voto da terceira via (a)': num(m['pool'])}
+    models = {'A': {**cols, 'parcela de Lula por voto válido novo (b)': num(m['dvalid'])}}
     if have:
-        models['B'] = {**cols, 'parcela de Lula por novo comparecimento (b1)': (m.dturn / v1).values,
-                       'parcela de Lula por queda de brancos+nulos (b2)': (m.dbn / v1).values}
-    g = m.SG_UF.values if m.SG_UF.nunique() > 1 else None
+        models['B'] = {**cols, 'parcela de Lula por novo comparecimento (b1)': num(m['dturn']),
+                       'parcela de Lula por queda de brancos+nulos (b2)': num(m['dbn'])}
+    g = uf_array(m) if m['SG_UF'].n_unique() > 1 else None
     # Diagnóstico de identificação: sem variação do regressor entre municípios (dentro da UF), o
     # coeficiente não é estimável e o IC explode. dp em pontos percentuais dos válidos do 1T.
     allx = models['B'] if have else models['A']
@@ -104,28 +114,31 @@ def balance(wide, label, out, min_valid=200, boot=300):
             mk = gg == k; r[mk] -= (v1[mk] / v1[mk].sum()) @ r[mk]
     else:
         r -= (v1 / v1.sum()) @ r
-    rs = r * np.sqrt(v1); mad = mad_sigma(rs)
-    m['resid_votos'] = r * v1; m['z_resid'] = rs / mad
-    top = m.sort_values('z_resid', ascending=False).head(15)
+    rs = r * np.sqrt(v1); mad = mad_positivo(rs, f'{label}: resíduos do balanço')
+    m = m.with_columns(resid_votos=pl.Series(r * v1), z_resid=pl.Series(rs / mad))
+    top = m.sort('z_resid', descending=True).head(15)
     print(f'\nMunicípios com MAIS votos de Lula do que o modelo {best} explica (top 15):')
-    print(top[['mun', 'valid1', 'pool', 'dvalid', 'dL', 'dF', 'resid_votos', 'z_resid']].round(1).to_string(index=False))
-    neg = m[m.dF < 0]
-    print(f'\nMunicípios onde o 2º colocado perdeu votos absolutos: {len(neg):,} de {len(m):,} '
-          f'({len(neg)/len(m):.1%}; {neg.valid1.sum()/m.valid1.sum():.1%} dos válidos)')
+    with pl.Config(tbl_cols=-1, tbl_rows=-1, tbl_hide_dataframe_shape=True):
+        print(top.select(['mun', 'valid1', 'pool', 'dvalid', 'dL', 'dF', 'resid_votos', 'z_resid']).with_columns(pl.col(pl.Float64).round(1)))
+    neg = m.filter(pl.col('dF') < 0)
+    print(f'\nMunicípios onde o 2º colocado perdeu votos absolutos: {neg.height:,} de {m.height:,} '
+          f'({neg.height/m.height:.1%}; {neg["valid1"].sum()/m["valid1"].sum():.1%} dos válidos)')
     if have:
-        unexpl = neg[neg.dturn >= 0].sort_values('dF')
-        print(f'   com comparecimento em QUEDA (explicável por abstenção): {int((neg.dturn < 0).sum()):,}')
-        print(f'   com comparecimento estável/em ALTA (precisa de outra explicação): {len(unexpl):,}')
-        if len(unexpl):
-            print(unexpl[['mun', 'valid1', 'dturn', 'dF', 'dL']].head(15).round(0).to_string(index=False))
+        unexpl = neg.filter(pl.col('dturn') >= 0).sort('dF')
+        print(f'   com comparecimento em QUEDA (explicável por abstenção): {neg.filter(pl.col("dturn") < 0).height:,}')
+        print(f'   com comparecimento estável/em ALTA (precisa de outra explicação): {unexpl.height:,}')
+        if unexpl.height:
+            with pl.Config(tbl_cols=-1, tbl_rows=-1, tbl_hide_dataframe_shape=True):
+                print(unexpl.select(['mun', 'valid1', 'dturn', 'dF', 'dL']).head(15))
     # Regra 7: município com poucas seções vai para '<UF>-OUTROS', com supressão complementar (como no build).
     ints = ['secoes', 'valid1', 'valid2', 'lula1', 'lula2', 'flavio1', 'flavio2', 'pool', 'dvalid', 'dL', 'dF'] + \
         (['comp1', 'comp2', 'dturn', 'dbn'] if have else [])
     from .build import agrega_pequenos   # build importa muni_table daqui
-    pub = agrega_pequenos(m[['SG_UF', 'mun'] + ints])
-    pub = pub.merge(m[['mun', 'resid_votos', 'z_resid']], on='mun', how='left')
-    pub.loc[pub.municipios_agregados > 0, ['resid_votos', 'z_resid']] = np.nan
-    pub.to_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv', index=False)
+    pub = agrega_pequenos(m.select(['SG_UF', 'mun'] + ints))
+    pub = pub.join(m.select(['mun', 'resid_votos', 'z_resid']), on='mun', how='left', maintain_order='left')
+    agregado = pl.col('municipios_agregados') > 0
+    pub = pub.with_columns([pl.when(agregado).then(None).otherwise(pl.col(c)).alias(c) for c in ('resid_votos', 'z_resid')])
+    pub.write_csv(pathlib.Path(out) / f'balanco_municipios_{label.split()[0]}.csv')
     return res
 
 
