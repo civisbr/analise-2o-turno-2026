@@ -35,7 +35,7 @@ analysis: guard-prereg
 	$(PY) -m auditoria analyze --dir $(RAW) --out $(OUT) --year 2026 --control-year 2022 --ufs ALL
 
 site:
-	@echo "não implementado (Fase 5)"; exit 1
+	$(PY) -m auditoria site --derived $(OUT) --out site/data/painel.json
 
 verify:
 	$(PY) -m auditoria verify --dir $(RAW) --out $(OUT) --year 2026

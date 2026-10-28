@@ -13,7 +13,7 @@ import pandas as pd
 from .balance import add_flows, identity_gap, muni_table
 from .load import MIN_SECOES_PUBLICAS, NE, load_year
 from .robust import BOOT_SEED, mad_sigma, wls
-from .swing import swing_table
+from .swing import secoes_por_municipio, swing_table
 
 Z_ATIPICO = 4.0
 Q_FDR = 0.05
@@ -300,13 +300,19 @@ def _arredonda(x):
     return x
 
 
+def _secoes_publicas(w):
+    """Município publicável por lista nominal: pelo menos 10 seções em todas as contagens usadas (tabela municipal e swing)."""
+    todas = w.assign(mun=w.SG_UF + '-' + w.CD_MUNICIPIO).groupby('mun').size()
+    return todas.combine(secoes_por_municipio(w[w.SG_UF != 'ZZ']), min, fill_value=0).to_dict()
+
+
 def analise(dir, out, year, control_year, ufs, min_valid=200, boot=2000, n_sim=20):
     out = pathlib.Path(out); out.mkdir(parents=True, exist_ok=True)
     com_ext = list(ufs) + (['ZZ'] if 'ZZ' not in ufs else [])
     w26 = load_year(dir, year, com_ext); w22 = load_year(dir, control_year, com_ext)
     a26, a22 = str(year), str(control_year)
     m26 = prepara(w26, min_valid); m22 = prepara(w22, min_valid)
-    sec26, sec22 = (w.assign(mun=w.SG_UF + '-' + w.CD_MUNICIPIO).groupby('mun').size().to_dict() for w in (w26, w22))
+    sec26, sec22 = (_secoes_publicas(w) for w in (w26, w22))
     res = {'parametros': {'ano': int(year), 'controle': int(control_year), 'ufs': list(ufs), 'exterior_so_em_q1': True, 'min_valid': min_valid,
                           'boot': boot, 'simulacoes': n_sim, 'z_atipico': Z_ATIPICO, 'q_fdr': Q_FDR,
                           'min_secoes_publicas': MIN_SECOES_PUBLICAS},

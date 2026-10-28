@@ -7,6 +7,7 @@ from .balance import balanco
 from .build import build
 from .download import download
 from .load import resolve_ufs
+from .site import entradas, painel
 from .prereg import exige_prereg
 from .runinfo import confere_insumos, write_run
 from .swing import analyze
@@ -44,6 +45,9 @@ def main(argv=None):
     n.add_argument('--year', default='2026', type=year_arg); n.add_argument('--control-year', default='2022', type=year_arg)
     n.add_argument('--ufs', default='ALL'); n.add_argument('--min-valid', type=int, default=200)
     n.add_argument('--boot', type=intervalo(20, 20000), default=2000); n.add_argument('--sim', type=intervalo(1, 1000), default=20)
+    st = sp.add_parser('site', help='gera site/data/painel.json a partir de data/derived')
+    st.add_argument('--derived', default='data/derived'); st.add_argument('--out', default='site/data/painel.json')
+    st.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos; marca o painel como ilustrativo')
     v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
     v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
     v.add_argument('--year', default='2026', type=year_arg)
@@ -63,7 +67,7 @@ def main(argv=None):
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
         elif a.cmd in ('analyze', 'balanco', 'analise'):
             exige_prereg()   # verify só exige quando há 2º turno de 2026 nos dados
-    insumos = confere_insumos(a.dir) if a.cmd != 'download' else None
+    insumos = confere_insumos(a.dir) if a.cmd not in ('download', 'site') else None
     extra = {}
     ufs = resolve_ufs(a.ufs) if a.cmd in ('analyze', 'balanco', 'analise') else None
     if a.cmd in ('analyze', 'build') and pathlib.Path(a.private_dir).resolve().is_relative_to(pathlib.Path(a.out).resolve()):
@@ -76,12 +80,20 @@ def main(argv=None):
         extra = verify(a.dir, a.out, a.year, exige=not a.sem_prereg)
     elif a.cmd == 'analyze':
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
+    elif a.cmd == 'site':
+        if a.sem_prereg and pathlib.Path(a.out).resolve().is_relative_to(pathlib.Path('site').resolve()):
+            p.error('--sem-prereg não pode gravar em site/ (publicado); use outro --out')
+        painel(a.derived, a.out, exige_real=not a.sem_prereg)
+        insumos = entradas(a.derived)
+        extra = {'arquivos': [a.out]}
     elif a.cmd == 'analise':
         analise(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot, a.sim)
         extra = {'arquivos': [pathlib.Path(a.out) / 'resultados.json']}
     else:
         balanco(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot)
-    if a.cmd != 'download':
+    if a.cmd == 'site':
+        write_run('site', 2026, sys.argv[1:] if argv is None else argv, a.derived, insumos, **extra)
+    elif a.cmd != 'download':
         write_run(a.cmd, a.year, sys.argv[1:] if argv is None else argv, a.out, insumos, **extra)
 
 

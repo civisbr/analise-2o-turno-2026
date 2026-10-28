@@ -28,3 +28,4 @@ data/raw/*.part
 # por último: a última regra que casa vence, e nada por seção pode ser reaberto pela negação acima
 data/derived/secoes_*
 **/secoes_*
+.claude/

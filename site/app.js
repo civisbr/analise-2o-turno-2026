@@ -73,6 +73,7 @@ function donut(ganho) {
   let off = 0;
   const total = ganho.partes.reduce((a, p) => a + p.valor, 0);
   for (const p of ganho.partes) {
+    if (p.valor <= 0) continue;   // arco negativo não existe; a legenda mostra o valor
     const len = (p.valor / total) * C;
     const arco = svg('circle', {cx: 84, cy: 84, r: R, 'stroke-dasharray': `${len} ${C - len}`,
       'stroke-dashoffset': -off, transform: 'rotate(-90 84 84)'});
@@ -82,7 +83,7 @@ function donut(ganho) {
   }
   box.appendChild(s);
   const c = el('div', {class: 'donut-c'});
-  c.appendChild(el('b', {}, '+' + fmt2.format(total / 1e6) + ' mi'));
+  c.appendChild(el('b', {}, sinal(total) + fmt2.format(Math.abs(total) / 1e6) + ' mi'));
   c.appendChild(el('span', {}, 'ganho conjunto'));
   c.appendChild(el('span', {}, 'dos finalistas'));
   box.appendChild(c);
@@ -91,7 +92,7 @@ function donut(ganho) {
     const li = el('li');
     const i = el('i'); i.style.background = cor(p.cor); li.appendChild(i);
     li.appendChild(document.createTextNode(p.rotulo));
-    li.appendChild(el('small', {}, `+${fmt.format(p.valor)} (${fmt1.format(p.valor / total * 100)}%)`));
+    li.appendChild(el('small', {}, `${sinal(p.valor)}${fmt.format(Math.abs(p.valor))} (${fmt1.format(p.valor / total * 100)}%)`));
     leg.appendChild(li);
   }
 }
@@ -128,6 +129,20 @@ function atipicos(lista) {
   }
 }
 
+function perguntas(lista) {
+  if (!lista) return;
+  const box = document.getElementById('perguntas');
+  for (const q of lista) {
+    const c = el('article', {class: 'cartao'});
+    const h = el('h3');
+    h.append(el('small', {}, q.id), document.createTextNode(' ' + q.titulo));
+    const ul = el('ul');
+    for (const l of q.linhas || []) ul.appendChild(el('li', {}, l));
+    c.append(h, ul);
+    box.appendChild(c);
+  }
+}
+
 function tema() {
   const raiz = document.documentElement;
   try { const t = localStorage.getItem('tema'); if (t === 'light' || t === 'dark') raiz.dataset.theme = t; } catch (e) { /* sem armazenamento */ }
@@ -156,7 +171,9 @@ async function main() {
   document.getElementById('aviso').hidden = !ilus;
   document.body.classList.toggle('ilustrativo', ilus);
   document.getElementById('kpis').append(...d.kpis.map(kpi));
-  donut(d.ganho); barras(d.divisao); atipicos(d.atipicos);
+  const notas = document.getElementById('notas');
+  for (const n of d.notas || []) notas.appendChild(el('p', {}, n));
+  donut(d.ganho); barras(d.divisao); atipicos(d.atipicos); perguntas(d.perguntas);
 }
 
 main().catch(() => {
