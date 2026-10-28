@@ -61,8 +61,8 @@ def test_arquivo_ausente_para_o_pipeline(tmp_path):
 
 
 def test_cli_analise_exige_prereg(synth_dir, tmp_path, monkeypatch):
-    from auditoria import cli
-    monkeypatch.chdir(tmp_path)   # fora de qualquer repositório git: tag ausente
+    from auditoria import cli, prereg
+    monkeypatch.setattr(prereg, 'ROOT', tmp_path)   # fora de qualquer repositório git: tag ausente
     with pytest.raises(SystemExit, match='prereg-v1'):
         cli.main(['balanco', '--dir', str(synth_dir), '--out', str(tmp_path / 'o'), '--ufs', 'BA,PE,SP,PA'])
 
