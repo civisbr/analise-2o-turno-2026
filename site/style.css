@@ -98,6 +98,11 @@ main { padding:0 16px 8px; max-width:1700px; margin:0 auto; }
 .perguntas ul { display:grid; gap:6px; margin-top:6px; font-size:.86rem; }
 .perguntas h3 small { color:var(--muted); font-weight:600; margin-right:6px; }
 .nota { margin-top:10px; font-size:.82rem; color:var(--muted); }
+.sem-js { max-width:980px; margin:0 auto; padding:22px 16px; } .sem-js .cartao { margin-top:12px; }
+.tabela { width:100%; border-collapse:collapse; font-size:.88rem; }
+.tabela caption { text-align:left; font-weight:600; font-size:1.02rem; padding-bottom:8px; }
+.tabela th, .tabela td { text-align:left; padding:6px 8px; border-top:1px solid var(--line); }
+.tabela thead th { color:var(--muted); font-weight:600; }
 .hip { display:grid; gap:12px; margin:6px 0; }
 .hip li { display:flex; gap:12px; align-items:center; font-size:.86rem; } .hip svg { width:20px; height:20px; color:var(--muted); }
 .cor-verde { background:var(--verde); } .cor-azul { background:var(--azul); } .cor-amarelo { background:var(--amarelo); }

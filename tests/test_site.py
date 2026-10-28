@@ -42,7 +42,7 @@ def test_cli_site_registra_a_rodada(synth_dir, tmp_path):
     d = _derived(synth_dir, tmp_path)
     cli.main(['site', '--derived', str(d), '--out', str(tmp_path / 'painel.json'), '--sem-prereg'])
     run = json.loads((d / 'run_site_2026.json').read_text())
-    assert list(run['saidas']) == ['painel.json'] and set(run['insumos']) == set(ENTRADAS)
+    assert list(run['saidas']) == ['painel.json', 'tabelas.html'] and set(run['insumos']) == set(ENTRADAS)
     assert run['insumos']['resultados.json'] == _sha(d / 'resultados.json')
 
 
@@ -99,3 +99,14 @@ def test_painel_nota_a_diferenca_entre_totais_e_decomposicao(synth_dir, tmp_path
     d = _derived(synth_dir, tmp_path)
     p = painel(d, tmp_path / 'p.json', exige_real=False)
     assert isinstance(p['notas'], list)
+
+
+def test_tabelas_html_sem_js_escapa_e_traz_os_numeros(synth_dir, tmp_path):
+    d = _derived(synth_dir, tmp_path)
+    p = painel(d, tmp_path / 'p.json', exige_real=False)
+    assert '<script' not in (tmp_path / 'tabelas.html').read_text(encoding='utf-8')
+    from auditoria.site import tabelas_html
+    p['atipicos'][0]['rotulo'] = '<img src=x onerror=1>'
+    h = tabelas_html(p)
+    assert '<img' not in h and '&lt;img' in h
+    assert all(q['id'] in h for q in p['perguntas'])

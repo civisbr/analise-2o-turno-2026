@@ -1,5 +1,6 @@
 """painel.json da página: só lê arquivos gerados (totais, resultados.json). Nenhum número é digitado à mão
 (regra 5). Texto aqui é descritivo; interpretação fica fora da página até a revisão externa."""
+import html
 import json
 import pathlib
 from types import SimpleNamespace
@@ -131,6 +132,56 @@ def _notas(t1, t2, g26):
     return []
 
 
+def _fmt(tipo, v):
+    if v is None:
+        return '—'
+    return {'int': lambda: _br(v), 'sint': lambda: _br(v, 0, True), 'pct': lambda: _br(v, 2) + '%',
+            'pp': lambda: _br(v, 2, True) + ' p.p.', 'pctsinal': lambda: _br(v, 2, True) + '%',
+            'par_pct': lambda: ' / '.join(_br(x, 2) + '%' for x in v),
+            'par_int': lambda: ' / '.join(_br(x) for x in v)}[tipo]()
+
+
+def tabelas_html(p):
+    """Versão sem JavaScript: as mesmas tabelas da página, a partir do painel.json já gerado."""
+    e = html.escape
+
+    def tabela(titulo, cab, linhas):
+        th = ''.join(f'<th scope="col">{e(c)}</th>' for c in cab)
+        tr = ''.join('<tr>' + (f'<th scope="row">{e(l[0])}</th>' + ''.join(f'<td>{e(c)}</td>' for c in l[1:])) + '</tr>' for l in linhas)
+        return f'<section class="cartao"><table class="tabela"><caption>{e(titulo)}</caption><thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></section>'
+
+    def kpi(k):
+        d = k['delta']; var = d['texto'] if d.get('texto') else ' '.join(x for x in (_fmt(d['tipo'], d['valor']), d.get('sufixo', '')) if x)
+        l2 = k['linha2']; seg = ' '.join(x for x in (_fmt(l2['tipo'], l2['valor']), l2.get('sufixo', '')) if x)
+        return (k['rotulo'], _fmt(k['tipo'], k['valor']), seg, var)
+    corpos = [
+        tabela('Panorama nacional', ['Indicador', 'Valor', 'Detalhe', 'Variação'], [kpi(k) for k in p['kpis']]),
+        tabela('De onde veio o ganho conjunto dos finalistas', ['Origem', 'Votos', 'Participação'],
+               [(x['rotulo'], _br(x['valor'], 0, True), _br(x['pct'], 1) + '%') for x in p['ganho']['partes']]
+               + [('Total', _br(p['ganho']['total'], 0, True), '')]),
+        tabela('Divisão do ganho entre Lula e Flávio', ['Ano', 'Lula', 'Flávio'],
+               [(str(a['ano']), f'{a["lula"]}%', f'{a["flavio"]}%') for a in p['divisao']['anos']]),
+    ]
+    if p['atipicos']:
+        corpos.append(tabela('Municípios com padrão atípico (Q3), com controle de 2022', ['Critério', 'Base', '% dos municípios'],
+                             [(x['rotulo'], x['faixa'], _br(x['pct'], 2) + '%') for x in p['atipicos']]))
+    for q in p['perguntas']:
+        corpos.append(f'<section class="cartao"><h2>{e(q["id"])} — {e(q["titulo"])}</h2><ul>'
+                      + ''.join(f'<li>{e(l)}</li>' for l in q['linhas']) + '</ul></section>')
+    notas = ''.join(f'<p class="nota">{e(n)}</p>' for n in p.get('notas', []))
+    return ('<!doctype html>\n<html lang="pt-BR">\n<head>\n  <meta charset="utf-8">\n'
+            '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            '  <meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src \'self\'; style-src \'self\'; '
+            'base-uri \'none\'; form-action \'none\'">\n'
+            '  <title>Auditoria Pública – 2º turno 2026: tabelas</title>\n  <link rel="stylesheet" href="../style.css">\n</head>\n<body>\n'
+            '  <main class="painel sem-js">\n'
+            f'    <div class="painel-cab"><h1>Tabelas, sem JavaScript</h1><span class="muted">Atualizado em {e(p["atualizado"])}</span></div>\n'
+            '    <p class="nota">Versão preliminar. Associações entre municípios e seções, com 2022 como controle; '
+            'um padrão atípico não indica irregularidade. <a href="../index.html">Voltar à página</a>.</p>\n    '
+            + '\n    '.join(corpos) + f'\n    {notas}\n  </main>\n'
+            '  <footer class="rodape"><span>Projeto independente. Dados: TSE. Não é uma fonte oficial.</span></footer>\n</body>\n</html>\n')
+
+
 ENTRADAS = ('resultados.json', 'totais_nacionais_2026.csv', 'run_analise_2026.json')
 
 
@@ -158,4 +209,5 @@ def painel(derived, out, exige_real=True):
            'notas': _notas(t[1], t[2], g26)}
     out = pathlib.Path(out); out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(res, indent=1, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')
+    out.with_name('tabelas.html').write_text(tabelas_html(res), encoding='utf-8')
     return res
