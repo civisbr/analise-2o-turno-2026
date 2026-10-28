@@ -107,7 +107,7 @@ def test_tabelas_html_sem_js_escapa_e_traz_os_numeros(synth_dir, tmp_path):
     p = painel(d, tmp_path / 'p.json', exige_real=False)
     h = (tmp_path / 'tabelas.html').read_text(encoding='utf-8')
     assert '<script' not in h and 'Valores de demonstração' in h   # sintético: aviso como na página com JS
-    assert _br(p['ganho']['total'], 0, True) in h
+    assert _br(p['ganho']['total'], 0, True) in h and 'rel="icon"' in h
     q3 = h.split('Municípios com padrão atípico')[1].split('</table>')[0]
     for x in p['atipicos']:
         assert f'<td>{_br(x["pct"], 1)}%</td>' in q3   # 1 casa, igual à página com JS
