@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Auditoria Pública – 2º turno 2026: tabelas</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main class="painel sem-js">
+    <div class="painel-cab"><h1>Tabelas, sem JavaScript</h1><span class="muted">Atualizado em 2026-10-28</span></div>
+    <p class="nota">Versão preliminar. Associações entre municípios e seções, com 2022 como controle; um padrão atípico não indica irregularidade. <a href="../index.html">Voltar à página</a>.</p>
+    <section class="cartao"><table class="tabela"><caption>Panorama nacional</caption><thead><tr><th scope="col">Indicador</th><th scope="col">Valor</th><th scope="col">Detalhe</th><th scope="col">Variação</th></tr></thead><tbody><tr><th scope="row">Comparecimento 2º turno</th><td>80,78%</td><td>128.236.074 eleitores</td><td>+1,86 p.p. vs 1º turno</td></tr><tr><th scope="row">Votos válidos</th><td>124.082.273</td><td>+4.776.239 vs 1º turno</td><td>+4,00%</td></tr><tr><th scope="row">Lula</th><td>64.256.232</td><td>51,79% dos válidos</td><td>+10.376.694 vs 1º turno</td></tr><tr><th scope="row">Flávio Bolsonaro</th><td>59.826.041</td><td>48,21% dos válidos</td><td>+3.721.538 vs 1º turno</td></tr><tr><th scope="row">Abstenção</th><td>19,22%</td><td>30.509.005 eleitores</td><td>−1,86 p.p. vs 1º turno</td></tr><tr><th scope="row">Brancos / Nulos</th><td>1,12% / 2,12%</td><td>1.430.496 / 2.723.305</td><td>queda vs 1º turno</td></tr></tbody></table></section>
+    <section class="cartao"><table class="tabela"><caption>De onde veio o ganho conjunto dos finalistas</caption><thead><tr><th scope="col">Origem</th><th scope="col">Votos</th><th scope="col">Participação</th></tr></thead><tbody><tr><th scope="row">Terceira via</th><td>+9.321.993</td><td>66,1%</td></tr><tr><th scope="row">Mais comparecimento</th><td>+2.960.241</td><td>21,0%</td></tr><tr><th scope="row">Queda de brancos/nulos</th><td>+1.816.000</td><td>12,9%</td></tr><tr><th scope="row">Total</th><td>+14.098.234</td><td></td></tr></tbody></table></section>
+    <section class="cartao"><table class="tabela"><caption>Divisão do ganho entre Lula e Flávio</caption><thead><tr><th scope="col">Ano</th><th scope="col">Lula</th><th scope="col">Flávio</th></tr></thead><tbody><tr><th scope="row">2022</th><td>30%</td><td>70%</td></tr><tr><th scope="row">2026</th><td>74%</td><td>26%</td></tr></tbody></table></section>
+    <section class="cartao"><table class="tabela"><caption>Municípios com padrão atípico (Q3), com controle de 2022</caption><thead><tr><th scope="col">Critério</th><th scope="col">Base</th><th scope="col">% dos municípios</th></tr></thead><tbody><tr><th scope="row">2026, sem correção</th><td>p &lt; 0,05</td><td>10,68%</td></tr><tr><th scope="row">2022, controle</th><td>p &lt; 0,05</td><td>10,23%</td></tr><tr><th scope="row">Esperado por acaso</th><td>p &lt; 0,05</td><td>5,00%</td></tr><tr><th scope="row">2026, FDR 5%</th><td>nos dois ajustes</td><td>2,50%</td></tr><tr><th scope="row">2022, FDR 5%</th><td>controle, nos dois ajustes</td><td>2,41%</td></tr></tbody></table></section>
+    <section class="cartao"><h2>Q1 — De onde veio o ganho conjunto dos finalistas?</h2><ul><li>2026: Lula +10.376.696, Flávio +3.721.538 votos.</li><li>2022: Lula +3.086.436, Flávio +7.133.820 votos.</li></ul></section>
+    <section class="cartao"><h2>Q2 — A divisão do ganho difere de 2022?</h2><ul><li>Diferença de α (2026 − 2022): +0,10 (IC 95%: +0,07 a +0,16).</li><li>Diferença de β (voto válido novo): +0,26 (IC 95%: +0,20 a +0,32).</li><li>Explicado pelas covariáveis dos dados oficiais: não.</li></ul></section>
+    <section class="cartao"><h2>Q3 — Há municípios que destoam do padrão do estado?</h2><ul><li>Sinalizados (FDR 5%, nos dois ajustes): 139 de 5.571 em 2026; 134 de 5.570 em 2022.</li></ul></section>
+    <section class="cartao"><h2>Q4 — Onde Flávio perdeu votos absolutos, o comparecimento caiu?</h2><ul><li>2026: 938 municípios com queda de Flávio, 210 sem queda de comparecimento.</li><li>2022: 92 municípios com queda de Flávio, 0 sem queda de comparecimento.</li></ul></section>
+    <section class="cartao"><h2>Q5 — Há excesso de seções extremas?</h2><ul><li>Seções com |z| &gt; 4: 0,084% em 2026, 0,098% em 2022; esperado por acaso (simulação): 0,008%.</li><li>Conjunto atípico de seções: não.</li></ul></section>
+    <section class="cartao"><h2>Q6 — Seções que fecharam tarde tiveram swing diferente?</h2><ul><li>Não testável com dados públicos: a hora de encerramento por seção não existe nos CSV do TSE.</li></ul></section>
+    <p class="nota">Diferença de 2 votos entre os totais do TSE e a decomposição: seções presentes em só um turno ficam fora da decomposição (descartes_2026.csv).</p>
+  </main>
+  <footer class="rodape"><span>Projeto independente. Dados: TSE. Não é uma fonte oficial.</span></footer>
+</body>
+</html>
