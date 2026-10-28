@@ -85,7 +85,7 @@ def main(argv=None):
             p.error('--sem-prereg não pode gravar em site/ (publicado); use outro --out')
         painel(a.derived, a.out, exige_real=not a.sem_prereg)
         insumos = entradas(a.derived)
-        extra = {'arquivos': [a.out]}
+        extra = {'arquivos': [a.out, pathlib.Path(a.out).with_name('tabelas.html')]}
     elif a.cmd == 'analise':
         analise(a.dir, a.out, a.year, a.control_year, ufs, a.min_valid, a.boot, a.sim)
         extra = {'arquivos': [pathlib.Path(a.out) / 'resultados.json']}

@@ -4,8 +4,8 @@
   "argv": [
     "site"
   ],
-  "gerado_utc": "2026-10-28T20:28:22+00:00",
-  "commit": "0903964d9e47f9a690ae46fe899e9dd520407472",
+  "gerado_utc": "2026-10-28T20:49:08+00:00",
+  "commit": "78d885a30ee30e34cb3e1776629d591eb4571e3f",
   "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
@@ -22,7 +22,8 @@
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {
-    "painel.json": "c2d09a70d5367da309b6e78ab2d5b857b64095a35fefa07c2cfb2f718af95d88"
+    "painel.json": "c2d09a70d5367da309b6e78ab2d5b857b64095a35fefa07c2cfb2f718af95d88",
+    "tabelas.html": "bcd8dc58a20cce9d2e69c6b2634698d6ac6779e94b7e76db0fa848ed85eff912"
   },
   "conteudo_sha256": null
 }
