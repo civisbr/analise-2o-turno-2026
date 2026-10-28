@@ -9,7 +9,7 @@ def test_run_json_registra_saidas_e_versoes(tmp_path):
     info = write_run('verify', 2026, ['verify'], tmp_path, None, fechamento={'x': 0}, arquivos=[tmp_path / 'a.csv'])
     salvo = json.loads((tmp_path / 'run_verify_2026.json').read_text())
     assert salvo['saidas']['a.csv'] == info['saidas']['a.csv'] and len(salvo['saidas']['a.csv']) == 64
-    assert {'python', 'numpy', 'pandas'} <= set(salvo['versoes'])
+    assert {'python', 'numpy', 'polars'} <= set(salvo['versoes'])
     assert salvo['insumos'] is None and salvo['fechamento_secoes_divergentes'] == {'x': 0}
 
 

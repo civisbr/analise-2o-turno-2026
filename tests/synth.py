@@ -7,21 +7,19 @@ import pathlib
 import zipfile
 
 import numpy as np
-import pandas as pd
+import polars as pl
 
 
 def _munzona(V, T):
     """Agregação por município-zona como o TSE publica: município sem zero à esquerda trocado por 7 dígitos."""
-    t = pd.DataFrame(T); t = t[t.CD_CARGO == '1']
+    t = pl.DataFrame(T, infer_schema_length=None).filter(pl.col('CD_CARGO') == '1')
     k = ['NR_TURNO', 'CD_CARGO', 'SG_UF', 'CD_MUNICIPIO', 'NR_ZONA']
-    for c in ('QT_APTOS', 'QT_COMPARECIMENTO', 'QT_ABSTENCOES', 'QT_VOTOS_NOMINAIS', 'QT_VOTOS_BRANCOS', 'QT_VOTOS_NULOS'):
-        t[c] = t[c].astype(int)
-    m = t.groupby(k, as_index=False).sum(numeric_only=True)
-    m['QT_TOTAL_VOTOS_VALIDOS'] = m.QT_VOTOS_NOMINAIS
-    m['QT_VOTOS_NULOS_TECNICOS'] = 0
-    m['QT_TOTAL_VOTOS_NULOS'] = m.QT_VOTOS_NULOS
-    m['CD_MUNICIPIO'] = m.CD_MUNICIPIO.astype(int).map(lambda x: f'{x:07d}')
-    return m.drop(columns='QT_VOTOS_NOMINAIS').astype(str)
+    somas = ['QT_APTOS', 'QT_COMPARECIMENTO', 'QT_ABSTENCOES', 'QT_VOTOS_NOMINAIS', 'QT_VOTOS_BRANCOS', 'QT_VOTOS_NULOS']
+    m = t.with_columns(pl.col(somas).cast(pl.Int64)).group_by(k).agg(pl.col(somas).sum()).sort(k)
+    m = m.with_columns(QT_TOTAL_VOTOS_VALIDOS=pl.col('QT_VOTOS_NOMINAIS'), QT_VOTOS_NULOS_TECNICOS=pl.lit(0),
+                       QT_TOTAL_VOTOS_NULOS=pl.col('QT_VOTOS_NULOS'),
+                       CD_MUNICIPIO=pl.col('CD_MUNICIPIO').cast(pl.Int64).map_elements(lambda x: f'{x:07d}', return_dtype=pl.Utf8))
+    return m.drop('QT_VOTOS_NOMINAIS').cast(pl.Utf8)
 
 
 def make(outdir, year, ufs, a, f, b, plant, seed):
@@ -69,12 +67,12 @@ def make(outdir, year, ufs, a, f, b, plant, seed):
     # layout real do TSE: Presidente de todas as UFs no membro _BR; o detalhe é um zip nacional único
     for name, member, rows in ((f'votacao_secao_{year}_BR.zip', f'votacao_secao_{year}_BR.csv', V),
                                (f'detalhe_votacao_secao_{year}.zip', f'detalhe_votacao_secao_{year}_BR.csv', T)):
-        df = pd.DataFrame(rows).astype(str)
+        df = pl.DataFrame(rows, infer_schema_length=None).cast(pl.Utf8)
         with zipfile.ZipFile(outdir / name, 'w') as z:
-            z.writestr(member, df.to_csv(sep=';', index=False).encode('latin1'))
+            z.writestr(member, df.write_csv(separator=';').encode('latin1'))
             z.writestr('leiame.pdf', b'%PDF-')
     with zipfile.ZipFile(outdir / f'detalhe_votacao_munzona_{year}.zip', 'w') as z:
-        z.writestr(f'detalhe_votacao_munzona_{year}_BR.csv', mz.to_csv(sep=';', index=False).encode('latin1'))
+        z.writestr(f'detalhe_votacao_munzona_{year}_BR.csv', mz.write_csv(separator=';').encode('latin1'))
 
 
 UFS = ['BA', 'PE', 'SP', 'PA']

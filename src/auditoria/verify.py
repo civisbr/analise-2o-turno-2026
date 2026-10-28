@@ -1,28 +1,33 @@
 import pathlib
 import sys
 
+import polars as pl
+
 from .load import ALL, load_sections
 from .munzona import crosscheck, load_munzona
 from .prereg import exige_prereg
 
 CHECKS = {
-    'válidos (votação) != nominais (detalhe)': lambda g: g.valid != g.nominais,
-    'brancos (votação) != brancos (detalhe)': lambda g: g.branco != g.brancos_d,
-    'nulos (votação) != nulos (detalhe)': lambda g: g.nulo != g.nulos_d,
-    'comparecimento != nominais + brancos + nulos': lambda g: g.comp != g.nominais + g.brancos_d + g.nulos_d,
-    'comparecimento + abstenções > aptos': lambda g: g.comp + g.abst > g.apt,
+    'válidos (votação) != nominais (detalhe)': pl.col('valid') != pl.col('nominais'),
+    'brancos (votação) != brancos (detalhe)': pl.col('branco') != pl.col('brancos_d'),
+    'nulos (votação) != nulos (detalhe)': pl.col('nulo') != pl.col('nulos_d'),
+    'comparecimento != nominais + brancos + nulos': pl.col('comp') != pl.col('nominais') + pl.col('brancos_d') + pl.col('nulos_d'),
+    'comparecimento + abstenções > aptos': pl.col('comp') + pl.col('abst') > pl.col('apt'),
 }
 
 
 def reconcile(g):
     """Fecha votação x detalhe seção a seção. Retorna {verificação: nº de seções divergentes}."""
-    return {k: int(f(g).sum()) for k, f in CHECKS.items()}
+    return {k: g.filter(f.fill_null(True)).height for k, f in CHECKS.items()}   # nulo conta como divergência
+
+
+TOT_COLS = ['apt', 'comp', 'abstencao', 'valid', 'lula', 'flavio', 'terceira_via', 'branco', 'nulo']
 
 
 def totais(g):
-    c = g.assign(terceira_via=g.valid - g.lula - g.flavio, abstencao=g.abst)
-    cols = ['apt', 'comp', 'abstencao', 'valid', 'lula', 'flavio', 'terceira_via', 'branco', 'nulo']
-    return (c.groupby('NR_TURNO')[cols].sum(), c.groupby(['SG_UF', 'NR_TURNO'])[cols].sum())
+    c = g.with_columns(terceira_via=pl.col('valid') - pl.col('lula') - pl.col('flavio'), abstencao=pl.col('abst'))
+    soma = lambda chave: c.group_by(chave).agg(pl.col(TOT_COLS).sum()).sort(chave)
+    return soma('NR_TURNO'), soma(['SG_UF', 'NR_TURNO'])
 
 
 def fechamento(dir, year, g, exige_munzona=False):
@@ -32,7 +37,7 @@ def fechamento(dir, year, g, exige_munzona=False):
     for k, v in bad.items():
         print(f'  {k}: {v}')
     if (pathlib.Path(dir) / f'detalhe_votacao_munzona_{year}.zip').exists():
-        zonas, tecnicos = crosscheck(g, load_munzona(dir, year, set(g.NR_TURNO)))
+        zonas, tecnicos = crosscheck(g, load_munzona(dir, year, set(g['NR_TURNO'].to_list())))
         print(f'\nSoma das seções x detalhe município-zona (nulos técnicos reclassificados por turno: {tecnicos}):')
         for k, v in zonas.items():
             print(f'  {k}: {v}')
@@ -51,16 +56,17 @@ def fechamento(dir, year, g, exige_munzona=False):
 
 def verify(dir, out, year, exige=True):
     g = load_sections(dir, year, ALL + ['ZZ'])
-    if g.apt.isna().any():
+    if g['apt'].null_count():
         sys.exit(f'{year}: sem detalhe_votacao_secao; fechamento não verificável')
     # Os totais do 2º turno de 2026 já respondem Q1: só depois do pré-registro congelado.
-    if exige and str(year) == '2026' and '2' in set(g.NR_TURNO):
+    if exige and str(year) == '2026' and '2' in set(g['NR_TURNO'].to_list()):
         exige_prereg()
     bad = fechamento(dir, year, g)
     nac, uf = totais(g)
     out = pathlib.Path(out); out.mkdir(parents=True, exist_ok=True)
     arquivos = [out / f'totais_nacionais_{year}.csv', out / f'totais_uf_{year}.csv']
-    nac.to_csv(arquivos[0]); uf.to_csv(arquivos[1])
+    nac.write_csv(arquivos[0]); uf.write_csv(arquivos[1])
     print(f'\nTotais nacionais {year} (27 UFs + exterior ZZ):')
-    print(nac.to_string())
+    with pl.Config(tbl_cols=-1, tbl_rows=-1, tbl_hide_dataframe_shape=True):
+        print(nac)
     return {'fechamento': bad, 'arquivos': arquivos}

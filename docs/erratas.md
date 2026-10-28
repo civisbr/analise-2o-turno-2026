@@ -14,3 +14,11 @@ Alterações posteriores ao congelamento de [`pre-registro.md`](pre-registro.md)
 
 - **O quê:** o detalhe município-zona do 2º turno de 2026 foi publicado pelo TSE em 27/10/2026 (19:47 GMT). Os arquivos por seção do 2º turno (`votacao_secao`, `detalhe_votacao_secao`) foram baixados em 27/10/2026, depois da tag `prereg-v1`, e o fechamento entre as fontes passou sem divergência antes de qualquer análise.
 - **Efeito:** nenhum no método. Registra que nenhum dado do 2º turno de 2026 foi lido antes do congelamento, como a declaração de acesso do pré-registro prevê.
+
+## E3 — 28/10/2026 — troca de biblioteca de dados (pandas para polars)
+
+- **O quê:** o pipeline passou a usar polars no lugar de pandas (leitura, agregação, tabelas e saídas). A regressão numérica (NumPy: WLS, bootstrap, MAD, sementes) não mudou. O pré-registro não trata biblioteca de dados.
+- **Efeito no método:** nenhum. Evidência: sobre dados sintéticos, `resultados.json` e os CSV públicos saem byte a byte iguais aos do código pandas, e o `conteudo_sha256` do build não muda.
+- **Efeito nas saídas:** `swing_municipios_<ano>.csv` grava `flag_pos`, `flag_neg` e `votos_2t` como inteiros (antes `3.0`), e listas em que há empate de `dF` ou de `|z|` passam a ser ordenadas por desempate determinístico (município); o pandas deixava a ordem do empate indefinida. Os valores não mudam.
+- **Entradas mais estritas:** campo vazio ou truncado em colunas de votos agora para o pipeline (antes só o `astype(int)` do pandas falhava em parte dos casos), e `mad = 0` em z robusto para com mensagem clara em vez de gerar NaN.
+- **Código:** PR de migração para polars.

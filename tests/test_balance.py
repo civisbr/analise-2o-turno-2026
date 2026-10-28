@@ -2,7 +2,7 @@ import contextlib
 import io
 
 import numpy as np
-import pandas as pd
+import polars as pl
 import pytest
 
 from auditoria.balance import add_flows, balance, identity_gap, muni_table
@@ -41,30 +41,31 @@ def test_outliers_plantados_deslocam_o_ajuste_e_aparecem_no_topo(wide26, wide26_
     plant = run_balance(wide26, '2026 (principal)', tmp_path / 'com')[('A', True)]
     # o sentido do viés depende de quais municípios recebem o plantio; só o deslocamento é estável
     assert np.abs(plant - base).max() > 0.03
-    m = pd.read_csv(tmp_path / 'com' / 'balanco_municipios_2026.csv')
-    top3 = set(m.sort_values('z_resid', ascending=False).head(3).mun)
+    m = pl.read_csv(tmp_path / 'com' / 'balanco_municipios_2026.csv')
+    top3 = set(m.sort('z_resid', descending=True).head(3)['mun'])
     assert top3 == {'BA-00003', 'BA-00007', 'BA-00011'}
-    assert m.z_resid.max() > 10
+    assert m['z_resid'].max() > 10
 
 
 def test_resultado_sem_comparecimento_nao_quebra(wide22, tmp_path):
-    w = wide22.assign(comp1=float('nan'), comp2=float('nan'))
+    w = wide22.with_columns(comp1=pl.lit(None, dtype=pl.Float64), comp2=pl.lit(None, dtype=pl.Float64))
     res = run_balance(w, '2022 (controle)', tmp_path)
     assert {k[0] for k in res} == {'A'}
 
 
 def test_identidade_quebrada_para_o_pipeline(wide22, tmp_path):
-    w = wide22.assign(lula2=wide22.lula2 + 5)   # votos de candidato sem válidos correspondentes
+    w = wide22.with_columns(lula2=pl.col('lula2') + 5)   # votos de candidato sem válidos correspondentes
     with pytest.raises(SystemExit, match='identidade'):
         run_balance(w, '2022 (controle)', tmp_path)
 
 
 def test_csv_municipal_omite_municipio_com_poucas_secoes(wide26_noplant, tmp_path):
-    w = wide26_noplant
-    pequeno = w[(w.SG_UF == 'SP') & (w.CD_MUNICIPIO == '00005')].index[5:]
-    run_balance(w.drop(index=pequeno), '2026 (principal)', tmp_path)
-    m = pd.read_csv(tmp_path / 'balanco_municipios_2026.csv')
-    assert 'SP-00005' not in set(m.mun) and 'SP-OUTROS' in set(m.mun)
-    outros = m[m.mun == 'SP-OUTROS'].iloc[0]
-    assert outros.municipios_agregados >= 2 and outros.secoes >= 10 and np.isnan(outros.z_resid)
-    assert m.dL.sum() == with_flows(w.drop(index=pequeno)).query('valid1 >= 200 and valid2 >= 200').dL.sum()
+    sp5 = (pl.col('SG_UF') == 'SP') & (pl.col('CD_MUNICIPIO') == '00005')
+    w = wide26_noplant.filter(~(sp5 & (pl.int_range(pl.len()).over(sp5) >= 5)))
+    run_balance(w, '2026 (principal)', tmp_path)
+    m = pl.read_csv(tmp_path / 'balanco_municipios_2026.csv')
+    assert 'SP-00005' not in set(m['mun']) and 'SP-OUTROS' in set(m['mun'])
+    outros = m.filter(pl.col('mun') == 'SP-OUTROS').row(0, named=True)
+    assert outros['municipios_agregados'] >= 2 and outros['secoes'] >= 10 and outros['z_resid'] is None
+    elegiveis = with_flows(w).filter((pl.col('valid1') >= 200) & (pl.col('valid2') >= 200))
+    assert m['dL'].sum() == elegiveis['dL'].sum()
