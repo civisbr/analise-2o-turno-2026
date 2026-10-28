@@ -102,11 +102,17 @@ def test_painel_nota_a_diferenca_entre_totais_e_decomposicao(synth_dir, tmp_path
 
 
 def test_tabelas_html_sem_js_escapa_e_traz_os_numeros(synth_dir, tmp_path):
+    from auditoria.site import _br, tabelas_html
     d = _derived(synth_dir, tmp_path)
     p = painel(d, tmp_path / 'p.json', exige_real=False)
-    assert '<script' not in (tmp_path / 'tabelas.html').read_text(encoding='utf-8')
-    from auditoria.site import tabelas_html
+    h = (tmp_path / 'tabelas.html').read_text(encoding='utf-8')
+    assert '<script' not in h and 'Valores de demonstração' in h   # sintético: aviso como na página com JS
+    assert _br(p['ganho']['total'], 0, True) in h
+    q3 = h.split('Municípios com padrão atípico')[1].split('</table>')[0]
+    for x in p['atipicos']:
+        assert f'<td>{_br(x["pct"], 1)}%</td>' in q3   # 1 casa, igual à página com JS
+    assert '85,00%' in h   # comparecimento do CSV sintético (850/1000)
     p['atipicos'][0]['rotulo'] = '<img src=x onerror=1>'
-    h = tabelas_html(p)
-    assert '<img' not in h and '&lt;img' in h
-    assert all(q['id'] in h for q in p['perguntas'])
+    h2 = tabelas_html(p)
+    assert '<img' not in h2 and '&lt;img' in h2
+    assert all(q['id'] in h2 for q in p['perguntas'])

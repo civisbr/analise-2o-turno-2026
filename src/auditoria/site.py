@@ -162,13 +162,14 @@ def tabelas_html(p):
         tabela('Divisão do ganho entre Lula e Flávio', ['Ano', 'Lula', 'Flávio'],
                [(str(a['ano']), f'{a["lula"]}%', f'{a["flavio"]}%') for a in p['divisao']['anos']]),
     ]
-    if p['atipicos']:
+    if p['atipicos']:   # 1 casa decimal nos percentuais, como na página com JS
         corpos.append(tabela('Municípios com padrão atípico (Q3), com controle de 2022', ['Critério', 'Base', '% dos municípios'],
-                             [(x['rotulo'], x['faixa'], _br(x['pct'], 2) + '%') for x in p['atipicos']]))
+                             [(x['rotulo'], x['faixa'], _br(x['pct'], 1) + '%') for x in p['atipicos']]))
     for q in p['perguntas']:
         corpos.append(f'<section class="cartao"><h2>{e(q["id"])} — {e(q["titulo"])}</h2><ul>'
                       + ''.join(f'<li>{e(l)}</li>' for l in q['linhas']) + '</ul></section>')
     notas = ''.join(f'<p class="nota">{e(n)}</p>' for n in p.get('notas', []))
+    aviso = ('<p class="aviso-ilustrativo">Valores de demonstração: não são resultados publicados.</p>' if p['ilustrativo'] else '')
     return ('<!doctype html>\n<html lang="pt-BR">\n<head>\n  <meta charset="utf-8">\n'
             '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '  <meta http-equiv="Content-Security-Policy" content="default-src \'none\'; img-src \'self\'; style-src \'self\'; '
@@ -176,7 +177,7 @@ def tabelas_html(p):
             '  <title>Auditoria Pública – 2º turno 2026: tabelas</title>\n  <link rel="stylesheet" href="../style.css">\n</head>\n<body>\n'
             '  <main class="painel sem-js">\n'
             f'    <div class="painel-cab"><h1>Tabelas, sem JavaScript</h1><span class="muted">Atualizado em {e(p["atualizado"])}</span></div>\n'
-            '    <p class="nota">Versão preliminar. Associações entre municípios e seções, com 2022 como controle; '
+            + aviso + '    <p class="nota">Versão preliminar. Associações entre municípios e seções, com 2022 como controle; '
             'um padrão atípico não indica irregularidade. <a href="../index.html">Voltar à página</a>.</p>\n    '
             + '\n    '.join(corpos) + f'\n    {notas}\n  </main>\n'
             '  <footer class="rodape"><span>Projeto independente. Dados: TSE. Não é uma fonte oficial.</span></footer>\n</body>\n</html>\n')
