@@ -8,7 +8,16 @@ from .load import MIN_SECOES_PUBLICAS, load_year
 from .robust import mad_sigma
 
 
-def swing_table(wide, min_votes=50):
+MIN_VOTOS = 50   # seção com menos votos nominais em qualquer turno fica fora do swing
+
+
+def secoes_por_municipio(wide, min_votes=MIN_VOTOS):
+    """Seções que entram no swing, por município: é a contagem que vale para o corte de publicação (regra 7)."""
+    d = wide[(wide.lula1 + wide.flavio1 >= min_votes) & (wide.lula2 + wide.flavio2 >= min_votes)]
+    return (d.SG_UF + '-' + d.CD_MUNICIPIO).value_counts()
+
+
+def swing_table(wide, min_votes=MIN_VOTOS):
     d = wide.copy()
     d = d[(d.lula1 + d.flavio1 >= min_votes) & (d.lula2 + d.flavio2 >= min_votes)].copy()
     n1 = d.lula1 + d.flavio1; n2 = d.lula2 + d.flavio2
@@ -68,7 +77,7 @@ def analyze(dir, out, year, control_year, ufs, closing=None, private_dir='data/p
         print(f'  {uf}: swing mediano {g.swing.median():+.2f} pp; ρ(swing, Δcomparecimento)={rho:+.2f}')
     d.to_csv(private / f'secoes_{year}.csv', index=False)
     flagged.to_csv(private / f'secoes_sinalizadas_{year}.csv', index=False)
-    muni.to_csv(out / f'municipios_{year}.csv')
+    muni.to_csv(out / f'swing_municipios_{year}.csv')   # municipios_<ano>.csv é a tabela pública do build
     print('\nTop 15 municípios por |z_mun| (≥ 10 seções):')
     print(muni[muni.secoes >= 10].head(15).round(2).to_string())
     if control_year:

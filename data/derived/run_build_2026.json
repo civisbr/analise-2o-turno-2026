@@ -12,9 +12,9 @@
     "--private-dir",
     "<externo>"
   ],
-  "gerado_utc": "2026-10-28T19:07:15+00:00",
-  "commit": "5f1a087546671a3e1c4cba93c61fa6f3feb4ce8b",
-  "tree_clean": false,
+  "gerado_utc": "2026-10-28T20:17:48+00:00",
+  "commit": "0903964d9e47f9a690ae46fe899e9dd520407472",
+  "tree_clean": true,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",

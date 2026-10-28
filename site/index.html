@@ -33,7 +33,7 @@
     <section class="hero" id="mapas">
       <div class="hero-texto">
         <h1>Números públicos.<br>Transparência para todos.</h1>
-        <p class="sub">Analisamos, com dados do TSE, o que mudou entre o 1º e o 2º turno das eleições presidenciais de 2026. Sem achismos. Sem lado. Apenas evidências.</p>
+        <p class="sub">Analisamos, com dados do TSE, o que mudou entre o 1º e o 2º turno das eleições presidenciais de 2026. Método pré-registrado e resultados negativos com o mesmo destaque.</p>
         <ul class="selos">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.500-7-5-7-10V6z"/><path d="M8.500 12l2.500 2.500 4.500-5"/></svg><div><strong>Independente</strong><span>Não é oficial. Não é partidário.</span></div></li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V12M10 20V6M15 20V10M20 20V4"/></svg><div><strong>Baseado em dados</strong><span>Fonte primária: TSE</span></div></li>
@@ -83,7 +83,7 @@
         </article>
         <article class="cartao" aria-labelledby="t-atip">
           <h3 id="t-atip">Municípios com padrão atípico</h3>
-          <p class="muted peq">% de municípios por nível de atipicidade (Q3)</p>
+          <p class="muted peq">% de municípios por critério (Q3), com controle de 2022</p>
           <div id="atipicos" class="hbarras"></div>
           <a class="mais" href="#resultados">Explorar no mapa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
@@ -100,11 +100,14 @@
           <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ver todas as hipóteses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
       </div>
+      <div class="perguntas" id="perguntas" role="group" aria-label="Perguntas Q1 a Q6"></div>
+      <p class="nota">Associações entre municípios e seções, com 2022 como controle. Dados agregados não descrevem o comportamento de eleitores individuais (inferência ecológica). Um padrão atípico não indica irregularidade: indica o que o modelo não explica.</p>
+      <div id="notas" class="nota"></div>
     </section>
 
     <section class="faixa" id="dados" aria-label="Transparência do projeto">
       <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.500"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg></span><div><strong>Dados e código abertos</strong><p>Todo o código, dados derivados e documentação estão disponíveis no GitHub.</p><a class="pill" href="https://github.com/civisbr/analise-2o-turno-2026">Ver repositório <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 19v-3.500M15 19v-3.500M9 15c-3 1-3-2-5-2M15 15c3 1 3-2 5-2"/></svg></a></div></div>
-      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v3l6 5M18 8v3l-6 5"/></svg></span><div><strong>Status do projeto <span class="selo-prelim">Versão preliminar</span></strong><p>Em revisão por especialistas externos antes da divulgação ampla.</p></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v3l6 5M18 8v3l-6 5"/></svg></span><div><strong>Status do projeto <span class="selo-prelim">Versão preliminar</span></strong><p>Aguardando revisão externa antes da divulgação ampla.</p></div></div>
       <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6M10 8h2"/></svg></span><div><strong>Pré-registro</strong><p>Metodologia, hipóteses e critérios definidos antes de qualquer análise.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ler pré-registro <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
       <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a6 6 0 0 0-6 6v3M12 4a6 6 0 0 1 6 6v6M9 20c0-3 0-6 3-6s3 3 3 6M12 8a2 2 0 0 0-2 2v3"/></svg></span><div><strong>Transparência total</strong><p>Cada número desta página tem origem, comando e data. Sem números digitados à mão.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Como garantimos isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
     </section>

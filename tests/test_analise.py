@@ -171,3 +171,15 @@ def test_q1_municipal_com_supressao_complementar(wide22):
 def test_bh_com_empates_e_p_unico():
     assert benjamini_hochberg(np.array([0.01, 0.01, 0.01, 0.9])).tolist() == [True, True, True, False]
     assert benjamini_hochberg(np.array([0.04])).tolist() == [True]
+
+
+def test_lista_nominal_usa_a_menor_contagem_de_secoes(wide22):
+    from auditoria.load import MIN_SECOES_PUBLICAS
+    from auditoria.swing import secoes_por_municipio
+    w = wide22.copy()
+    mun = (w.SG_UF + '-' + w.CD_MUNICIPIO)
+    alvo = mun.value_counts().index[-1]
+    idx = w.index[mun == alvo]
+    w.loc[idx[0], ['lula1', 'flavio1']] = [10, 10]   # fica abaixo de 50 votos: fora do swing
+    pub = an._secoes_publicas(w)
+    assert pub[alvo] == min(len(idx), secoes_por_municipio(w)[alvo]) == len(idx) - 1

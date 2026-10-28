@@ -1,15 +1,242 @@
 {
-  "ilustrativo": false,
-  "atualizado": null,
-  "kpis": [
-    {"id": "comparecimento", "rotulo": "Comparecimento 2º turno", "valor": null, "tipo": "pct", "linha2": {"valor": null, "tipo": "int", "sufixo": "eleitores"}, "delta": {"valor": null, "tipo": "pp", "sufixo": "vs 1º turno"}, "serie": null, "cor": "verde"},
-    {"id": "validos", "rotulo": "Votos válidos", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "delta": {"valor": null, "tipo": "pctsinal"}, "serie": null, "cor": "verde"},
-    {"id": "lula", "rotulo": "Lula", "ponto": "verde", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "pct", "sufixo": "dos válidos"}, "delta": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "serie": null, "cor": "verde"},
-    {"id": "flavio", "rotulo": "Flávio Bolsonaro", "ponto": "azul", "valor": null, "tipo": "int", "linha2": {"valor": null, "tipo": "pct", "sufixo": "dos válidos"}, "delta": {"valor": null, "tipo": "sint", "sufixo": "vs 1º turno"}, "serie": null, "cor": "azul"},
-    {"id": "abstencao", "rotulo": "Abstenção", "valor": null, "tipo": "pct", "linha2": {"valor": null, "tipo": "int", "sufixo": "eleitores"}, "delta": {"valor": null, "tipo": "pp", "sufixo": "vs 1º turno"}, "serie": null, "cor": "amarelo"},
-    {"id": "brancos_nulos", "rotulo": "Brancos / Nulos", "valor": null, "tipo": "par_pct", "linha2": {"valor": null, "tipo": "par_int"}, "delta": {"valor": null, "tipo": "pp"}, "serie": null, "cor": "roxo"}
-  ],
-  "ganho": null,
-  "divisao": null,
-  "atipicos": null
+ "ilustrativo": false,
+ "atualizado": "2026-10-28",
+ "kpis": [
+  {
+   "id": "comparecimento",
+   "rotulo": "Comparecimento 2º turno",
+   "valor": 80.78,
+   "tipo": "pct",
+   "linha2": {
+    "valor": 128236074,
+    "tipo": "int",
+    "sufixo": "eleitores"
+   },
+   "delta": {
+    "valor": 1.86,
+    "tipo": "pp",
+    "sufixo": "vs 1º turno"
+   },
+   "serie": null,
+   "cor": "verde"
+  },
+  {
+   "id": "validos",
+   "rotulo": "Votos válidos",
+   "valor": 124082273,
+   "tipo": "int",
+   "linha2": {
+    "valor": 4776239,
+    "tipo": "sint",
+    "sufixo": "vs 1º turno"
+   },
+   "delta": {
+    "valor": 4.0,
+    "tipo": "pctsinal"
+   },
+   "serie": null,
+   "cor": "verde"
+  },
+  {
+   "id": "lula",
+   "rotulo": "Lula",
+   "ponto": "verde",
+   "valor": 64256232,
+   "tipo": "int",
+   "linha2": {
+    "valor": 51.79,
+    "tipo": "pct",
+    "sufixo": "dos válidos"
+   },
+   "delta": {
+    "valor": 10376694,
+    "tipo": "sint",
+    "sufixo": "vs 1º turno"
+   },
+   "serie": null,
+   "cor": "verde"
+  },
+  {
+   "id": "flavio",
+   "rotulo": "Flávio Bolsonaro",
+   "ponto": "azul",
+   "valor": 59826041,
+   "tipo": "int",
+   "linha2": {
+    "valor": 48.21,
+    "tipo": "pct",
+    "sufixo": "dos válidos"
+   },
+   "delta": {
+    "valor": 3721538,
+    "tipo": "sint",
+    "sufixo": "vs 1º turno"
+   },
+   "serie": null,
+   "cor": "azul"
+  },
+  {
+   "id": "abstencao",
+   "rotulo": "Abstenção",
+   "valor": 19.22,
+   "tipo": "pct",
+   "linha2": {
+    "valor": 30509005,
+    "tipo": "int",
+    "sufixo": "eleitores"
+   },
+   "delta": {
+    "valor": -1.86,
+    "tipo": "pp",
+    "sufixo": "vs 1º turno"
+   },
+   "serie": null,
+   "cor": "amarelo"
+  },
+  {
+   "id": "brancos_nulos",
+   "rotulo": "Brancos / Nulos",
+   "valor": [
+    1.12,
+    2.12
+   ],
+   "tipo": "par_pct",
+   "linha2": {
+    "valor": [
+     1430496,
+     2723305
+    ],
+    "tipo": "par_int"
+   },
+   "delta": {
+    "texto": "queda vs 1º turno"
+   },
+   "serie": null,
+   "cor": "roxo"
+  }
+ ],
+ "ganho": {
+  "total": 14098234,
+  "partes": [
+   {
+    "id": "terceira_via",
+    "rotulo": "Terceira via",
+    "valor": 9321993,
+    "pct": 66.1,
+    "cor": "roxo"
+   },
+   {
+    "id": "comparecimento",
+    "rotulo": "Mais comparecimento",
+    "valor": 2960241,
+    "pct": 21.0,
+    "cor": "azul"
+   },
+   {
+    "id": "brancos_nulos",
+    "rotulo": "Queda de brancos/nulos",
+    "valor": 1816000,
+    "pct": 12.9,
+    "cor": "amarelo"
+   }
+  ]
+ },
+ "divisao": {
+  "anos": [
+   {
+    "ano": 2022,
+    "lula": 30,
+    "flavio": 70
+   },
+   {
+    "ano": 2026,
+    "lula": 74,
+    "flavio": 26
+   }
+  ]
+ },
+ "atipicos": [
+  {
+   "rotulo": "2026, sem correção",
+   "faixa": "p < 0,05",
+   "pct": 10.68,
+   "cor": "azul"
+  },
+  {
+   "rotulo": "2022, controle",
+   "faixa": "p < 0,05",
+   "pct": 10.23,
+   "cor": "amarelo"
+  },
+  {
+   "rotulo": "Esperado por acaso",
+   "faixa": "p < 0,05",
+   "pct": 5.0,
+   "cor": "muted"
+  },
+  {
+   "rotulo": "2026, FDR 5%",
+   "faixa": "nos dois ajustes",
+   "pct": 2.5,
+   "cor": "azul"
+  },
+  {
+   "rotulo": "2022, FDR 5%",
+   "faixa": "controle, nos dois ajustes",
+   "pct": 2.41,
+   "cor": "amarelo"
+  }
+ ],
+ "perguntas": [
+  {
+   "id": "Q1",
+   "titulo": "De onde veio o ganho conjunto dos finalistas?",
+   "linhas": [
+    "2026: Lula +10.376.696, Flávio +3.721.538 votos.",
+    "2022: Lula +3.086.436, Flávio +7.133.820 votos."
+   ]
+  },
+  {
+   "id": "Q2",
+   "titulo": "A divisão do ganho difere de 2022?",
+   "linhas": [
+    "Diferença de α (2026 − 2022): +0,10 (IC 95%: +0,07 a +0,16).",
+    "Diferença de β (voto válido novo): +0,26 (IC 95%: +0,20 a +0,32).",
+    "Explicado pelas covariáveis dos dados oficiais: não."
+   ]
+  },
+  {
+   "id": "Q3",
+   "titulo": "Há municípios que destoam do padrão do estado?",
+   "linhas": [
+    "Sinalizados (FDR 5%, nos dois ajustes): 139 de 5.571 em 2026; 134 de 5.570 em 2022."
+   ]
+  },
+  {
+   "id": "Q4",
+   "titulo": "Onde Flávio perdeu votos absolutos, o comparecimento caiu?",
+   "linhas": [
+    "2026: 938 municípios com queda de Flávio, 210 sem queda de comparecimento.",
+    "2022: 92 municípios com queda de Flávio, 0 sem queda de comparecimento."
+   ]
+  },
+  {
+   "id": "Q5",
+   "titulo": "Há excesso de seções extremas?",
+   "linhas": [
+    "Seções com |z| > 4: 0,084% em 2026, 0,098% em 2022; esperado por acaso (simulação): 0,008%.",
+    "Conjunto atípico de seções: não."
+   ]
+  },
+  {
+   "id": "Q6",
+   "titulo": "Seções que fecharam tarde tiveram swing diferente?",
+   "linhas": [
+    "Não testável com dados públicos: a hora de encerramento por seção não existe nos CSV do TSE."
+   ]
+  }
+ ],
+ "notas": [
+  "Diferença de 2 votos entre os totais do TSE e a decomposição: seções presentes em só um turno ficam fora da decomposição (descartes_2026.csv)."
+ ]
 }
