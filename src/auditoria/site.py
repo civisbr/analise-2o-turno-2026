@@ -1,4 +1,4 @@
-"""painel.json da página: só lê arquivos gerados (totais, resultados.json). Nenhum número é digitado à mão
+"""painel.json da página: lê resultados e snapshots municipais rastreáveis. Nenhum número é digitado à mão
 (regra 5). Texto aqui é descritivo; interpretação fica fora da página até a revisão externa."""
 import html
 import json
@@ -8,6 +8,8 @@ from types import SimpleNamespace
 import polars as pl
 
 from .runinfo import _sha
+from .concentracao import candidato, concentracao
+from .contexto import analisar_contexto
 
 
 def _br(x, casas=0, sinal=False):
@@ -64,7 +66,8 @@ def _divisao(g26, g22):
     def ano(a, g):
         if g['dL'] < 0 or g['dF'] < 0 or g['dL'] + g['dF'] == 0:
             raise SystemExit(f'ganho de {a} sem divisão definida (dL={g["dL"]}, dF={g["dF"]}): painel não gerado')
-        l = round(g['dL'] / (g['dL'] + g['dF']) * 100); return {'ano': a, 'lula': l, 'flavio': 100 - l}
+        l = round(g['dL'] / (g['dL'] + g['dF']) * 100)
+        return {'ano': a, 'lula': l, 'flavio': 100 - l, 'candidato_22': candidato(a, 'flavio')}
     return {'anos': [ano(2022, g22), ano(2026, g26)]}
 
 
@@ -99,21 +102,21 @@ def _perguntas(r, g26, g22):
     dif = lambda nome, c: (f'{nome}: {_br(c["dif"], 2, True)} ({ic(c)}).' if c else f'{nome}: {NAO_AVALIAVEL}')
 
     def q4_linha(ano):
-        q = q4[ano]; base = f'{_br(q["com_queda_de_flavio"])} municípios com queda de Flávio'
+        q = q4[ano]; base = f'{_br(q["com_queda_de_flavio"])} municípios com queda de {candidato(ano, "flavio")}'
         if 'comparecimento_estavel_ou_alta' not in q:
             return f'{ano}: {base}; comparecimento {NAO_AVALIAVEL}'
         return f'{ano}: {base}, {_br(q["comparecimento_estavel_ou_alta"])} sem queda de comparecimento.'
     return [
         {'id': 'Q1', 'titulo': 'De onde veio o ganho conjunto dos finalistas?', 'linhas': [
             f'2026: Lula {_br(g26["dL"], 0, True)}, Flávio {_br(g26["dF"], 0, True)} votos.',
-            f'2022: Lula {_br(g22["dL"], 0, True)}, Flávio {_br(g22["dF"], 0, True)} votos.']},
+            f'2022: Lula {_br(g22["dL"], 0, True)}, Jair Bolsonaro {_br(g22["dF"], 0, True)} votos.']},
         {'id': 'Q2', 'titulo': 'A divisão do ganho difere de 2022?', 'linhas': [
             dif('Diferença de α (2026 − 2022)', al), dif('Diferença de β (voto válido novo)', be),
             f'Explicado pelas covariáveis dos dados oficiais: {veredito}.']},
         {'id': 'Q3', 'titulo': 'Há municípios que destoam do padrão do estado?', 'linhas': [
             f'Sinalizados (FDR 5%, nos dois ajustes): {_br(q3[a26]["sinalizados_nos_dois"])} de {_br(q3[a26]["testados"])} em 2026; '
             f'{_br(q3[a22]["sinalizados_nos_dois"])} de {_br(q3[a22]["testados"])} em 2022.']},
-        {'id': 'Q4', 'titulo': 'Onde Flávio perdeu votos absolutos, o comparecimento caiu?', 'linhas': [q4_linha(a26), q4_linha(a22)]},
+        {'id': 'Q4', 'titulo': 'Onde o candidato nº 22 perdeu votos absolutos, o comparecimento caiu?', 'linhas': [q4_linha(a26), q4_linha(a22)]},
         {'id': 'Q5', 'titulo': 'Há excesso de seções extremas?', 'linhas': [
             f'Seções com |z| > 4: {_br(q5["fracao_" + a26] * 100, 3)}% em 2026, {_br(q5["fracao_" + a22] * 100, 3)}% em 2022; '
             f'esperado por acaso (simulação): {_br(q5["esperado_por_acaso_simulacao"] * 100, 3)}%.',
@@ -141,6 +144,16 @@ def _fmt(tipo, v):
             'par_int': lambda: ' / '.join(_br(x) for x in v)}[tipo]()
 
 
+def _distribuicao(d, exige_real):
+    nome = 'distribuicao_secoes.json'
+    run = json.loads((d / 'run_distribuicao-secoes_2026.json').read_text(encoding='utf-8'))
+    if run['saidas'].get(nome) != _sha(d / nome):
+        raise SystemExit('distribuicao_secoes.json difere da rodada: rode `auditoria distribuicao-secoes` de novo')
+    if exige_real and (run.get('insumos') is None or run.get('prereg_tag') is None):
+        raise SystemExit('distribuição de seções sem insumos do MANIFEST.json ou sem tag prereg-v1 (dado sintético?)')
+    return json.loads((d / nome).read_text(encoding='utf-8'))
+
+
 def tabelas_html(p):
     """Versão sem JavaScript: as mesmas tabelas da página, a partir do painel.json já gerado."""
     e = html.escape
@@ -159,12 +172,109 @@ def tabelas_html(p):
         tabela('De onde veio o ganho conjunto dos finalistas', ['Origem', 'Votos', 'Participação'],
                [(x['rotulo'], _br(x['valor'], 0, True), _br(x['pct'], 1) + '%') for x in p['ganho']['partes']]
                + [('Total', _br(p['ganho']['total'], 0, True), '')]),
-        tabela('Divisão do ganho entre Lula e Flávio', ['Ano', 'Lula', 'Flávio'],
-               [(str(a['ano']), f'{a["lula"]}%', f'{a["flavio"]}%') for a in p['divisao']['anos']]),
+        tabela('Divisão do ganho entre os finalistas', ['Ano', 'Lula', 'Candidato nº 22', 'Parcela do ganho'],
+               [(str(a['ano']), f'{a["lula"]}%', a['candidato_22'], f'{a["flavio"]}%') for a in p['divisao']['anos']]),
     ]
     if p['atipicos']:   # 1 casa decimal nos percentuais, como na página com JS
         corpos.append(tabela('Municípios com padrão atípico (Q3), com controle de 2022', ['Critério', 'Base', '% dos municípios'],
                              [(x['rotulo'], x['faixa'], _br(x['pct'], 1) + '%') for x in p['atipicos']]))
+    con = p['concentracao']
+    def resultado(r):
+        if r is None:
+            return 'Não disponível individualmente nesta base'
+        return (f'{r["candidato"]}: {_br(r["pct"], 3)}% '
+                f'({_br(r["votos"])} / {_br(r["validos"])} válidos); '
+                + ('mais de 90%' if r['acima_90'] else 'até 90%'))
+    corpos.append('<section class="cartao"><h2>Municípios com mais de 90% dos votos válidos</h2>'
+                  + ''.join(f'<p>{ano}: {_br(r["acima_90"])} de {_br(r["avaliados"])} municípios avaliados.</p>'
+                            for ano, r in con['resumo'].items())
+                  + f'<p>Nos dois anos: {_br(con["nos_dois_anos"])} municípios.</p>'
+                  + '<details class="explicacao"><summary>Como ler esta comparação</summary>'
+                  '<p>Segundo turno; votos do candidato divididos pelos válidos. O corte é estritamente maior que 90%, '
+                  'antes de arredondar. A tabela mostra o candidato mais votado em cada ano e inclui cidades que '
+                  'passaram de 90% em pelo menos um ano. Compara códigos municipais do TSE, sem ajuste de limites territoriais. '
+                  'A base contém só seções presentes nos dois turnos; municípios pequenos agrupados em OUTROS e exterior '
+                  'ficam fora. Ausência não significa zero. Análise descritiva adicional, sem teste de irregularidade.</p></details></section>')
+    corpos.append(tabela('Comparação municipal: 2º turno de 2026 × 2022',
+                         ['Município / UF (código TSE)', '2026: líder e votação', '2022: líder e votação', 'Mais de 90%'],
+                         [(f'{r["nome"]} / {r["uf"]} ({r["mun"]})', resultado(r['2026']), resultado(r['2022']), r['situacao'])
+                          for r in con['linhas']]))
+    ds = p['distribuicao_secoes']
+    corpos.append('<section class="cartao"><h2>Seções com até 10 votos — 2º turno</h2>'
+                  '<details class="explicacao"><summary>Como contamos as seções</summary>'
+                  '<p>De zero a dez votos, inclusive. Uma seção é a combinação de UF, município, zona e número da seção. '
+                  'Entram todas as seções com votos válidos no segundo turno, sem exigir presença no primeiro e sem piso '
+                  'de tamanho. Seções sem válidos ficam fora. Brasil exclui exterior; os dois recortes adicionais mostram '
+                  'o efeito dessa escolha. A unidade é a seção apurada, não o equipamento físico da urna.</p>'
+                  '<p>Até dez votos é um limite absoluto; mais de 90% é uma proporção dos válidos, calculada sem arredondar. '
+                  'Dez de cinquenta votos equivalem a 20%; dez de trezentos, a 3,33%. '
+                  'As contagens de 2022 e 2026 são de universos próprios, sem parear seções entre eleições. '
+                  'Análise descritiva adicional; isoladamente, essas contagens não demonstram irregularidade.</p></details></section>')
+    for escopo, rotulo in [('brasil', 'Brasil, sem exterior'), ('exterior', 'Exterior'), ('brasil_exterior', 'Brasil + exterior')]:
+        linhas = []
+        for ano in ('2026', '2022'):
+            b = ds['anos'][ano][escopo]
+            for c in ('flavio', 'lula'):
+                r = b['candidatos'][c]
+                linhas.append((f'{ano} — {r["nome"]}', _br(b['avaliadas']), _br(r['zero']),
+                               _br(r['de_1_a_5']), _br(r['de_6_a_10']), _br(r['ate_10']),
+                               _fmt('pct', r['pct_ate_10']), _br(r['acima_90'])))
+        corpos.append(tabela(f'Seções: {rotulo}', ['Ano / candidato', 'Seções avaliadas', 'Zero voto', '1–5 votos',
+                                                '6–10 votos', 'Até 10 votos', '% das seções', 'Mais de 90% dos válidos'], linhas))
+    for c in ('flavio', 'lula'):
+        por_ano = {ano: {r['uf']: r for r in ds['anos'][ano]['ufs']} for ano in ('2026', '2022')}
+        linhas = []
+        for uf in sorted(set(por_ano['2026']) | set(por_ano['2022'])):
+            linha = [uf]
+            for ano in ('2026', '2022'):
+                b = por_ano[ano].get(uf)
+                linha += ([_br(b['candidatos'][c]['ate_10']), _fmt('pct', b['candidatos'][c]['pct_ate_10'])]
+                          if b else ['—', '—'])
+            linhas.append(tuple(linha))
+        corpos.append(tabela(f'Até 10 votos por UF: {candidato(2026, c)} (2026) / {candidato(2022, c)} (2022)',
+                             ['UF', '2026: seções', '2026: %', '2022: seções', '2022: %'], linhas))
+    ctx = p['contexto']['anos']['2026']
+    moeda = lambda v: '—' if v is None else 'R$ ' + _br(v, 2)
+    ind = lambda v: '—' if v is None else _br(v, 3)
+    corpos.append('<section class="cartao"><h2>Contexto municipal da eleição presidencial de 2026</h2>'
+                  '<details class="explicacao"><summary>Fontes e limites do cruzamento</summary>'
+                  '<p>IDHM de 2010 (Atlas/PNUD/Ipea/FJP, via Ipeadata); PIB e PIB por habitante de 2023 (IBGE); '
+                  'prefeitos e partidos eleitos em 2024 (TSE). PIB por habitante não é renda das pessoas. '
+                  'Categorias partidárias da tabela 1 de Bolognesi et al. (2025), pesquisa de 2022; centro-esquerda '
+                  'e extrema esquerda agrupadas em Esquerda; centro-direita e extrema direita em Direita. '
+                  'Siglas não presentes ficam sem classificação. Isso não mede a posição pessoal do prefeito '
+                  'nem seu apoio presidencial. O partido atual não foi verificado.</p>'
+                  '<p>Cada município tem o mesmo peso; sem ajuste por região ou porte. Medianas usam apenas os casos '
+                  'com indicador disponível. A votação de 2022 é referência eleitoral; governos de 2024 não são '
+                  'atribuídos a 2022. As associações não demonstram causalidade ou irregularidade. '
+                  '<a href="../index.html#exp-contexto">Fontes e metodologia no painel</a>.</p></details></section>')
+    corpos.append(tabela('Medianas por concentração de votos em 2026',
+                         ['Grupo', 'Municípios', 'IDHM 2010 (n)', 'PIB/hab. 2023 (n)', 'PIB total 2023 (n)'],
+                         [(g['rotulo'], _br(g['n']),
+                           f'{ind(g["indicadores"]["idhm_2010"]["mediana"])} ({g["indicadores"]["idhm_2010"]["n"]})',
+                           f'{moeda(g["indicadores"]["pib_pc_2023"]["mediana"])} ({g["indicadores"]["pib_pc_2023"]["n"]})',
+                           f'{moeda(g["indicadores"]["pib_2023"]["mediana"])} ({g["indicadores"]["pib_2023"]["n"]})') for g in ctx['grupos']]))
+    corpos.append(tabela('Bloco do partido eleito para a prefeitura em 2024 × concentração em 2026',
+                         ['Bloco', 'Municípios avaliados', 'Acima de 90%', '% dentro do bloco'],
+                         [(r['bloco'], _br(r['municipios']), _br(r['acima_90']), _fmt('pct', r['pct'])) for r in ctx['blocos']]))
+    corpos.append(tabela('Correlação de Spearman com o percentual do candidato mais votado em 2026',
+                         ['Indicador', 'Municípios com dados', 'Correlação'],
+                         [(k, _br(r['n']), ind(r['rho'])) for k, r in ctx['correlacoes'].items()]))
+    selecionados = [r for r in ctx['linhas'] if r['acima_90'] or r['acima_90_2022']]
+    corpos.append(tabela('Contexto: municípios acima de 90% em 2026 ou 2022, presentes na base de 2026',
+                         ['Município / UF', '2026', 'IDHM 2010', 'PIB/hab. 2023', 'Eleito em 2024', 'Partido de 2024 / bloco'],
+                         [(f'{r["nome"]} / {r["uf"]}', f'{r["candidato"]}: {ind(r["pct_lider"])}%', ind(r['idhm_2010']),
+                           moeda(r['pib_pc_2023']), (r['prefeito_2024'] or {}).get('nome', 'Não identificado'),
+                           (r['prefeito_2024'] or {}).get('partido', '—') + ' / ' + (r['ideologia'] or {}).get('bloco', 'Sem classificação'))
+                          for r in selecionados]))
+    links = []
+    for r in selecionados:
+        v = r['verificacao_prefeitura']
+        if v:
+            links.append(f'<li>{e(r["nome"])}: {e(v["nome"])} — '
+                         f'<a href="{e(v["url"], quote=True)}">{e(v["referencia"])}</a>; consulta {e(v["consulta"])}.</li>')
+    corpos.append('<details class="cartao explicacao"><summary>Fontes institucionais sobre as prefeituras</summary><ul>'
+                  + ''.join(links) + '</ul><p>Referências com datas distintas; não comprovam filiação atual ou ausência de substituições posteriores.</p></details>')
     for q in p['perguntas']:
         corpos.append(f'<section class="cartao"><h2>{e(q["id"])} — {e(q["titulo"])}</h2><ul>'
                       + ''.join(f'<li>{e(l)}</li>' for l in q['linhas']) + '</ul></section>')
@@ -183,7 +293,10 @@ def tabelas_html(p):
             '  <footer class="rodape"><span>Projeto independente. Dados: TSE. Não é uma fonte oficial.</span></footer>\n</body>\n</html>\n')
 
 
-ENTRADAS = ('resultados.json', 'totais_nacionais_2026.csv', 'run_analise_2026.json')
+ENTRADAS = ('resultados.json', 'totais_nacionais_2026.csv', 'run_analise_2026.json',
+            'municipios_2022.csv', 'municipios_2026.csv', 'nomes_municipios.csv',
+            'distribuicao_secoes.json', 'run_distribuicao-secoes_2026.json',
+            'contexto_municipal.json', 'fontes_contexto.json', 'prefeituras_verificadas.json')
 
 
 def entradas(derived):
@@ -207,7 +320,8 @@ def painel(derived, out, exige_real=True):
     res = {'ilustrativo': not exige_real, 'atualizado': run['gerado_utc'][:10],
            'kpis': _kpis(t[1], t[2]), 'ganho': _ganho(g26), 'divisao': _divisao(g26, g22),
            'atipicos': _atipicos(r['q3']['2026'], r['q3']['2022']), 'perguntas': _perguntas(r, g26, g22),
-           'notas': _notas(t[1], t[2], g26)}
+           'notas': _notas(t[1], t[2], g26), 'concentracao': concentracao(d),
+           'distribuicao_secoes': _distribuicao(d, exige_real), 'contexto': analisar_contexto(d)}
     out = pathlib.Path(out); out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(res, indent=1, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')
     out.with_name('tabelas.html').write_text(tabelas_html(res), encoding='utf-8')

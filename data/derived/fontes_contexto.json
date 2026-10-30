@@ -1,0 +1,47 @@
+{
+  "coletado_utc": "2026-10-30T01:16:44+00:00",
+  "fontes": {
+    "municipios_ibge.json": {
+      "url": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios",
+      "sha256": "86ecdccdf97d72e7e5e46f0854cfcea8bacc28154cc1bc4ed0e6110e3a6c9c02"
+    },
+    "idhm_ipea.json": {
+      "url": "https://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='ADH_IDHM')",
+      "sha256": "7017ff1b09fe1fa74e46c4cb99122fe45d495e1f1f7a125a7cd3ace0888be456"
+    },
+    "pib_2023.json": {
+      "url": "https://apisidra.ibge.gov.br/values/t/5938/n6/all/v/37/p/2023",
+      "sha256": "dd75c4088abdb4ac6055a34723379cf55fd2a681320032bd43ce9b915fb27230"
+    },
+    "candidatos_2024.zip": {
+      "url": "https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2024.zip",
+      "sha256": "8c39fb0e6ff7cda93a783b562f227f70ae67a32d4c8a384faa40f3f4893da1fe"
+    },
+    "ideologia.html": {
+      "url": "https://www.scielo.br/j/op/a/hv8GBg9hfCCZLwcWktfYhtC/?lang=pt",
+      "sha256": "edfe0f80ffc3b82b4337aa8989562a99deb2e1f1f230e13d6bad43e241ebd1eb"
+    },
+    "pibpc_2023.json": {
+      "url_base": "https://servicodados.ibge.gov.br/api/v1/pesquisas/38/periodos/2023/indicadores/47001/resultados/",
+      "consulta": "códigos IBGE em lotes de 150 separados por |; concatenação de res",
+      "sha256": "e94888d956157723875d57a6a261c75e2aff0fa6d08aa22acf75505b44a28334"
+    }
+  },
+  "nomes_municipios_sha256": "302ae6407ab8ce66995879d09d5035f69446be0771e03ac3ecc44239475e58d4",
+  "saida_sha256": "30eb2a18a242fd49f5a5d3ad1a0a6a78c654c527e1033a465a5cfd3b853b820a",
+  "sem_correspondencia_ibge": [
+    "GO-92690",
+    "MG-41092",
+    "MG-44571",
+    "MG-53031",
+    "MT-91553",
+    "PA-4120",
+    "PR-77119",
+    "RN-17035",
+    "RO-256",
+    "RO-337",
+    "RR-3158",
+    "SE-31011",
+    "SP-71013"
+  ]
+}

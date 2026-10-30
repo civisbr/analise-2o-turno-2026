@@ -22,3 +22,20 @@ Alterações posteriores ao congelamento de [`pre-registro.md`](pre-registro.md)
 - **Efeito nas saídas:** `swing_municipios_<ano>.csv` grava `flag_pos`, `flag_neg` e `votos_2t` como inteiros (antes `3.0`), e listas em que há empate de `dF` ou de `|z|` passam a ser ordenadas por desempate determinístico (município); o pandas deixava a ordem do empate indefinida. Os valores não mudam.
 - **Entradas mais estritas:** campo vazio ou truncado em colunas de votos agora para o pipeline (antes só o `astype(int)` do pandas falhava em parte dos casos), e `mad = 0` em z robusto para com mensagem clara em vez de gerar NaN.
 - **Código:** PR de migração para polars.
+
+## E4 — 29/10/2026 — concentração municipal e nomes dos candidatos no painel
+
+- **O quê:** análise descritiva adicional dos municípios com mais de 90% dos votos válidos no segundo turno, com comparação 2026 × 2022, solicitada após o pré-registro. Usa a base municipal pública, excluindo grupos OUTROS e exterior; não reconstrói municípios suprimidos.
+- **Efeito no método:** não altera Q1–Q6. O corte é estritamente maior que 90% antes do arredondamento, e a comparação usa o código municipal TSE. Cobertura, ausência de linha individual e limitações de seções pareadas ficam explícitas no painel.
+- **Correção editorial:** o candidato nº 22 de 2022 passa a ser identificado como Jair Bolsonaro em gráficos, textos e tabelas. As chaves internas antigas são mantidas para compatibilidade. Explicações antes ligadas a Markdown no repositório passam a abrir no HTML.
+
+## E5 — 29/10/2026 — distribuição de votos por seção
+
+- **O quê:** complemento descritivo solicitado após o pré-registro: seções com 0, 1–5, 6–10 e até 10 votos por candidato, e seções com mais de 90% dos válidos. Segundo turno completo, com votos válidos positivos, Brasil e exterior separados.
+- **Efeito no método:** não altera Q1–Q6, nem usa os filtros de Q5 ou o pareamento entre turnos. Contagens agregadas por UF e país, com o mesmo critério para Lula e o candidato nº 22; controle de 2022 e rastreabilidade próprios.
+
+## E6 — 29/10/2026 — contexto socioeconômico e partidos das prefeituras
+
+- **O quê:** cruzamento descritivo solicitado após o pré-registro, entre concentração municipal em 2026, IDHM de 2010, PIB e PIB por habitante de 2023 e partidos dos prefeitos eleitos em 2024. Classificação partidária da tabela 1 de Bolognesi et al. (2025), com blocos e ausências explícitos.
+- **Efeito no método:** não altera Q1–Q6. Medianas, denominadores por bloco e correlações de Spearman sem ajuste; dados ausentes não são zeros. O contexto de 2024 não é atribuído à eleição de 2022. Fontes institucionais datadas complementam os 11 municípios acima de 90%, sem presumir filiação partidária atual.
+- **Publicação:** snapshots municipais com hashes, filtros, gráfico, tabelas sem JavaScript e explicações recolhidas no HTML. Não se publicam identificadores de seções ou campos pessoais alheios à função pública dos eleitos.

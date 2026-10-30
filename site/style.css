@@ -130,6 +130,9 @@ main { padding:0 16px 8px; max-width:1700px; margin:0 auto; }
   .rodape { padding:16px; }
 }
 @media (max-width:620px) {
+  .topo { grid-template-columns:minmax(0,1fr) auto; gap:12px; }
+  .marca img { max-width:100%; height:auto; }
+  .topo nav { min-width:0; }
   .kpis, .graficos, .perguntas, .faixa { grid-template-columns:1fr; } .faixa-item { border-left:0; }
   .acoes .btn-contorno { padding:10px 12px; white-space:nowrap; font-size:.85rem; }
 }
@@ -139,3 +142,30 @@ main { padding:0 16px 8px; max-width:1700px; margin:0 auto; }
 .ilustrativo .kpi::after, .ilustrativo .cartao::after { content:"ILUSTRATIVO"; position:absolute; top:6px; right:8px; font-size:.69rem; letter-spacing:.08em;
   font-weight:700; color:var(--amarelo); border:1px solid var(--amarelo); border-radius:4px; padding:0 5px; opacity:.9; }
 .cor-muted { background:var(--muted); }
+
+.explicacao { border-top:1px solid var(--line); padding:12px 4px; scroll-margin-top:18px; }
+.explicacao summary { cursor:pointer; color:var(--verde); font-weight:600; }
+.explicacao summary:focus-visible, input:focus-visible, select:focus-visible, .tabela-scroll:focus-visible { outline:2px solid var(--verde); outline-offset:3px; }
+.explicacao p { color:var(--muted); margin-top:12px; max-width:95ch; font-size:.9rem; }
+.explicacao[open] { padding-bottom:18px; }
+.concentracao-resumo { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0; }
+.concentracao-resumo > p { grid-column:1 / -1; }
+.filtros { display:flex; flex-wrap:wrap; gap:16px; margin:14px 0; }
+.filtros label { display:grid; gap:6px; font-size:.85rem; flex:1 1 240px; }
+.filtros input, .filtros select { width:100%; min-width:0; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font:inherit; }
+.tabela-scroll { overflow-x:auto; margin-top:12px; }
+.tabela-scroll .tabela { min-width:660px; }
+.tabela small, .voto-pct { display:block; }
+.tabela small { font-weight:400; color:var(--muted); }
+.tabela .destaque { color:var(--verde); }
+.tabela .voto-pct { font-weight:600; font-size:1.05rem; }
+@media (max-width:620px) { .concentracao-resumo { grid-template-columns:1fr; } }
+
+#contexto-mais { margin-top:12px; }
+#contexto-linhas .explicacao { min-width:160px; font-size:.78rem; }
+#contexto-linhas .explicacao p { font-size:.78rem; }
+#contexto-scatter .scatter { display:block; width:100%; height:auto; min-height:200px; stroke:none; }
+.scatter text { fill:var(--muted); font:14px system-ui,sans-serif; }
+.scatter .scatter-grade { stroke:var(--line); stroke-width:1; }
+.scatter .scatter-base { fill:var(--muted); opacity:.28; cursor:pointer; }
+.scatter .scatter-alto { fill:var(--verde); cursor:pointer; }

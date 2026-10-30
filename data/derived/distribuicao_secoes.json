@@ -1,0 +1,2348 @@
+{
+ "turno": 2,
+ "limite_votos": 10,
+ "anos": {
+  "2022": {
+   "brasil": {
+    "avaliadas": 471010,
+    "sem_validos_excluidas": 1,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 2,
+      "de_1_a_5": 34,
+      "de_6_a_10": 109,
+      "ate_10": 145,
+      "pct_ate_10": 0.030784909025286085,
+      "acima_90": 9424,
+      "ate_10_e_adversario_acima_90": 60,
+      "ate_10_com_50_mais_validos": 102,
+      "validos_nas_secoes_ate_10": {
+       "min": 6,
+       "mediana": 67.0,
+       "max": 198
+      }
+     },
+     "flavio": {
+      "nome": "Jair Bolsonaro",
+      "zero": 141,
+      "de_1_a_5": 1438,
+      "de_6_a_10": 2518,
+      "ate_10": 4097,
+      "pct_ate_10": 0.8698329122523938,
+      "acima_90": 199,
+      "ate_10_e_adversario_acima_90": 3553,
+      "ate_10_com_50_mais_validos": 3750,
+      "validos_nas_secoes_ate_10": {
+       "min": 6,
+       "mediana": 130.0,
+       "max": 426
+      }
+     }
+    }
+   },
+   "exterior": {
+    "avaliadas": 1017,
+    "sem_validos_excluidas": 47,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 2,
+      "de_1_a_5": 6,
+      "de_6_a_10": 7,
+      "ate_10": 15,
+      "pct_ate_10": 1.4749262536873156,
+      "acima_90": 9,
+      "ate_10_e_adversario_acima_90": 3,
+      "ate_10_com_50_mais_validos": 1,
+      "validos_nas_secoes_ate_10": {
+       "min": 1,
+       "mediana": 15.0,
+       "max": 66
+      }
+     },
+     "flavio": {
+      "nome": "Jair Bolsonaro",
+      "zero": 2,
+      "de_1_a_5": 9,
+      "de_6_a_10": 9,
+      "ate_10": 20,
+      "pct_ate_10": 1.966568338249754,
+      "acima_90": 14,
+      "ate_10_e_adversario_acima_90": 3,
+      "ate_10_com_50_mais_validos": 0,
+      "validos_nas_secoes_ate_10": {
+       "min": 1,
+       "mediana": 17.5,
+       "max": 46
+      }
+     }
+    }
+   },
+   "brasil_exterior": {
+    "avaliadas": 472027,
+    "sem_validos_excluidas": 48,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 4,
+      "de_1_a_5": 40,
+      "de_6_a_10": 116,
+      "ate_10": 160,
+      "pct_ate_10": 0.03389636609770204,
+      "acima_90": 9433,
+      "ate_10_e_adversario_acima_90": 63,
+      "ate_10_com_50_mais_validos": 103,
+      "validos_nas_secoes_ate_10": {
+       "min": 1,
+       "mediana": 62.0,
+       "max": 198
+      }
+     },
+     "flavio": {
+      "nome": "Jair Bolsonaro",
+      "zero": 143,
+      "de_1_a_5": 1447,
+      "de_6_a_10": 2527,
+      "ate_10": 4117,
+      "pct_ate_10": 0.8721958701514956,
+      "acima_90": 213,
+      "ate_10_e_adversario_acima_90": 3556,
+      "ate_10_com_50_mais_validos": 3750,
+      "validos_nas_secoes_ate_10": {
+       "min": 1,
+       "mediana": 129.0,
+       "max": 426
+      }
+     }
+    }
+   },
+   "ufs": [
+    {
+     "uf": "AC",
+     "avaliadas": 2124,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 5,
+       "ate_10": 6,
+       "pct_ate_10": 0.2824858757062147,
+       "acima_90": 15,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 5,
+       "validos_nas_secoes_ate_10": {
+        "min": 40,
+        "mediana": 71.5,
+        "max": 129
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 8,
+       "de_6_a_10": 5,
+       "ate_10": 15,
+       "pct_ate_10": 0.7062146892655368,
+       "acima_90": 14,
+       "ate_10_e_adversario_acima_90": 13,
+       "ate_10_com_50_mais_validos": 13,
+       "validos_nas_secoes_ate_10": {
+        "min": 46,
+        "mediana": 122.0,
+        "max": 265
+       }
+      }
+     }
+    },
+    {
+     "uf": "AL",
+     "avaliadas": 6626,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 118,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 12,
+       "ate_10": 13,
+       "pct_ate_10": 0.196196800482946,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 10,
+       "ate_10_com_50_mais_validos": 12,
+       "validos_nas_secoes_ate_10": {
+        "min": 39,
+        "mediana": 141.0,
+        "max": 250
+       }
+      }
+     }
+    },
+    {
+     "uf": "AM",
+     "avaliadas": 7453,
+     "sem_validos_excluidas": 1,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 2,
+       "de_6_a_10": 1,
+       "ate_10": 3,
+       "pct_ate_10": 0.04025224741714746,
+       "acima_90": 339,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 7,
+        "mediana": 30.0,
+        "max": 45
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 23,
+       "de_1_a_5": 114,
+       "de_6_a_10": 102,
+       "ate_10": 239,
+       "pct_ate_10": 3.206762377566081,
+       "acima_90": 3,
+       "ate_10_e_adversario_acima_90": 223,
+       "ate_10_com_50_mais_validos": 224,
+       "validos_nas_secoes_ate_10": {
+        "min": 7,
+        "mediana": 195.0,
+        "max": 426
+       }
+      }
+     }
+    },
+    {
+     "uf": "AP",
+     "avaliadas": 1740,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.11494252873563218,
+       "acima_90": 24,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 28,
+        "mediana": 31.0,
+        "max": 34
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 11,
+       "de_6_a_10": 10,
+       "ate_10": 21,
+       "pct_ate_10": 1.206896551724138,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 18,
+       "ate_10_com_50_mais_validos": 18,
+       "validos_nas_secoes_ate_10": {
+        "min": 38,
+        "mediana": 125.0,
+        "max": 353
+       }
+      }
+     }
+    },
+    {
+     "uf": "BA",
+     "avaliadas": 34424,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 2235,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 19,
+       "de_1_a_5": 272,
+       "de_6_a_10": 577,
+       "ate_10": 868,
+       "pct_ate_10": 2.5214966302579596,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 783,
+       "ate_10_com_50_mais_validos": 822,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 136.5,
+        "max": 369
+       }
+      }
+     }
+    },
+    {
+     "uf": "CE",
+     "avaliadas": 22796,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.004386734514827163,
+       "acima_90": 1468,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 98,
+        "mediana": 98.0,
+        "max": 98
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 8,
+       "de_1_a_5": 140,
+       "de_6_a_10": 371,
+       "ate_10": 519,
+       "pct_ate_10": 2.2767152131952977,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 465,
+       "ate_10_com_50_mais_validos": 496,
+       "validos_nas_secoes_ate_10": {
+        "min": 20,
+        "mediana": 131.0,
+        "max": 338
+       }
+      }
+     }
+    },
+    {
+     "uf": "DF",
+     "avaliadas": 6748,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.014819205690574985,
+       "acima_90": 2,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 30,
+        "mediana": 30.0,
+        "max": 30
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 1,
+       "ate_10": 4,
+       "pct_ate_10": 0.05927682276229994,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 23,
+        "mediana": 31.5,
+        "max": 74
+       }
+      }
+     }
+    },
+    {
+     "uf": "ES",
+     "avaliadas": 9239,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 9,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 5,
+       "de_6_a_10": 7,
+       "ate_10": 12,
+       "pct_ate_10": 0.12988418660028142,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 7,
+       "ate_10_com_50_mais_validos": 7,
+       "validos_nas_secoes_ate_10": {
+        "min": 15,
+        "mediana": 74.5,
+        "max": 130
+       }
+      }
+     }
+    },
+    {
+     "uf": "GO",
+     "avaliadas": 14620,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.006839945280437756,
+       "acima_90": 12,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 17,
+        "mediana": 17.0,
+        "max": 17
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 5,
+       "de_6_a_10": 7,
+       "ate_10": 12,
+       "pct_ate_10": 0.08207934336525308,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 8,
+       "ate_10_com_50_mais_validos": 8,
+       "validos_nas_secoes_ate_10": {
+        "min": 17,
+        "mediana": 126.5,
+        "max": 216
+       }
+      }
+     }
+    },
+    {
+     "uf": "MA",
+     "avaliadas": 16423,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.006089021494245874,
+       "acima_90": 1794,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 16.0,
+        "max": 16
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 47,
+       "de_1_a_5": 333,
+       "de_6_a_10": 542,
+       "ate_10": 922,
+       "pct_ate_10": 5.614077817694697,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 852,
+       "ate_10_com_50_mais_validos": 878,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 135.0,
+        "max": 341
+       }
+      }
+     }
+    },
+    {
+     "uf": "MG",
+     "avaliadas": 49981,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 6,
+       "ate_10": 9,
+       "pct_ate_10": 0.01800684260018807,
+       "acima_90": 284,
+       "ate_10_e_adversario_acima_90": 3,
+       "ate_10_com_50_mais_validos": 6,
+       "validos_nas_secoes_ate_10": {
+        "min": 12,
+        "mediana": 57.0,
+        "max": 126
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 9,
+       "de_1_a_5": 113,
+       "de_6_a_10": 165,
+       "ate_10": 287,
+       "pct_ate_10": 0.5742182029171085,
+       "acima_90": 3,
+       "ate_10_e_adversario_acima_90": 187,
+       "ate_10_com_50_mais_validos": 232,
+       "validos_nas_secoes_ate_10": {
+        "min": 12,
+        "mediana": 73.0,
+        "max": 256
+       }
+      }
+     }
+    },
+    {
+     "uf": "MS",
+     "avaliadas": 6912,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 74,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 20,
+       "de_6_a_10": 17,
+       "ate_10": 38,
+       "pct_ate_10": 0.5497685185185185,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 38,
+       "ate_10_com_50_mais_validos": 38,
+       "validos_nas_secoes_ate_10": {
+        "min": 50,
+        "mediana": 173.5,
+        "max": 299
+       }
+      }
+     }
+    },
+    {
+     "uf": "MT",
+     "avaliadas": 7652,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 2,
+       "ate_10": 5,
+       "pct_ate_10": 0.06534239414532149,
+       "acima_90": 43,
+       "ate_10_e_adversario_acima_90": 3,
+       "ate_10_com_50_mais_validos": 3,
+       "validos_nas_secoes_ate_10": {
+        "min": 41,
+        "mediana": 71.0,
+        "max": 82
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 5,
+       "de_1_a_5": 21,
+       "de_6_a_10": 10,
+       "ate_10": 36,
+       "pct_ate_10": 0.4704652378463147,
+       "acima_90": 27,
+       "ate_10_e_adversario_acima_90": 32,
+       "ate_10_com_50_mais_validos": 34,
+       "validos_nas_secoes_ate_10": {
+        "min": 36,
+        "mediana": 126.0,
+        "max": 383
+       }
+      }
+     }
+    },
+    {
+     "uf": "PA",
+     "avaliadas": 18235,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 1,
+       "de_1_a_5": 4,
+       "de_6_a_10": 13,
+       "ate_10": 18,
+       "pct_ate_10": 0.09871126953660543,
+       "acima_90": 406,
+       "ate_10_e_adversario_acima_90": 7,
+       "ate_10_com_50_mais_validos": 12,
+       "validos_nas_secoes_ate_10": {
+        "min": 32,
+        "mediana": 60.5,
+        "max": 198
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 8,
+       "de_1_a_5": 103,
+       "de_6_a_10": 140,
+       "ate_10": 251,
+       "pct_ate_10": 1.3764738140937756,
+       "acima_90": 14,
+       "ate_10_e_adversario_acima_90": 195,
+       "ate_10_com_50_mais_validos": 218,
+       "validos_nas_secoes_ate_10": {
+        "min": 23,
+        "mediana": 91.0,
+        "max": 306
+       }
+      }
+     }
+    },
+    {
+     "uf": "PB",
+     "avaliadas": 9602,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 213,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 12,
+       "de_6_a_10": 22,
+       "ate_10": 34,
+       "pct_ate_10": 0.35409289731305976,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 31,
+       "ate_10_com_50_mais_validos": 30,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 157.5,
+        "max": 246
+       }
+      }
+     }
+    },
+    {
+     "uf": "PE",
+     "avaliadas": 20572,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 895,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 34,
+       "de_6_a_10": 137,
+       "ate_10": 171,
+       "pct_ate_10": 0.831226910363601,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 161,
+       "ate_10_com_50_mais_validos": 167,
+       "validos_nas_secoes_ate_10": {
+        "min": 17,
+        "mediana": 181.0,
+        "max": 333
+       }
+      }
+     }
+    },
+    {
+     "uf": "PI",
+     "avaliadas": 8963,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.011156978690170702,
+       "acima_90": 1205,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 13.0,
+        "max": 13
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 7,
+       "de_1_a_5": 148,
+       "de_6_a_10": 297,
+       "ate_10": 452,
+       "pct_ate_10": 5.042954367957157,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 412,
+       "ate_10_com_50_mais_validos": 435,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 127.5,
+        "max": 320
+       }
+      }
+     }
+    },
+    {
+     "uf": "PR",
+     "avaliadas": 25721,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 4,
+       "de_6_a_10": 9,
+       "ate_10": 13,
+       "pct_ate_10": 0.05054235838419968,
+       "acima_90": 21,
+       "ate_10_e_adversario_acima_90": 11,
+       "ate_10_com_50_mais_validos": 12,
+       "validos_nas_secoes_ate_10": {
+        "min": 45,
+        "mediana": 110.0,
+        "max": 177
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 2,
+       "de_6_a_10": 3,
+       "ate_10": 6,
+       "pct_ate_10": 0.023327242331169083,
+       "acima_90": 24,
+       "ate_10_e_adversario_acima_90": 4,
+       "ate_10_com_50_mais_validos": 5,
+       "validos_nas_secoes_ate_10": {
+        "min": 40,
+        "mediana": 71.0,
+        "max": 223
+       }
+      }
+     }
+    },
+    {
+     "uf": "RJ",
+     "avaliadas": 34068,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.005870611717740989,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 39,
+        "mediana": 41.0,
+        "max": 43
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.0029353058588704943,
+       "acima_90": 3,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 52,
+        "mediana": 52.0,
+        "max": 52
+       }
+      }
+     }
+    },
+    {
+     "uf": "RN",
+     "avaliadas": 7674,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 69,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 8,
+       "ate_10": 9,
+       "pct_ate_10": 0.11727912431587179,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 6,
+       "ate_10_com_50_mais_validos": 9,
+       "validos_nas_secoes_ate_10": {
+        "min": 60,
+        "mediana": 133.0,
+        "max": 235
+       }
+      }
+     }
+    },
+    {
+     "uf": "RO",
+     "avaliadas": 4198,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 0,
+       "ate_10": 1,
+       "pct_ate_10": 0.023820867079561697,
+       "acima_90": 6,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 6,
+        "mediana": 6.0,
+        "max": 6
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 4,
+       "ate_10": 7,
+       "pct_ate_10": 0.16674606955693186,
+       "acima_90": 12,
+       "ate_10_e_adversario_acima_90": 4,
+       "ate_10_com_50_mais_validos": 4,
+       "validos_nas_secoes_ate_10": {
+        "min": 6,
+        "mediana": 90.0,
+        "max": 198
+       }
+      }
+     }
+    },
+    {
+     "uf": "RR",
+     "avaliadas": 1268,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 4,
+       "ate_10": 4,
+       "pct_ate_10": 0.31545741324921134,
+       "acima_90": 11,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 3,
+       "validos_nas_secoes_ate_10": {
+        "min": 24,
+        "mediana": 109.5,
+        "max": 152
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 6,
+       "de_6_a_10": 2,
+       "ate_10": 10,
+       "pct_ate_10": 0.7886435331230284,
+       "acima_90": 6,
+       "ate_10_e_adversario_acima_90": 10,
+       "ate_10_com_50_mais_validos": 10,
+       "validos_nas_secoes_ate_10": {
+        "min": 55,
+        "mediana": 177.5,
+        "max": 268
+       }
+      }
+     }
+    },
+    {
+     "uf": "RS",
+     "avaliadas": 27201,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 1,
+       "de_1_a_5": 11,
+       "de_6_a_10": 43,
+       "ate_10": 55,
+       "pct_ate_10": 0.20219844858644903,
+       "acima_90": 29,
+       "ate_10_e_adversario_acima_90": 29,
+       "ate_10_com_50_mais_validos": 51,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 76.0,
+        "max": 156
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 13,
+       "de_6_a_10": 22,
+       "ate_10": 37,
+       "pct_ate_10": 0.13602441086724754,
+       "acima_90": 57,
+       "ate_10_e_adversario_acima_90": 20,
+       "ate_10_com_50_mais_validos": 22,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 57.0,
+        "max": 302
+       }
+      }
+     }
+    },
+    {
+     "uf": "SC",
+     "avaliadas": 16242,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 6,
+       "ate_10": 7,
+       "pct_ate_10": 0.04309814062307597,
+       "acima_90": 10,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 5,
+       "validos_nas_secoes_ate_10": {
+        "min": 26,
+        "mediana": 67.0,
+        "max": 127
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 7,
+       "de_6_a_10": 11,
+       "ate_10": 19,
+       "pct_ate_10": 0.11698066740549193,
+       "acima_90": 31,
+       "ate_10_e_adversario_acima_90": 6,
+       "ate_10_com_50_mais_validos": 5,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 28.0,
+        "max": 124
+       }
+      }
+     }
+    },
+    {
+     "uf": "SE",
+     "avaliadas": 5498,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 81,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 6,
+       "de_6_a_10": 15,
+       "ate_10": 22,
+       "pct_ate_10": 0.40014550745725724,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 18,
+       "ate_10_com_50_mais_validos": 18,
+       "validos_nas_secoes_ate_10": {
+        "min": 15,
+        "mediana": 134.5,
+        "max": 214
+       }
+      }
+     }
+    },
+    {
+     "uf": "SP",
+     "avaliadas": 101073,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 4,
+       "de_6_a_10": 11,
+       "ate_10": 15,
+       "pct_ate_10": 0.014840758659582677,
+       "acima_90": 31,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 4,
+       "validos_nas_secoes_ate_10": {
+        "min": 7,
+        "mediana": 19.0,
+        "max": 78
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 4,
+       "de_1_a_5": 40,
+       "de_6_a_10": 25,
+       "ate_10": 69,
+       "pct_ate_10": 0.06826748983408032,
+       "acima_90": 3,
+       "ate_10_e_adversario_acima_90": 27,
+       "ate_10_com_50_mais_validos": 20,
+       "validos_nas_secoes_ate_10": {
+        "min": 7,
+        "mediana": 29.0,
+        "max": 141
+       }
+      }
+     }
+    },
+    {
+     "uf": "TO",
+     "avaliadas": 3957,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 30,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Jair Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 17,
+       "de_6_a_10": 5,
+       "ate_10": 23,
+       "pct_ate_10": 0.5812484205205964,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 21,
+       "ate_10_com_50_mais_validos": 23,
+       "validos_nas_secoes_ate_10": {
+        "min": 50,
+        "mediana": 221.0,
+        "max": 328
+       }
+      }
+     }
+    }
+   ]
+  },
+  "2026": {
+   "brasil": {
+    "avaliadas": 497897,
+    "sem_validos_excluidas": 0,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 4,
+      "de_1_a_5": 59,
+      "de_6_a_10": 149,
+      "ate_10": 212,
+      "pct_ate_10": 0.04257908764262488,
+      "acima_90": 6802,
+      "ate_10_e_adversario_acima_90": 104,
+      "ate_10_com_50_mais_validos": 150,
+      "validos_nas_secoes_ate_10": {
+       "min": 9,
+       "mediana": 67.0,
+       "max": 296
+      }
+     },
+     "flavio": {
+      "nome": "Flávio Bolsonaro",
+      "zero": 106,
+      "de_1_a_5": 1044,
+      "de_6_a_10": 1879,
+      "ate_10": 3029,
+      "pct_ate_10": 0.6083587569316545,
+      "acima_90": 368,
+      "ate_10_e_adversario_acima_90": 2544,
+      "ate_10_com_50_mais_validos": 2709,
+      "validos_nas_secoes_ate_10": {
+       "min": 9,
+       "mediana": 128.0,
+       "max": 385
+      }
+     }
+    }
+   },
+   "exterior": {
+    "avaliadas": 1308,
+    "sem_validos_excluidas": 43,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 0,
+      "de_1_a_5": 5,
+      "de_6_a_10": 10,
+      "ate_10": 15,
+      "pct_ate_10": 1.146788990825688,
+      "acima_90": 14,
+      "ate_10_e_adversario_acima_90": 2,
+      "ate_10_com_50_mais_validos": 1,
+      "validos_nas_secoes_ate_10": {
+       "min": 7,
+       "mediana": 19.0,
+       "max": 55
+      }
+     },
+     "flavio": {
+      "nome": "Flávio Bolsonaro",
+      "zero": 0,
+      "de_1_a_5": 8,
+      "de_6_a_10": 5,
+      "ate_10": 13,
+      "pct_ate_10": 0.9938837920489296,
+      "acima_90": 10,
+      "ate_10_e_adversario_acima_90": 1,
+      "ate_10_com_50_mais_validos": 0,
+      "validos_nas_secoes_ate_10": {
+       "min": 7,
+       "mediana": 23.0,
+       "max": 44
+      }
+     }
+    }
+   },
+   "brasil_exterior": {
+    "avaliadas": 499205,
+    "sem_validos_excluidas": 43,
+    "candidatos": {
+     "lula": {
+      "nome": "Lula",
+      "zero": 4,
+      "de_1_a_5": 64,
+      "de_6_a_10": 159,
+      "ate_10": 227,
+      "pct_ate_10": 0.04547230095852405,
+      "acima_90": 6816,
+      "ate_10_e_adversario_acima_90": 106,
+      "ate_10_com_50_mais_validos": 151,
+      "validos_nas_secoes_ate_10": {
+       "min": 7,
+       "mediana": 64.0,
+       "max": 296
+      }
+     },
+     "flavio": {
+      "nome": "Flávio Bolsonaro",
+      "zero": 106,
+      "de_1_a_5": 1052,
+      "de_6_a_10": 1884,
+      "ate_10": 3042,
+      "pct_ate_10": 0.6093688965455073,
+      "acima_90": 378,
+      "ate_10_e_adversario_acima_90": 2545,
+      "ate_10_com_50_mais_validos": 2709,
+      "validos_nas_secoes_ate_10": {
+       "min": 7,
+       "mediana": 128.0,
+       "max": 385
+      }
+     }
+    }
+   },
+   "ufs": [
+    {
+     "uf": "AC",
+     "avaliadas": 2270,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 2,
+       "ate_10": 3,
+       "pct_ate_10": 0.13215859030837004,
+       "acima_90": 22,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 3,
+       "validos_nas_secoes_ate_10": {
+        "min": 71,
+        "mediana": 91.0,
+        "max": 122
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 3,
+       "de_1_a_5": 15,
+       "de_6_a_10": 4,
+       "ate_10": 22,
+       "pct_ate_10": 0.9691629955947136,
+       "acima_90": 5,
+       "ate_10_e_adversario_acima_90": 21,
+       "ate_10_com_50_mais_validos": 22,
+       "validos_nas_secoes_ate_10": {
+        "min": 61,
+        "mediana": 137.5,
+        "max": 190
+       }
+      }
+     }
+    },
+    {
+     "uf": "AL",
+     "avaliadas": 7101,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 95,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 4,
+       "de_6_a_10": 11,
+       "ate_10": 15,
+       "pct_ate_10": 0.21123785382340513,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 12,
+       "ate_10_com_50_mais_validos": 11,
+       "validos_nas_secoes_ate_10": {
+        "min": 35,
+        "mediana": 146.0,
+        "max": 369
+       }
+      }
+     }
+    },
+    {
+     "uf": "AM",
+     "avaliadas": 8157,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 2,
+       "ate_10": 5,
+       "pct_ate_10": 0.06129704548240775,
+       "acima_90": 373,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 3,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 59.0,
+        "max": 149
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 30,
+       "de_1_a_5": 120,
+       "de_6_a_10": 110,
+       "ate_10": 260,
+       "pct_ate_10": 3.187446365085203,
+       "acima_90": 13,
+       "ate_10_e_adversario_acima_90": 251,
+       "ate_10_com_50_mais_validos": 253,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 220.0,
+        "max": 379
+       }
+      }
+     }
+    },
+    {
+     "uf": "AP",
+     "avaliadas": 1914,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.052246603970741906,
+       "acima_90": 31,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 43,
+        "mediana": 43.0,
+        "max": 43
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 17,
+       "de_6_a_10": 11,
+       "ate_10": 28,
+       "pct_ate_10": 1.4629049111807733,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 23,
+       "ate_10_com_50_mais_validos": 26,
+       "validos_nas_secoes_ate_10": {
+        "min": 20,
+        "mediana": 156.0,
+        "max": 247
+       }
+      }
+     }
+    },
+    {
+     "uf": "BA",
+     "avaliadas": 35476,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 0,
+       "ate_10": 1,
+       "pct_ate_10": 0.002818807080843387,
+       "acima_90": 1345,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 71,
+        "mediana": 71.0,
+        "max": 71
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 4,
+       "de_1_a_5": 132,
+       "de_6_a_10": 330,
+       "ate_10": 466,
+       "pct_ate_10": 1.3135640996730182,
+       "acima_90": 3,
+       "ate_10_e_adversario_acima_90": 400,
+       "ate_10_com_50_mais_validos": 431,
+       "validos_nas_secoes_ate_10": {
+        "min": 12,
+        "mediana": 122.0,
+        "max": 385
+       }
+      }
+     }
+    },
+    {
+     "uf": "CE",
+     "avaliadas": 23765,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.008415737428992215,
+       "acima_90": 662,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 87.0,
+        "max": 161
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 55,
+       "de_6_a_10": 178,
+       "ate_10": 235,
+       "pct_ate_10": 0.9888491479065854,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 190,
+       "ate_10_com_50_mais_validos": 215,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 114.0,
+        "max": 264
+       }
+      }
+     }
+    },
+    {
+     "uf": "DF",
+     "avaliadas": 6969,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.014349261013057828,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 19,
+        "mediana": 19.0,
+        "max": 19
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 2,
+       "de_6_a_10": 3,
+       "ate_10": 5,
+       "pct_ate_10": 0.07174630506528915,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 22,
+        "mediana": 31.0,
+        "max": 62
+       }
+      }
+     }
+    },
+    {
+     "uf": "ES",
+     "avaliadas": 9844,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.02031694433157253,
+       "acima_90": 9,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 31.5,
+        "max": 45
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 3,
+       "de_6_a_10": 5,
+       "ate_10": 9,
+       "pct_ate_10": 0.09142624949207638,
+       "acima_90": 2,
+       "ate_10_e_adversario_acima_90": 4,
+       "ate_10_com_50_mais_validos": 4,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 41.0,
+        "max": 125
+       }
+      }
+     }
+    },
+    {
+     "uf": "GO",
+     "avaliadas": 15686,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 3,
+       "ate_10": 4,
+       "pct_ate_10": 0.02550044625780951,
+       "acima_90": 9,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 24.5,
+        "max": 60
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 4,
+       "de_6_a_10": 10,
+       "ate_10": 14,
+       "pct_ate_10": 0.08925156190233328,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 7,
+       "ate_10_com_50_mais_validos": 7,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 93.5,
+        "max": 261
+       }
+      }
+     }
+    },
+    {
+     "uf": "MA",
+     "avaliadas": 18093,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.005526999392030067,
+       "acima_90": 1549,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 11.0,
+        "max": 11
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 20,
+       "de_1_a_5": 286,
+       "de_6_a_10": 482,
+       "ate_10": 788,
+       "pct_ate_10": 4.355275520919693,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 721,
+       "ate_10_com_50_mais_validos": 747,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 140.5,
+        "max": 350
+       }
+      }
+     }
+    },
+    {
+     "uf": "MG",
+     "avaliadas": 52062,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 8,
+       "de_6_a_10": 11,
+       "ate_10": 19,
+       "pct_ate_10": 0.03649494833083631,
+       "acima_90": 173,
+       "ate_10_e_adversario_acima_90": 5,
+       "ate_10_com_50_mais_validos": 9,
+       "validos_nas_secoes_ate_10": {
+        "min": 9,
+        "mediana": 42.0,
+        "max": 138
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 67,
+       "de_6_a_10": 106,
+       "ate_10": 175,
+       "pct_ate_10": 0.33613768199454497,
+       "acima_90": 6,
+       "ate_10_e_adversario_acima_90": 98,
+       "ate_10_com_50_mais_validos": 130,
+       "validos_nas_secoes_ate_10": {
+        "min": 9,
+        "mediana": 68.0,
+        "max": 274
+       }
+      }
+     }
+    },
+    {
+     "uf": "MS",
+     "avaliadas": 7106,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.014072614691809739,
+       "acima_90": 88,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 56,
+        "mediana": 56.0,
+        "max": 56
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 10,
+       "de_6_a_10": 31,
+       "ate_10": 42,
+       "pct_ate_10": 0.591049817056009,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 39,
+       "ate_10_com_50_mais_validos": 40,
+       "validos_nas_secoes_ate_10": {
+        "min": 26,
+        "mediana": 194.5,
+        "max": 297
+       }
+      }
+     }
+    },
+    {
+     "uf": "MT",
+     "avaliadas": 8287,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 10,
+       "ate_10": 13,
+       "pct_ate_10": 0.15687220948473513,
+       "acima_90": 62,
+       "ate_10_e_adversario_acima_90": 5,
+       "ate_10_com_50_mais_validos": 8,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 66.0,
+        "max": 168
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 5,
+       "de_1_a_5": 28,
+       "de_6_a_10": 18,
+       "ate_10": 51,
+       "pct_ate_10": 0.6154217449016532,
+       "acima_90": 48,
+       "ate_10_e_adversario_acima_90": 47,
+       "ate_10_com_50_mais_validos": 49,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 192.0,
+        "max": 327
+       }
+      }
+     }
+    },
+    {
+     "uf": "PA",
+     "avaliadas": 20827,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 2,
+       "de_1_a_5": 10,
+       "de_6_a_10": 29,
+       "ate_10": 41,
+       "pct_ate_10": 0.19685984539299944,
+       "acima_90": 457,
+       "ate_10_e_adversario_acima_90": 24,
+       "ate_10_com_50_mais_validos": 30,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 59.0,
+        "max": 221
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 16,
+       "de_1_a_5": 104,
+       "de_6_a_10": 163,
+       "ate_10": 283,
+       "pct_ate_10": 1.3588130791760695,
+       "acima_90": 51,
+       "ate_10_e_adversario_acima_90": 220,
+       "ate_10_com_50_mais_validos": 243,
+       "validos_nas_secoes_ate_10": {
+        "min": 13,
+        "mediana": 99.0,
+        "max": 314
+       }
+      }
+     }
+    },
+    {
+     "uf": "PB",
+     "avaliadas": 10712,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 1,
+       "ate_10": 1,
+       "pct_ate_10": 0.009335324869305453,
+       "acima_90": 130,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 10,
+        "mediana": 10.0,
+        "max": 10
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 9,
+       "de_6_a_10": 16,
+       "ate_10": 26,
+       "pct_ate_10": 0.24271844660194172,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 21,
+       "ate_10_com_50_mais_validos": 20,
+       "validos_nas_secoes_ate_10": {
+        "min": 10,
+        "mediana": 138.0,
+        "max": 296
+       }
+      }
+     }
+    },
+    {
+     "uf": "PE",
+     "avaliadas": 21418,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 667,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 14,
+       "de_6_a_10": 88,
+       "ate_10": 103,
+       "pct_ate_10": 0.4809039125968811,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 93,
+       "ate_10_com_50_mais_validos": 98,
+       "validos_nas_secoes_ate_10": {
+        "min": 20,
+        "mediana": 194.0,
+        "max": 363
+       }
+      }
+     }
+    },
+    {
+     "uf": "PI",
+     "avaliadas": 10225,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 870,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 85,
+       "de_6_a_10": 226,
+       "ate_10": 312,
+       "pct_ate_10": 3.0513447432762835,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 275,
+       "ate_10_com_50_mais_validos": 300,
+       "validos_nas_secoes_ate_10": {
+        "min": 16,
+        "mediana": 127.0,
+        "max": 271
+       }
+      }
+     }
+    },
+    {
+     "uf": "PR",
+     "avaliadas": 27142,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 6,
+       "de_6_a_10": 12,
+       "ate_10": 18,
+       "pct_ate_10": 0.06631788372264387,
+       "acima_90": 12,
+       "ate_10_e_adversario_acima_90": 10,
+       "ate_10_com_50_mais_validos": 17,
+       "validos_nas_secoes_ate_10": {
+        "min": 22,
+        "mediana": 79.0,
+        "max": 184
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 5,
+       "de_6_a_10": 8,
+       "ate_10": 14,
+       "pct_ate_10": 0.051580576228723016,
+       "acima_90": 31,
+       "ate_10_e_adversario_acima_90": 8,
+       "ate_10_com_50_mais_validos": 9,
+       "validos_nas_secoes_ate_10": {
+        "min": 17,
+        "mediana": 116.5,
+        "max": 317
+       }
+      }
+     }
+    },
+    {
+     "uf": "RJ",
+     "avaliadas": 37675,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.0053085600530856005,
+       "acima_90": 1,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 24.5,
+        "max": 31
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 1,
+       "ate_10": 2,
+       "pct_ate_10": 0.0053085600530856005,
+       "acima_90": 2,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 18,
+        "mediana": 89.5,
+        "max": 161
+       }
+      }
+     }
+    },
+    {
+     "uf": "RN",
+     "avaliadas": 8115,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 35,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 1,
+       "de_6_a_10": 6,
+       "ate_10": 7,
+       "pct_ate_10": 0.0862600123228589,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 3,
+       "ate_10_com_50_mais_validos": 3,
+       "validos_nas_secoes_ate_10": {
+        "min": 23,
+        "mediana": 48.0,
+        "max": 185
+       }
+      }
+     }
+    },
+    {
+     "uf": "RO",
+     "avaliadas": 4698,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 3,
+       "ate_10": 3,
+       "pct_ate_10": 0.06385696040868455,
+       "acima_90": 16,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 14,
+        "mediana": 18.0,
+        "max": 125
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 1,
+       "de_1_a_5": 8,
+       "de_6_a_10": 5,
+       "ate_10": 14,
+       "pct_ate_10": 0.29799914857386123,
+       "acima_90": 19,
+       "ate_10_e_adversario_acima_90": 12,
+       "ate_10_com_50_mais_validos": 10,
+       "validos_nas_secoes_ate_10": {
+        "min": 14,
+        "mediana": 152.5,
+        "max": 261
+       }
+      }
+     }
+    },
+    {
+     "uf": "RR",
+     "avaliadas": 1519,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 2,
+       "ate_10": 2,
+       "pct_ate_10": 0.13166556945358787,
+       "acima_90": 23,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 2,
+       "validos_nas_secoes_ate_10": {
+        "min": 53,
+        "mediana": 63.5,
+        "max": 74
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 8,
+       "de_1_a_5": 6,
+       "de_6_a_10": 4,
+       "ate_10": 18,
+       "pct_ate_10": 1.184990125082291,
+       "acima_90": 7,
+       "ate_10_e_adversario_acima_90": 18,
+       "ate_10_com_50_mais_validos": 16,
+       "validos_nas_secoes_ate_10": {
+        "min": 44,
+        "mediana": 176.5,
+        "max": 278
+       }
+      }
+     }
+    },
+    {
+     "uf": "RS",
+     "avaliadas": 27547,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 2,
+       "de_1_a_5": 21,
+       "de_6_a_10": 48,
+       "ate_10": 71,
+       "pct_ate_10": 0.25774131484372165,
+       "acima_90": 20,
+       "ate_10_e_adversario_acima_90": 45,
+       "ate_10_com_50_mais_validos": 59,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 85.0,
+        "max": 296
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 2,
+       "de_1_a_5": 7,
+       "de_6_a_10": 15,
+       "ate_10": 24,
+       "pct_ate_10": 0.08712382473590591,
+       "acima_90": 116,
+       "ate_10_e_adversario_acima_90": 11,
+       "ate_10_com_50_mais_validos": 9,
+       "validos_nas_secoes_ate_10": {
+        "min": 11,
+        "mediana": 32.5,
+        "max": 293
+       }
+      }
+     }
+    },
+    {
+     "uf": "SC",
+     "avaliadas": 17326,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 2,
+       "de_6_a_10": 10,
+       "ate_10": 12,
+       "pct_ate_10": 0.06926007156874062,
+       "acima_90": 2,
+       "ate_10_e_adversario_acima_90": 7,
+       "ate_10_com_50_mais_validos": 12,
+       "validos_nas_secoes_ate_10": {
+        "min": 60,
+        "mediana": 91.5,
+        "max": 201
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 4,
+       "de_6_a_10": 5,
+       "ate_10": 9,
+       "pct_ate_10": 0.05194505367655546,
+       "acima_90": 61,
+       "ate_10_e_adversario_acima_90": 2,
+       "ate_10_com_50_mais_validos": 1,
+       "validos_nas_secoes_ate_10": {
+        "min": 15,
+        "mediana": 25.0,
+        "max": 66
+       }
+      }
+     }
+    },
+    {
+     "uf": "SE",
+     "avaliadas": 5923,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 95,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 13,
+       "ate_10": 16,
+       "pct_ate_10": 0.27013337835556306,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 14,
+       "ate_10_com_50_mais_validos": 13,
+       "validos_nas_secoes_ate_10": {
+        "min": 28,
+        "mediana": 170.5,
+        "max": 246
+       }
+      }
+     }
+    },
+    {
+     "uf": "SP",
+     "avaliadas": 103656,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 3,
+       "de_6_a_10": 6,
+       "ate_10": 9,
+       "pct_ate_10": 0.008682565408659412,
+       "acima_90": 15,
+       "ate_10_e_adversario_acima_90": 1,
+       "ate_10_com_50_mais_validos": 2,
+       "validos_nas_secoes_ate_10": {
+        "min": 10,
+        "mediana": 17.0,
+        "max": 74
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 0,
+       "de_1_a_5": 24,
+       "de_6_a_10": 25,
+       "ate_10": 49,
+       "pct_ate_10": 0.047271745002701246,
+       "acima_90": 2,
+       "ate_10_e_adversario_acima_90": 14,
+       "ate_10_com_50_mais_validos": 12,
+       "validos_nas_secoes_ate_10": {
+        "min": 10,
+        "mediana": 30.0,
+        "max": 183
+       }
+      }
+     }
+    },
+    {
+     "uf": "TO",
+     "avaliadas": 4384,
+     "sem_validos_excluidas": 0,
+     "candidatos": {
+      "lula": {
+       "nome": "Lula",
+       "zero": 0,
+       "de_1_a_5": 0,
+       "de_6_a_10": 0,
+       "ate_10": 0,
+       "pct_ate_10": 0.0,
+       "acima_90": 40,
+       "ate_10_e_adversario_acima_90": 0,
+       "ate_10_com_50_mais_validos": 0,
+       "validos_nas_secoes_ate_10": {
+        "min": null,
+        "mediana": null,
+        "max": null
+       }
+      },
+      "flavio": {
+       "nome": "Flávio Bolsonaro",
+       "zero": 7,
+       "de_1_a_5": 30,
+       "de_6_a_10": 5,
+       "ate_10": 42,
+       "pct_ate_10": 0.958029197080292,
+       "acima_90": 0,
+       "ate_10_e_adversario_acima_90": 39,
+       "ate_10_com_50_mais_validos": 38,
+       "validos_nas_secoes_ate_10": {
+        "min": 31,
+        "mediana": 156.5,
+        "max": 305
+       }
+      }
+     }
+    }
+   ]
+  }
+ }
+}
