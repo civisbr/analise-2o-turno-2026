@@ -27,15 +27,15 @@ Nos CSV derivados de 2022 a coluna `flavio` guarda os votos do candidato nº 22 
 
 | Total | Baseline divulgado (2026: imprensa; 2022: totais do TSE) | Arquivos TSE | Diferença |
 |---|---|---|---|
-| 1º turno: Lula | 53.879.538 | 53.879.538 | 0 |
-| 1º turno: Flávio | 56.104.503 | 56.104.503 | 0 |
-| 1º turno: comparecimento | 125.275.835 | 125.275.835 | 0 |
-| 1º turno: abstenção (`QT_ABSTENCOES`) | 33.469.244 | 33.469.244 | 0 |
-| 1º turno: brancos | 2.300.798 | 2.300.798 | 0 |
-| 1º turno: válidos | 119.300.788 | 119.306.034 | +5.246 (candidato nº 28) |
-| 1º turno: nulos | 3.674.249 | 3.669.003 | −5.246 (candidato nº 28) |
-| 2022, 1º turno: Lula / Bolsonaro | 57.259.504 / 51.072.345 | 57.259.504 / 51.072.345 | 0 |
-| 2022, 2º turno: Lula / Bolsonaro | 60.345.999 / 58.206.354 | 60.345.999 / 58.206.354 | 0 |
+| 2026, 1º turno: Lula | 53.879.538 | 53.879.538 | 0 |
+| 2026, 1º turno: Flávio | 56.104.503 | 56.104.503 | 0 |
+| 2026, 1º turno: comparecimento | 125.275.835 | 125.275.835 | 0 |
+| 2026, 1º turno: abstenção (`QT_ABSTENCOES`) | 33.469.244 | 33.469.244 | 0 |
+| 2026, 1º turno: brancos | 2.300.798 | 2.300.798 | 0 |
+| 2026, 1º turno: válidos | 119.300.788 | 119.306.034 | +5.246 (candidato nº 28) |
+| 2026, 1º turno: nulos | 3.674.249 | 3.669.003 | −5.246 (candidato nº 28) |
+| 2022, 1º turno: Lula / Jair Bolsonaro | 57.259.504 / 51.072.345 | 57.259.504 / 51.072.345 | 0 |
+| 2022, 2º turno: Lula / Jair Bolsonaro | 60.345.999 / 58.206.354 | 60.345.999 / 58.206.354 | 0 |
 
 A abstenção oficial é a coluna `QT_ABSTENCOES`, que não conta 423 dos 495 aptos das 42 seções não instaladas (`aptos − comparecimento` daria 423 a mais). O 2º turno de 2026 ainda não está publicado, então sua linha fica pendente.
 
@@ -54,14 +54,14 @@ Nenhuma coluna de `votacao_secao` ou `detalhe_votacao_secao` traz a hora de ence
 Testes, na ordem em que rodam. Qualquer falha para o pipeline antes de gravar qualquer arquivo:
 
 1. votação × detalhe, por seção (`reconcile`): válidos, brancos, nulos, comparecimento e abstenções. Mesma publicação do TSE, em dois arquivos.
-2. soma das seções × `detalhe_votacao_munzona`, por município-zona: agregação feita pelo TSE, portanto a segunda fonte de fato. Cobre aptos, comparecimento, abstenções, brancos, nulos e válidos. **Não cobre votos por candidato** (Lula e Flávio por seção vêm só de `votacao_secao`) e **não verifica** que os nulos técnicos sejam os votos do candidato nº 28: aceita qualquer valor que mantenha as identidades. Conferir candidatos exigiria `votacao_candidato_munzona` (450 a 640 MB por ano).
-3. partição: municípios + descartes + aptos de seções não instaladas = total nacional, por turno, para Lula, Flávio, válidos, aptos e comparecimento. Vem do mesmo conjunto de seções: pega erro de pivot, merge ou chave duplicada, não erro de dado.
+2. soma das seções × `detalhe_votacao_munzona`, por município-zona: agregação feita pelo TSE, portanto a segunda fonte de fato. Cobre aptos, comparecimento, abstenções, brancos, nulos e válidos. **Não cobre votos por candidato** (Lula e o candidato nº 22 — Jair Bolsonaro em 2022, Flávio Bolsonaro em 2026 — por seção vêm só de `votacao_secao`) e **não verifica** que os nulos técnicos sejam os votos do candidato nº 28: aceita qualquer valor que mantenha as identidades. Conferir candidatos exigiria `votacao_candidato_munzona` (450 a 640 MB por ano).
+3. partição: municípios + descartes + aptos de seções não instaladas = total nacional, por turno, para Lula, candidato nº 22, válidos, aptos e comparecimento. Vem do mesmo conjunto de seções: pega erro de pivot, merge ou chave duplicada, não erro de dado.
 
 O hash estável é o de **conteúdo** (`conteudo_sha256` no `run_build_<ano>.json`), não o do arquivo Parquet, que embute a versão da biblioteca; ele depende da versão do polars, registrada junto. O munzona de turnos que não estão nas seções é ignorado (o 2º turno de 2026 não entra antes do pré-registro). Sem o munzona, `verify` e `build` param quando há `MANIFEST.json`. A tabela municipal de 2026 só é gerada com o pré-registro congelado (`make build-2026`).
 
 Regras de publicação em `data/derived` (regra 7):
 
-- `municipios_<ano>.csv` tem Lula, Flávio, válidos, aptos e comparecimento (os insumos do balanço), mais `secoes` (seções ativas nos dois turnos). Município com menos de 10 seções vai para `<UF>-OUTROS`; se esse grupo ficar com menos de 10 seções ou com um só município, absorve o menor município publicado da UF, para que ninguém seja identificável pelo complemento. O exterior (`ZZ`) é a linha `ZZ-EXTERIOR` e não entra nas análises de município (que usam `ALL`, sem `ZZ`). A soma é preservada.
+- `municipios_<ano>.csv` tem Lula, candidato nº 22 (Jair Bolsonaro em 2022; Flávio Bolsonaro em 2026), válidos, aptos e comparecimento (os insumos do balanço), mais `secoes` (seções ativas nos dois turnos). Município com menos de 10 seções vai para `<UF>-OUTROS`; se esse grupo ficar com menos de 10 seções ou com um só município, absorve o menor município publicado da UF, para que ninguém seja identificável pelo complemento. O exterior (`ZZ`) é a linha `ZZ-EXTERIOR` e não entra nas análises de município (que usam `ALL`, sem `ZZ`). A soma é preservada.
 - `descartes_<ano>.csv` é publicado só por turno, sem UF.
 - `totais_uf_<ano>.csv` e `totais_nacionais_<ano>.csv` (gravados só por `verify`) são agregados por UF; combinados com a tabela municipal permitem recuperar somas de grupos, mas não de uma seção.
 
@@ -195,3 +195,25 @@ data de coleta e faltas de correspondência. O gerador confere o hash do snapsho
 e o hash do cadastro municipal usado no cruzamento antes de publicá-lo e registra
 as entradas da rodada. O navegador usa dados locais;
 não depende das APIs externas para abrir o painel.
+
+
+## Leitura acessível e hipóteses sobre a mudança da vantagem
+
+A apresentação distingue o saldo de votos de cada candidato da transferência de
+votos individuais. A leitura da virada é gerada pelos totais nacionais completos,
+incluindo o exterior. Q1 usa apenas seções presentes nos dois turnos; a nota do
+painel informa diferenças entre os universos. Ganho líquido significa entradas
+menos saídas, sem identificar quem mudou de voto.
+
+As hipóteses ampliadas em 30/10/2026 são exploratórias: preferência entre finalistas,
+rejeição, apoios e campanha, retorno de abstencionistas, redução de brancos e nulos,
+abstenção seletiva, troca direta entre finalistas e diferenças locais. Cada hipótese
+é acompanhada da evidência adicional necessária, como pesquisas com os mesmos
+entrevistados nos dois turnos. Não se estima uma parcela de transferência nem se
+atribui a vitória a uma única causa. Referência sobre os limites da inferência a
+partir de agregados: [King (2004)](https://gking.harvard.edu/publication/ei-a-program-for-ecological-inference-jss/).
+
+O pré-registro congelado conserva sua redação original. Em suas fórmulas e filtros,
+as referências gerais ao candidato nº 22 se aplicam a Jair Bolsonaro em 2022 e a
+Flávio Bolsonaro em 2026. A correção editorial é registrada em E7, sem alterar o
+arquivo congelado ou os cálculos.

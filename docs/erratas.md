@@ -39,3 +39,12 @@ Alterações posteriores ao congelamento de [`pre-registro.md`](pre-registro.md)
 - **O quê:** cruzamento descritivo solicitado após o pré-registro, entre concentração municipal em 2026, IDHM de 2010, PIB e PIB por habitante de 2023 e partidos dos prefeitos eleitos em 2024. Classificação partidária da tabela 1 de Bolognesi et al. (2025), com blocos e ausências explícitos.
 - **Efeito no método:** não altera Q1–Q6. Medianas, denominadores por bloco e correlações de Spearman sem ajuste; dados ausentes não são zeros. O contexto de 2024 não é atribuído à eleição de 2022. Fontes institucionais datadas complementam os 11 municípios acima de 90%, sem presumir filiação partidária atual.
 - **Publicação:** snapshots municipais com hashes, filtros, gráfico, tabelas sem JavaScript e explicações recolhidas no HTML. Não se publicam identificadores de seções ou campos pessoais alheios à função pública dos eleitos.
+
+
+## E7 — 30/10/2026 — identificação histórica e explicações acessíveis
+
+- **Correção editorial:** textos que abrangem as duas eleições e saídas da CLI passam a identificar o candidato nº 22 pelo ano: Jair Bolsonaro em 2022, Flávio Bolsonaro em 2026. A tabela histórica explicita o ano de cada linha. As chaves internas antigas permanecem para compatibilidade.
+- **Pré-registro:** preserva-se o documento congelado. Suas referências gerais ao candidato nº 22 nas fórmulas, comparações e filtros devem ser lidas segundo o ano, como esclarecido na metodologia e no painel.
+- **Apresentação:** explicações em linguagem simples de Q1–Q6, ganhos líquidos, regressão, incerteza, múltiplas comparações e rastreabilidade. A leitura da mudança de vantagem é calculada dos totais nacionais completos, com seu universo identificado.
+- **Hipóteses:** discussão exploratória, posterior aos resultados, dos mecanismos que poderiam produzir maior ganho líquido para Lula. Não mede migração individual da terceira via nem afirma uma causa exclusiva da vitória; informa o que seria necessário para investigar cada hipótese.
+- **Efeito no método:** nenhum. Q1–Q6, seus filtros, limiares e resultados ficam preservados.

@@ -1,5 +1,5 @@
 """painel.json da página: lê resultados e snapshots municipais rastreáveis. Nenhum número é digitado à mão
-(regra 5). Texto aqui é descritivo; interpretação fica fora da página até a revisão externa."""
+(regra 5). A leitura é descritiva; hipóteses qualitativas não são causas demonstradas."""
 import html
 import json
 import pathlib
@@ -71,6 +71,28 @@ def _divisao(g26, g22):
     return {'anos': [ano(2022, g22), ano(2026, g26)]}
 
 
+def _virada(t1, t2):
+    """Leitura dos totais nacionais, sem atribuir fluxos individuais de votos."""
+    dl, df = int(t2.lula - t1.lula), int(t2.flavio - t1.flavio)
+    margem1, margem2 = int(t1.lula - t1.flavio), int(t2.lula - t2.flavio)
+    posicao = lambda v: f'{_br(abs(v))} votos ' + ('à frente' if v > 0 else 'atrás' if v < 0 else 'de diferença (empate)')
+    return [
+        f'Nos totais nacionais de 2026, incluindo o exterior, Lula terminou o primeiro turno {posicao(margem1)} de Flávio Bolsonaro '
+        f'e o segundo {posicao(margem2)}. A diferença a favor de Lula mudou em {_br(margem2 - margem1, sinal=True)} votos.',
+        f'Entre os turnos, Lula teve {_br(dl, sinal=True)} votos e Flávio Bolsonaro {_br(df, sinal=True)} votos. '
+        'A mudança da vantagem é a diferença entre esses dois ganhos líquidos. Ganho líquido é o saldo: entradas menos saídas de votos.',
+        f'Os outros candidatos, chamados aqui de terceira via, somavam {_br(int(t1.terceira_via))} votos no primeiro turno. '
+        f'O total de votos válidos também mudou em {_br(int(t2.valid - t1.valid), sinal=True)}: '
+        f'o comparecimento variou em {_br(int(t2.comp - t1.comp), sinal=True)} e a redução de brancos e nulos contribuiu com '
+        f'{_br(int(t1.branco + t1.nulo - t2.branco - t2.nulo), sinal=True)}. '
+        'Essa soma fecha o ganho conjunto dos finalistas; ela não separa a origem dos votos de cada um.',
+        'Lula teve o maior ganho líquido em 2026. Isso é compatível com ter atraído mais eleitores da terceira via, '
+        'mas também com ter mobilizado quem faltou no primeiro turno, conquistado votos antes brancos ou nulos, '
+        'ou recebido votos de quem havia escolhido o adversário. Esses movimentos podem ocorrer ao mesmo tempo. '
+        'Os totais, sozinhos, não demonstram que a terceira via foi a única causa da vitória.',
+    ]
+
+
 def _atipicos(q3_26, q3_22):
     if not q3_26['testados'] or not q3_22['testados']:
         return None
@@ -108,20 +130,23 @@ def _perguntas(r, g26, g22):
         return f'{ano}: {base}, {_br(q["comparecimento_estavel_ou_alta"])} sem queda de comparecimento.'
     return [
         {'id': 'Q1', 'titulo': 'De onde veio o ganho conjunto dos finalistas?', 'linhas': [
-            f'2026: Lula {_br(g26["dL"], 0, True)}, Flávio {_br(g26["dF"], 0, True)} votos.',
+            f'2026: Lula {_br(g26["dL"], 0, True)}, Flávio Bolsonaro {_br(g26["dF"], 0, True)} votos.',
             f'2022: Lula {_br(g22["dL"], 0, True)}, Jair Bolsonaro {_br(g22["dF"], 0, True)} votos.']},
         {'id': 'Q2', 'titulo': 'A divisão do ganho difere de 2022?', 'linhas': [
             dif('Diferença de α (2026 − 2022)', al), dif('Diferença de β (voto válido novo)', be),
-            f'Explicado pelas covariáveis dos dados oficiais: {veredito}.']},
+            f'A diferença entre as eleições atende à regra de “explicado pelo modelo”: {veredito}.',
+            'Em palavras simples: comparamos cidades para ver como o ganho varia com terceira via, participação e votos brancos ou nulos. O modelo não acompanha eleitores nem determina a causa da diferença.']},
         {'id': 'Q3', 'titulo': 'Há municípios que destoam do padrão do estado?', 'linhas': [
             f'Sinalizados (FDR 5%, nos dois ajustes): {_br(q3[a26]["sinalizados_nos_dois"])} de {_br(q3[a26]["testados"])} em 2026; '
-            f'{_br(q3[a22]["sinalizados_nos_dois"])} de {_br(q3[a22]["testados"])} em 2022.']},
+            f'{_br(q3[a22]["sinalizados_nos_dois"])} de {_br(q3[a22]["testados"])} em 2022.',
+            'São cidades que merecem exame mais atento em relação ao padrão usado na comparação; a sinalização não identifica sua causa.']},
         {'id': 'Q4', 'titulo': 'Onde o candidato nº 22 perdeu votos absolutos, o comparecimento caiu?', 'linhas': [q4_linha(a26), q4_linha(a22)]},
         {'id': 'Q5', 'titulo': 'Há excesso de seções extremas?', 'linhas': [
             f'Seções com |z| > 4: {_br(q5["fracao_" + a26] * 100, 3)}% em 2026, {_br(q5["fracao_" + a22] * 100, 3)}% em 2022; '
             f'esperado por acaso (simulação): {_br(q5["esperado_por_acaso_simulacao"] * 100, 3)}%.',
-            'Conjunto atípico de seções: ' + ('sim' if q5['conjunto_atipico'] else 'não') + '.']},
-        {'id': 'Q6', 'titulo': 'Seções que fecharam tarde tiveram swing diferente?', 'linhas': [
+            'Conjunto atípico de seções: ' + ('sim' if q5['conjunto_atipico'] else 'não') + '.',
+            'A regra exige ultrapassar tanto a referência histórica quanto a simulação. Um resultado negativo significa que esse critério conjunto não foi atingido.']},
+        {'id': 'Q6', 'titulo': 'Seções que fecharam tarde tiveram mudança de votação diferente?', 'linhas': [
             'Não testável com dados públicos: a hora de encerramento por seção não existe nos CSV do TSE.']},
     ]
 
@@ -178,6 +203,9 @@ def tabelas_html(p):
     if p['atipicos']:   # 1 casa decimal nos percentuais, como na página com JS
         corpos.append(tabela('Municípios com padrão atípico (Q3), com controle de 2022', ['Critério', 'Base', '% dos municípios'],
                              [(x['rotulo'], x['faixa'], _br(x['pct'], 1) + '%') for x in p['atipicos']]))
+    corpos.append('<section class="cartao"><h2>Como a diferença de votos mudou em 2026?</h2>'
+                  + ''.join(f'<p>{e(l)}</p>' for l in p['virada'])
+                  + '<p><a href="../index.html#hipoteses">Hipóteses e como investigá-las, em linguagem simples</a>.</p></section>')
     con = p['concentracao']
     def resultado(r):
         if r is None:
@@ -320,7 +348,7 @@ def painel(derived, out, exige_real=True):
     res = {'ilustrativo': not exige_real, 'atualizado': run['gerado_utc'][:10],
            'kpis': _kpis(t[1], t[2]), 'ganho': _ganho(g26), 'divisao': _divisao(g26, g22),
            'atipicos': _atipicos(r['q3']['2026'], r['q3']['2022']), 'perguntas': _perguntas(r, g26, g22),
-           'notas': _notas(t[1], t[2], g26), 'concentracao': concentracao(d),
+           'notas': _notas(t[1], t[2], g26), 'virada': _virada(t[1], t[2]), 'concentracao': concentracao(d),
            'distribuicao_secoes': _distribuicao(d, exige_real), 'contexto': analisar_contexto(d)}
     out = pathlib.Path(out); out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(res, indent=1, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')

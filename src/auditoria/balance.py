@@ -3,8 +3,8 @@
   ΔLula = a·(terceira via 1T) + b·(Δ votos válidos)                                   [modelo A]
   ΔLula = a·(terceira via 1T) + b1·(Δ comparecimento) + b2·(queda de brancos+nulos)   [modelo B]
 
-Tudo dividido pelos válidos do 1T e ponderado por eles. Como ΔLula+ΔFlávio = terceira via + Δválidos
-(identidade exata), os coeficientes de Flávio são 1−a e 1−b.
+Tudo dividido pelos válidos do 1T e ponderado por eles. Como ΔLula+Δcandidato22 = terceira via + Δválidos
+(identidade exata), os coeficientes do candidato nº 22 são 1−a e 1−b.
 
 ATENÇÃO À LEITURA: 'a' NÃO é "a fração da terceira via que votou em Lula". É a parcela, que fica com
 Lula, do ganho líquido associado a cada voto da terceira via, mantido fixo o Δ de válidos (se parte da
@@ -19,6 +19,7 @@ import sys
 import numpy as np
 import polars as pl
 
+from .concentracao import candidato
 from .load import load_year
 from .robust import BOOT_SEED, boot_ci, mad_positivo, wls
 
@@ -35,7 +36,7 @@ def muni_table(wide):
 
 
 def identity_gap(m):
-    """ΔLula + ΔFlávio − (terceira via + Δválidos). Zero em qualquer eleição com dados íntegros."""
+    """ΔLula + Δcandidato22 − (terceira via + Δválidos). Zero em qualquer eleição com dados íntegros."""
     return m['dL'].sum() + m['dF'].sum() - m['pool'].sum() - m['dvalid'].sum()
 
 
@@ -54,6 +55,7 @@ def uf_array(m):
 
 
 def balance(wide, label, out, min_valid=200, boot=300):
+    nome22 = candidato(label.split()[0], 'flavio')
     m = add_flows(muni_table(wide))
     bad = m.filter(pl.col('dL') + pl.col('dF') - pl.col('pool') - pl.col('dvalid') != 0)
     if bad.height:
@@ -68,10 +70,10 @@ def balance(wide, label, out, min_valid=200, boot=300):
     tot = {k: m[k].sum() for k in ('pool', 'dvalid', 'dL', 'dF')}
     print(f'\n===== {label}: {m.height:,} municípios (válidos 1T ≥ {min_valid}) =====')
     print(f'terceira via 1T: {tot["pool"]:,.0f} | Δválidos: {tot["dvalid"]:+,.0f} | ΔLula: {tot["dL"]:+,.0f} | '
-          f'ΔFlávio/Bolsonaro: {tot["dF"]:+,.0f}')
-    print(f'ΔLula/(ΔLula+ΔFlávio) = {tot["dL"]/(tot["dL"]+tot["dF"]):.1%}   '
+          f'Δ{nome22}: {tot["dF"]:+,.0f}')
+    print(f'ΔLula/(ΔLula+Δ{nome22}) = {tot["dL"]/(tot["dL"]+tot["dF"]):.1%}   '
           f'identidade ΔL+ΔF − (terceira via + Δválidos) = {identity_gap(m):+,.0f} (deve ser 0)')
-    print('\nPor UF:  terceira via   Δválidos       ΔLula     ΔFlávio   %Lula do ganho')
+    print(f'\nPor UF:  terceira via   Δválidos       ΔLula     Δ{nome22}   %Lula do ganho')
     for (uf,), g in sorted(m.partition_by('SG_UF', as_dict=True).items()):
         dl, df_ = g['dL'].sum(), g['dF'].sum()
         print(f'  {uf}  {g["pool"].sum():11,.0f} {g["dvalid"].sum():+11,.0f} {dl:+11,.0f} {df_:+11,.0f}   {dl/(dl+df_):6.1%}')
@@ -151,7 +153,7 @@ def balanco(dir, out, year, control_year, ufs, min_valid=200, boot=300):
             if key in rc:
                 print(f'\nModelo {key[0]} {"c/ FE" if key[1] else "s/ FE"}: coeficientes {year} {np.round(r26[key],3)} '
                       f'vs {control_year} {np.round(rc[key],3)}')
-    print('\nLeitura: compare a e b de 2026 com os de 2022 (mesmo modelo, mesmas UFs). 1−a e 1−b são as parcelas de '
-          'Flávio/Bolsonaro. Diferença grande e estável entre UFs indica padrão nacional (mobilização, troca de '
-          'lado); diferença concentrada em poucos municípios aparece na lista de resíduos. Nada aqui é prova de '
+    print('\nLeitura: compare a e b de 2026 com os de 2022 (mesmo modelo, mesmas UFs). 1−a e 1−b são as parcelas '
+          'do candidato nº 22 (Jair Bolsonaro em 2022; Flávio Bolsonaro em 2026). Diferença grande e estável entre UFs pode refletir um padrão nacional, '
+          'sem identificar sua causa; diferença concentrada em poucos municípios aparece na lista de resíduos. Nada aqui é prova de '
           'irregularidade: é associação entre municípios.')

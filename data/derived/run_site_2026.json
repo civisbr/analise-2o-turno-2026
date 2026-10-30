@@ -2,14 +2,10 @@
   "comando": "site",
   "ano": "2026",
   "argv": [
-    "site",
-    "--derived",
-    "data/derived",
-    "--out",
-    "site/data/painel.json"
+    "site"
   ],
-  "gerado_utc": "2026-10-30T01:57:56+00:00",
-  "commit": "715a997c162eab068d76e84efe871aaa80f01500",
+  "gerado_utc": "2026-10-30T12:20:36+00:00",
+  "commit": "9b77c1a87b545eb1ea333f923f838f062dce58bf",
   "tree_clean": false,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
@@ -33,8 +29,8 @@
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {
-    "painel.json": "1c295825ffb2a86acbfd3df6277bc34c4457d683823dc6a426c527d4686c9b56",
-    "tabelas.html": "0c9779a4f6ba837faefd7a2bf0056d66103209bac36f267de2bedd1dfee67a58"
+    "painel.json": "f2492c752ae9b17f008c2498ea95c8e7f69e27ebfdabb6732c7e3b9bd8fe6e06",
+    "tabelas.html": "189f807722f46ae5c52c3f9f432594a68056a5e44568b75f31c356c155a79b59"
   },
   "conteudo_sha256": null
 }
