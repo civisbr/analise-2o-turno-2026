@@ -2,11 +2,15 @@
   "comando": "site",
   "ano": "2026",
   "argv": [
-    "site"
+    "site",
+    "--derived",
+    "data/derived",
+    "--out",
+    "site/data/painel.json"
   ],
-  "gerado_utc": "2026-10-28T21:54:59+00:00",
-  "commit": "fc5be1ded51fa94ac950d9d614a182b4a635f92c",
-  "tree_clean": true,
+  "gerado_utc": "2026-10-30T01:57:56+00:00",
+  "commit": "715a997c162eab068d76e84efe871aaa80f01500",
+  "tree_clean": false,
   "prereg_tag": "7c281d1571287d096c5a252615ff3ae98e1ccccb",
   "versoes": {
     "python": "3.12.3",
@@ -17,12 +21,20 @@
   "insumos": {
     "resultados.json": "f39b927b6de624c94f16483e388fb04881e608143e0dda2967a0cc17ff24a62e",
     "totais_nacionais_2026.csv": "f5db6a0437f3440571145ecfbbc76c0dcccccf8b926cc08320ed566f334312e8",
-    "run_analise_2026.json": "fb0209577ab6c5c090960b3aa193e63ca22f5c2423b81f4852b435f6a0f17746"
+    "run_analise_2026.json": "fb0209577ab6c5c090960b3aa193e63ca22f5c2423b81f4852b435f6a0f17746",
+    "municipios_2022.csv": "3a5c971e62fcaee8f77adbd67e79f67f8c65f3f005d028605d4da0671c9eed09",
+    "municipios_2026.csv": "368a12e95190114bc58bfe9f562c16891c5101b10c10ab0ca912f796f0c72ec9",
+    "nomes_municipios.csv": "302ae6407ab8ce66995879d09d5035f69446be0771e03ac3ecc44239475e58d4",
+    "distribuicao_secoes.json": "386368347800b8be6af2c6fe4c3d649a51aa7f23adcc8ee3f14fe06ae2ee7fac",
+    "run_distribuicao-secoes_2026.json": "84729970661426bf77c5da070d01a85a673e6d7b8056af9fd3169575cdddfefd",
+    "contexto_municipal.json": "30eb2a18a242fd49f5a5d3ad1a0a6a78c654c527e1033a465a5cfd3b853b820a",
+    "fontes_contexto.json": "8cce8c86654254f61131bffcb84554bbccf12db49d62f0d8d7863b57a9bafa75",
+    "prefeituras_verificadas.json": "ce443dc6bb972cb2015791469b1d75180cabe9f5e2f547831f4551ef6cfb3fb9"
   },
   "fechamento_secoes_divergentes": null,
   "saidas": {
-    "painel.json": "c2d09a70d5367da309b6e78ab2d5b857b64095a35fefa07c2cfb2f718af95d88",
-    "tabelas.html": "acd3c5416a50651103ea4374679f7a5bf0cfa4c82f07e87d1c4a4ea7751c5877"
+    "painel.json": "1c295825ffb2a86acbfd3df6277bc34c4457d683823dc6a426c527d4686c9b56",
+    "tabelas.html": "0c9779a4f6ba837faefd7a2bf0056d66103209bac36f267de2bedd1dfee67a58"
   },
   "conteudo_sha256": null
 }

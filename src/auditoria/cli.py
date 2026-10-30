@@ -6,6 +6,7 @@ from .analise import analise
 from .balance import balanco
 from .build import build
 from .download import download
+from .distribuicao import distribuicao
 from .load import resolve_ufs
 from .site import entradas, painel
 from .prereg import exige_prereg
@@ -48,6 +49,9 @@ def main(argv=None):
     st = sp.add_parser('site', help='gera site/data/painel.json a partir de data/derived')
     st.add_argument('--derived', default='data/derived'); st.add_argument('--out', default='site/data/painel.json')
     st.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos; marca o painel como ilustrativo')
+    ds = sp.add_parser('distribuicao-secoes', help='conta seções com até 10 votos e concentração acima de 90%, com controle histórico')
+    ds.add_argument('--dir', default='data/raw'); ds.add_argument('--out', default='data/derived')
+    ds.add_argument('--year', default='2026', type=year_arg); ds.add_argument('--control-year', default='2022', type=year_arg)
     v = sp.add_parser('verify', help='fecha votação x detalhe por seção e grava totais nacionais e por UF')
     v.add_argument('--dir', default='data/raw'); v.add_argument('--out', default='data/derived')
     v.add_argument('--year', default='2026', type=year_arg)
@@ -55,17 +59,17 @@ def main(argv=None):
     bd.add_argument('--dir', default='data/raw'); bd.add_argument('--out', default='data/derived')
     bd.add_argument('--private-dir', default='data/private', help='saída por seção; nunca versionar')
     bd.add_argument('--year', default='2026', type=year_arg)
-    for sub_ in (z, b, n, v, bd):
+    for sub_ in (z, b, n, v, bd, ds):
         sub_.add_argument('--sem-prereg', action='store_true', help='só para dados sintéticos')
     a = p.parse_args(argv)
-    if a.cmd in ('analyze', 'balanco', 'analise', 'verify', 'build'):
+    if a.cmd in ('analyze', 'balanco', 'analise', 'verify', 'build', 'distribuicao-secoes'):
         if a.sem_prereg and (pathlib.Path(a.dir) / 'MANIFEST.json').exists():
             p.error('--sem-prereg não vale para dados reais (há MANIFEST.json em --dir)')
         if a.sem_prereg and pathlib.Path(a.out).resolve() == pathlib.Path('data/derived').resolve():
             p.error('--sem-prereg não pode gravar em data/derived (versionado); use outro --out')
         if a.sem_prereg:
             print('[aviso] --sem-prereg: pré-registro não verificado; resultado não vale como análise registrada')
-        elif a.cmd in ('analyze', 'balanco', 'analise'):
+        elif a.cmd in ('analyze', 'balanco', 'analise', 'distribuicao-secoes'):
             exige_prereg()   # verify só exige quando há 2º turno de 2026 nos dados
     insumos = confere_insumos(a.dir) if a.cmd not in ('download', 'site') else None
     extra = {}
@@ -81,6 +85,8 @@ def main(argv=None):
     elif a.cmd == 'analyze':
         analyze(a.dir, a.out, a.year, a.control_year, ufs, a.closing, a.private_dir)
         extra = {'arquivos': [pathlib.Path(a.out) / f'swing_municipios_{a.year}.csv']}
+    elif a.cmd == 'distribuicao-secoes':
+        extra = distribuicao(a.dir, a.out, a.year, a.control_year)
     elif a.cmd == 'site':
         if a.sem_prereg and pathlib.Path(a.out).resolve().is_relative_to(pathlib.Path('site').resolve()):
             p.error('--sem-prereg não pode gravar em site/ (publicado); use outro --out')

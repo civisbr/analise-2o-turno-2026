@@ -104,7 +104,7 @@ function barras(div) {
   for (const t of ['100%', '75%', '50%', '25%', '0%']) eixo.appendChild(el('span', {}, t));
   box.appendChild(eixo);
   for (const a of div.anos) {
-    const col = el('div', {class: 'col', role: 'img', 'aria-label': `${a.ano}: Lula ${a.lula}%, Flávio ${a.flavio}%`});
+    const col = el('div', {class: 'col', role: 'img', 'aria-label': `${a.ano}: Lula ${a.lula}%, ${a.candidato_22} ${a.flavio}%`});
     const topo = el('span', {class: 'cor-verde'}); topo.style.height = a.lula + '%';
     const base = el('span', {class: 'cor-azul'}); base.style.height = a.flavio + '%';
     col.append(topo, base, el('em', {}, String(a.ano)));
@@ -143,6 +143,209 @@ function perguntas(lista) {
   }
 }
 
+function explicacoes() {
+  function abrir(hash) {
+    const detalhe = document.getElementById(hash.slice(1));
+    if (detalhe && detalhe.tagName === 'DETAILS') {
+      detalhe.open = true;
+      detalhe.scrollIntoView({block: 'start'});
+      detalhe.querySelector('summary').focus({preventScroll: true});
+    }
+  }
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (link) abrir(link.getAttribute('href'));
+  });
+  window.addEventListener('hashchange', () => abrir(location.hash));
+  abrir(location.hash);
+}
+
+function concentracao(dados) {
+  if (!dados) return vazio('concentracao-resumo', 'Comparação municipal indisponível.');
+  const resumo = document.getElementById('concentracao-resumo');
+  for (const ano of ['2026', '2022']) {
+    const r = dados.resumo[ano];
+    const c = el('article', {class: 'cartao'});
+    c.append(el('h3', {}, `${ano}: ${fmt.format(r.acima_90)} municípios`),
+      el('p', {class: 'nota'}, `Acima de 90%, entre ${fmt.format(r.avaliados)} avaliados.`));
+    for (const [nome, n] of Object.entries(r.por_candidato)) c.append(el('p', {class: 'nota'}, `${nome}: ${fmt.format(n)}`));
+    resumo.append(c);
+  }
+  resumo.append(el('p', {class: 'nota'}, `${fmt.format(dados.nos_dois_anos)} municípios ultrapassaram 90% nos dois anos.`));
+  const busca = document.getElementById('busca-municipio');
+  const filtro = document.getElementById('filtro-concentracao');
+  const normaliza = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+  const fmt3 = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+  function celula(r) {
+    const td = el('td');
+    if (!r) { td.textContent = 'Não disponível individualmente nesta base'; return td; }
+    td.append(el('strong', {}, r.candidato), el('span', {class: 'voto-pct'}, `${fmt3.format(r.pct)}%`),
+      el('small', {}, `${fmt.format(r.votos)} / ${fmt.format(r.validos)} válidos`),
+      el('small', {class: r.acima_90 ? 'destaque' : 'muted'}, r.acima_90 ? 'Mais de 90%' : 'Até 90%'));
+    return td;
+  }
+  function render() {
+    const termo = normaliza(busca.value.trim());
+    const linhas = dados.linhas.filter((r) => {
+      const texto = normaliza(`${r.nome} ${r.uf} ${r.mun} ${r['2022']?.nome || ''}`);
+      return texto.includes(termo) && (filtro.value === 'todos' ||
+        (filtro.value === 'ambos' ? r.situacao === 'Nos dois anos' : r[filtro.value]?.acima_90));
+    });
+    const corpo = document.getElementById('concentracao-linhas');
+    corpo.replaceChildren();
+    for (const r of linhas) {
+      const tr = el('tr');
+      const cidade = el('th', {scope: 'row'}, `${r.nome} / ${r.uf}`);
+      cidade.append(el('small', {class: 'muted'}, `Código TSE: ${r.mun}`));
+      tr.append(cidade, celula(r['2026']), celula(r['2022']), el('td', {}, r.situacao));
+      corpo.append(tr);
+    }
+    if (!linhas.length) {
+      const tr = el('tr'); tr.append(el('td', {colspan: '4'}, 'Nenhum município corresponde aos filtros.')); corpo.append(tr);
+    }
+    document.getElementById('concentracao-contagem').textContent = `${fmt.format(linhas.length)} município(s) exibido(s).`;
+  }
+  busca.addEventListener('input', render); filtro.addEventListener('change', render); render();
+}
+
+function distribuicaoSecoes(dados) {
+  if (!dados) return vazio('secoes-resumo', 'Contagem de seções indisponível.');
+  const total = dados.anos['2026'].brasil_exterior.candidatos.flavio.ate_10;
+  document.getElementById('secoes-verificacao').textContent = `Conferência de 2026: ${fmt.format(total)} seções com até 10 votos para Flávio Bolsonaro, incluindo ` +
+    `${fmt.format(dados.anos['2026'].brasil.candidatos.flavio.ate_10)} no Brasil e ${fmt.format(dados.anos['2026'].exterior.candidatos.flavio.ate_10)} no exterior.`;
+  const seletor = document.getElementById('escopo-secoes');
+  const candidatoUF = document.getElementById('candidato-secoes-uf');
+  function render() {
+    const escopo = seletor.value;
+    const resumo = document.getElementById('secoes-resumo'); resumo.replaceChildren();
+    const corpo = document.getElementById('secoes-linhas'); corpo.replaceChildren();
+    const detalhes = document.getElementById('secoes-tamanho'); detalhes.replaceChildren();
+    for (const ano of ['2026', '2022']) {
+      const b = dados.anos[ano][escopo]; const f = b.candidatos.flavio;
+      const cartao = el('article', {class: 'cartao'});
+      cartao.append(el('h3', {}, `${ano} — ${f.nome}`), el('strong', {class: 'kpi-v'}, fmt.format(f.ate_10)),
+        el('p', {class: 'nota'}, `seções com até 10 votos (${fmtNum('pct', f.pct_ate_10)} de ${fmt.format(b.avaliadas)} avaliadas).`));
+      resumo.append(cartao);
+      for (const c of ['flavio', 'lula']) {
+        const r = b.candidatos[c]; const tr = el('tr');
+        tr.append(el('th', {scope: 'row'}, `${ano} — ${r.nome}`));
+        for (const v of [b.avaliadas, r.zero, r.de_1_a_5, r.de_6_a_10, r.ate_10]) tr.append(el('td', {}, fmt.format(v)));
+        tr.append(el('td', {}, fmtNum('pct', r.pct_ate_10)), el('td', {}, fmt.format(r.acima_90))); corpo.append(tr);
+        const t = r.validos_nas_secoes_ate_10;
+        detalhes.append(el('p', {}, `${ano}, ${r.nome}: das ${fmt.format(r.ate_10)} seções com até 10 votos, ` +
+          `${fmt.format(r.ate_10_e_adversario_acima_90)} tinham mais de 90% dos válidos para o adversário, e ` +
+          `${fmt.format(r.ate_10_com_50_mais_validos)} tinham pelo menos 50 votos válidos. ` +
+          (t.min == null ? 'Não há seções nesse recorte.' : `Válidos por seção desse grupo: mínimo ${fmt.format(t.min)}, mediana ${fmt.format(t.mediana)}, máximo ${fmt.format(t.max)}.`)));
+      }
+      detalhes.append(el('p', {}, `${ano}: ${fmt.format(b.sem_validos_excluidas)} seções sem votos válidos excluídas neste recorte.`));
+    }
+    const a = dados.anos['2026'][escopo].candidatos.flavio, b = dados.anos['2022'][escopo].candidatos.flavio;
+    document.getElementById('secoes-comparacao').textContent = `Candidato nº 22: ${num.sint(a.ate_10 - b.ate_10)} seções com até 10 votos em 2026 frente a 2022` +
+      (a.pct_ate_10 != null && b.pct_ate_10 != null ? ` (${num.pp(a.pct_ate_10 - b.pct_ate_10)} na proporção de seções).` : '.');
+  }
+  function renderUF() {
+    const corpo = document.getElementById('secoes-uf-linhas'); corpo.replaceChildren();
+    const mapas = Object.fromEntries(['2026', '2022'].map(ano => [ano, new Map(dados.anos[ano].ufs.map(r => [r.uf, r]))]));
+    const ufs = [...new Set([...mapas['2026'].keys(), ...mapas['2022'].keys()])].sort();
+    for (const uf of ufs) {
+      const tr = el('tr'); tr.append(el('th', {scope: 'row'}, uf));
+      for (const ano of ['2026', '2022']) {
+        const r = mapas[ano].get(uf)?.candidatos[candidatoUF.value];
+        tr.append(el('td', {}, r ? fmt.format(r.ate_10) : '—'), el('td', {}, r ? fmtNum('pct', r.pct_ate_10) : '—'));
+      }
+      corpo.append(tr);
+    }
+  }
+  seletor.addEventListener('change', render); candidatoUF.addEventListener('change', renderUF); render(); renderUF();
+}
+
+function contextoMunicipal(dados) {
+  if (!dados) return vazio('contexto-resumo', 'Contexto municipal indisponível.');
+  const a = dados.anos['2026'];
+  const decimal = new Intl.NumberFormat('pt-BR', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+  const dinheiro = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'});
+  const valor = (v, moeda = false) => v == null ? 'Não disponível' : (moeda ? dinheiro : decimal).format(v);
+  const resumo = document.getElementById('contexto-resumo');
+  for (const g of a.grupos) {
+    const c = el('article', {class: 'cartao'});
+    c.append(el('h3', {}, `${g.rotulo}: ${fmt.format(g.n)} municípios`));
+    for (const [k, rotulo] of [['idhm_2010', 'IDHM 2010'], ['pib_pc_2023', 'PIB/hab. 2023'], ['pib_2023', 'PIB total 2023']]) {
+      const i = g.indicadores[k];
+      c.append(el('p', {class: 'nota'}, `Mediana de ${rotulo}: ${valor(i.mediana, k !== 'idhm_2010')} (n = ${fmt.format(i.n)}).`));
+    }
+    resumo.append(c);
+  }
+  const cobertura = a.cobertura;
+  document.getElementById('contexto-cobertura').append(el('p', {}, `Cobertura: ${fmt.format(cobertura.avaliados)} municípios. ` +
+    `${fmt.format(cobertura.sem_ibge)} sem correspondência exata no IBGE; ${fmt.format(cobertura.sem_prefeito_2024)} sem prefeito eleito identificado na base de 2024. ` +
+    'Esses casos permanecem na lista com a ausência indicada.'));
+  const blocos = document.getElementById('contexto-blocos');
+  for (const b of a.blocos) {
+    const tr = el('tr'); tr.append(el('th', {scope: 'row'}, b.bloco));
+    for (const v of [fmt.format(b.municipios), fmt.format(b.acima_90), fmtNum('pct', b.pct)]) tr.append(el('td', {}, v));
+    blocos.append(tr);
+  }
+  const busca = document.getElementById('contexto-busca'), filtro = document.getElementById('contexto-filtro');
+  const mais = document.getElementById('contexto-mais'); let limite = 50;
+  const normaliza = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+  function render() {
+    const termo = normaliza(busca.value.trim());
+    const linhas = a.linhas.filter(r => (filtro.value === 'todos' || r.acima_90 || (filtro.value === 'historico' && r.acima_90_2022)) &&
+      normaliza(`${r.nome} ${r.uf} ${r.prefeito_2024?.partido || ''}`).includes(termo));
+    const corpo = document.getElementById('contexto-linhas'); corpo.replaceChildren();
+    for (const r of linhas.slice(0, limite)) {
+      const tr = el('tr'); const local = el('th', {scope: 'row'}, `${r.nome} / ${r.uf}`);
+      local.append(el('small', {}, `TSE ${r.mun} · IBGE ${r.ibge || 'não associado'}`));
+      tr.append(local, el('td', {}, `${r.candidato}: ${decimal.format(r.pct_lider)}%`),
+        el('td', {}, r.pct_lider_2022 == null ? 'Não disponível' : `${r.candidato_2022}: ${decimal.format(r.pct_lider_2022)}%`),
+        el('td', {}, valor(r.idhm_2010)), el('td', {}, valor(r.pib_pc_2023, true)));
+      const prefeito = el('td', {}, r.prefeito_2024?.nome_urna || 'Não identificado');
+      if (r.prefeito_2024) prefeito.append(el('small', {}, r.prefeito_2024.nome));
+      const ver = r.verificacao_prefeitura;
+      if (ver) {
+        const d = el('details', {class: 'explicacao'});
+        d.append(el('summary', {}, 'Fonte sobre a gestão'), el('p', {}, `${ver.nome}. ${ver.referencia}. Consultada em ${ver.consulta}. Partido atual não verificado.`),
+          el('a', {href: ver.url}, 'Consultar fonte institucional'));
+        prefeito.append(d);
+      }
+      tr.append(prefeito, el('td', {}, `${r.prefeito_2024?.partido || '—'} · ${r.ideologia?.bloco || 'Sem classificação'}`)); corpo.append(tr);
+    }
+    if (!linhas.length) { const tr = el('tr'); tr.append(el('td', {colspan: '7'}, 'Nenhum município corresponde aos filtros.')); corpo.append(tr); }
+    mais.hidden = linhas.length <= limite;
+    document.getElementById('contexto-contagem').textContent = `${fmt.format(Math.min(limite, linhas.length))} de ${fmt.format(linhas.length)} municípios exibidos.`;
+  }
+  function reinicia() { limite = 50; render(); }
+  busca.addEventListener('input', reinicia); filtro.addEventListener('change', reinicia);
+  mais.addEventListener('click', () => { limite += 50; render(); }); render();
+  const grafico = document.getElementById('contexto-grafico'); const indicador = document.getElementById('contexto-indicador');
+  function desenha() {
+    if (!grafico.open) return;
+    const k = indicador.value; const pontos = a.linhas.filter(r => r[k] != null && r[k] > 0);
+    const log = k === 'pib_pc_2023'; const conv = v => log ? Math.log10(v) : v;
+    const xs = pontos.map(r => conv(r[k])); const lo = Math.min(...xs), hi = Math.max(...xs);
+    const s = svg('svg', {viewBox: '0 0 800 350', class: 'scatter', role: 'img', 'aria-label': 'Indicador municipal versus percentual do candidato mais votado em 2026'});
+    const x = v => 65 + (conv(v) - lo) / (hi - lo || 1) * 700; const y = v => 290 - (v - 50) / 50 * 250;
+    for (const v of [50, 70, 90, 100]) {
+      s.append(svg('line', {x1: 65, x2: 765, y1: y(v), y2: y(v), class: 'scatter-grade'}));
+      const t = svg('text', {x: 8, y: y(v) + 5}); t.textContent = `${v}%`; s.append(t);
+    }
+    for (let i = 0; i <= 4; i++) {
+      const v = lo + (hi - lo) * i / 4; const t = svg('text', {x: 65 + 700 * i / 4, y: 320, 'text-anchor': 'middle'});
+      t.textContent = log ? fmt.format(Math.round(10 ** v)) : decimal.format(v); s.append(t);
+    }
+    for (const r of [...pontos].sort((u, v) => Number(u.acima_90) - Number(v.acima_90))) {
+      const c = svg('circle', {cx: x(r[k]), cy: y(r.pct_lider), r: r.acima_90 ? 4 : 2, class: r.acima_90 ? 'scatter-alto' : 'scatter-base'});
+      const texto = `${r.nome} / ${r.uf}: ${valor(r[k], log)}; ${r.candidato}, ${decimal.format(r.pct_lider)}% dos válidos.`;
+      const title = svg('title'); title.textContent = texto; c.append(title);
+      c.addEventListener('click', () => { document.getElementById('contexto-ponto').textContent = texto; }); s.append(c);
+    }
+    document.getElementById('contexto-scatter').replaceChildren(s);
+    const corr = a.correlacoes[k];
+    document.getElementById('contexto-correlacao').textContent = `Spearman: ${corr.rho == null ? 'não avaliável' : decimal.format(corr.rho)}; ${fmt.format(corr.n)} municípios. Sem ajuste por região ou porte; associação não implica causalidade.`;
+  }
+  grafico.addEventListener('toggle', desenha); indicador.addEventListener('change', desenha);
+}
+
 function tema() {
   const raiz = document.documentElement;
   try { const t = localStorage.getItem('tema'); if (t === 'light' || t === 'dark') raiz.dataset.theme = t; } catch (e) { /* sem armazenamento */ }
@@ -158,6 +361,7 @@ function tema() {
 
 async function main() {
   tema();
+  explicacoes();
   const r = await fetch('data/painel.json');
   if (!r.ok) throw new Error('data/painel.json: HTTP ' + r.status);
   const d = await r.json();
@@ -174,6 +378,9 @@ async function main() {
   const notas = document.getElementById('notas');
   for (const n of d.notas || []) notas.appendChild(el('p', {}, n));
   donut(d.ganho); barras(d.divisao); atipicos(d.atipicos); perguntas(d.perguntas);
+  concentracao(d.concentracao);
+  distribuicaoSecoes(d.distribuicao_secoes);
+  contextoMunicipal(d.contexto);
 }
 
 main().catch(() => {

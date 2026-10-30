@@ -21,7 +21,7 @@ Efeito na terceira via: 9.321.993 (11 candidatos) em vez de 9.316.747 (10 candid
 
 ## Reprodução do baseline (Fase 1)
 
-Nos CSV derivados de 2022 a coluna `flavio` guarda os votos do candidato nº 22 (Bolsonaro).
+Nos CSV derivados de 2022 a coluna `flavio` guarda os votos do candidato nº 22 (Jair Bolsonaro).
 
 `make verify` soma os arquivos por seção (27 UFs + exterior `ZZ`) e fecha votação × detalhe. Resultado em 26/10/2026:
 
@@ -68,3 +68,130 @@ Regras de publicação em `data/derived` (regra 7):
 ## Saída por seção
 
 Tabelas por seção são gravadas em `data/private/` (fora do git). Em `data/derived/` entram só agregados municipais e por UF.
+
+## Concentração municipal acima de 90% (análise descritiva adicional)
+
+Adicionada em 29/10/2026, depois do pré-registro. Não altera Q1–Q6 nem seus limiares.
+`auditoria site` lê `municipios_2022.csv` e `municipios_2026.csv` e calcula, para o
+**segundo turno**, `votos do candidato / valid2`. O corte é estrito e usa aritmética
+inteira (`10 × votos > 9 × válidos`), antes do arredondamento da apresentação.
+Exatamente 90% não entra. Brancos, nulos e abstenção não entram no denominador.
+
+O universo é o da tabela municipal pública: seções presentes nos dois turnos,
+municípios publicados individualmente e com votos válidos positivos. Excluem-se
+exterior (`ZZ`) e grupos `OUTROS`, inclusive os gerados por supressão complementar.
+Logo, a lista não é um censo completo dos municípios, nem necessariamente coincide
+com os percentuais da totalização municipal de todas as seções.
+
+A lista une os municípios que passaram do corte em pelo menos um dos anos; cada
+coluna mostra o candidato mais votado e os votos válidos daquele ano. A comparação
+é por UF e código TSE, sem ajuste de mudanças territoriais. Uma linha municipal
+ausente em um ano é “Sem comparação”, nunca zero ou “não passou”. “Nos dois anos”
+significa algum candidato acima de 90% em cada ano, não necessariamente a mesma
+pessoa. O número de municípios elegíveis é informado separadamente para cada ano.
+Não se atribui significância estatística nem irregularidade a esse indicador.
+
+Os nomes são extraídos de `NM_MUNICIPIO` no membro presidencial `_BR.csv` dos ZIP
+`detalhe_votacao_munzona` de cada ano, usando os arquivos do mesmo `MANIFEST.json`.
+Para reproduzir o cadastro e o painel:
+
+```bash
+python -m auditoria.concentracao --raw data/raw --out data/derived
+python -m auditoria site --derived data/derived --out site/data/painel.json
+```
+
+`nomes_municipios.csv` contém apenas ano, chave municipal e nome;
+`fontes_nomes_municipios.json` registra os hashes das fontes e da saída. O registro
+da rodada do site inclui hashes das duas tabelas municipais e do cadastro.
+Os nomes não dependem de consulta externa no navegador.
+
+A coluna histórica `flavio` dos dados continua sendo uma chave interna para o
+candidato nº 22: **Jair Bolsonaro em 2022** e **Flávio Bolsonaro em 2026**. Rótulos,
+legendas, textos acessíveis e tabelas HTML usam o nome correspondente ao ano.
+As explicações públicas ficam no próprio HTML, em elementos `details` fechados
+por padrão, abertos pelo leitor ou pelos links internos de explicação.
+
+## Seções com votação baixa ou concentrada (análise descritiva adicional)
+
+`auditoria distribuicao-secoes` lê e fecha os arquivos de votação, detalhe por seção
+ e detalhe município-zona dos dois anos antes de gravar `distribuicao_secoes.json`.
+O registro `run_distribuicao-secoes_2026.json` guarda hashes e verificações. A saída
+pública contém somente contagens nacionais, por UF e exterior, sem identificar seções.
+
+O universo é **Presidente, segundo turno, seções com pelo menos um voto válido**,
+sem pareamento com o primeiro turno e sem mínimo de 50 votos. Chave única:
+UF, município, zona e número da seção. Seções sem válidos são contadas à parte como
+excluídas, nunca como zero voto para os candidatos. O limite absoluto inclui zero
+e dez; as faixas 0, 1–5 e 6–10 somam o total ≤10. O corte proporcional é
+`10 × votos > 9 × válidos`, antes de arredondar. Os dois critérios não são equivalentes.
+
+O painel compara frequências em universos de cada eleição; não acompanha as mesmas
+seções entre anos. Exterior é selecionável e separado. Mostra também quantas das
+seções com ≤10 votos têm ≥50 válidos, quantas têm >90% para o adversário e o mínimo,
+a mediana e o máximo de votos válidos desse grupo. Não aplica o teste Q5 a esse recorte.
+
+Na checagem da afirmação de cerca de 3 mil seções, o arquivo de 2026 reproduz 3.042
+com Brasil + exterior (3.029 + 13). Para 2022, este recorte produz 4.117, não as
+4.118 citadas na página de Wesley Cota consultada em 29/10/2026. A divergência de
+uma seção permanece registrada; não se altera o cálculo para forçar concordância.
+Fonte da afirmação: https://g.wcota.me/eleicoes2026/distribuicao/.
+
+## Desenvolvimento e partidos das prefeituras (análise descritiva adicional)
+
+Adicionada em 29/10/2026, após o pré-registro, sem alterar Q1–Q6. O cruzamento usa
+os municípios individuais elegíveis da base pública de **2026**. A coluna de 2022
+é somente uma referência eleitoral: não se atribuem a 2022 os governos de 2024.
+
+Fontes e unidades:
+
+- IDHM municipal de **2010**, Atlas do Desenvolvimento Humano (PNUD/Ipea/FJP),
+  série `ADH_IDHM` do [Ipeadata](https://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='ADH_IDHM')).
+  Não é uma estimativa do desenvolvimento em 2026.
+- PIB municipal de **2023**, a preços correntes, [SIDRA/IBGE, tabela 5938, variável 37](https://apisidra.ibge.gov.br/values/t/5938/n6/all/v/37/p/2023).
+  A origem está em milhares de reais; a saída multiplica por mil.
+- PIB por habitante de **2023**, IBGE, pesquisa 38, indicador 47001, em reais.
+  É produção por habitante, não renda recebida por pessoa.
+- Prefeitos e partidos da eleição ordinária de **2024**, [cadastro do TSE](https://dadosabertos.tse.jus.br/dataset/candidatos-2024),
+  filtrado por cargo 11, situação ELEITO e tipo de eleição 2. Só nomes, partido e
+  datas são retidos. Não se presume que partido ou ocupante tenham permanecido até 2026.
+- Categorias partidárias da tabela 1 de [Bolognesi, Ribeiro, Codato e Silva (2025)](https://doi.org/10.1590/1807-0191202531120).
+  Usa-se a categoria publicada, sem recalculá-la pela média. Centro-esquerda e
+  extrema esquerda entram em Esquerda; centro-direita e extrema direita, em Direita;
+  Centro permanece separado. A categoria caracteriza o partido nacional, não o
+  apoio presidencial ou a posição pessoal do prefeito. Siglas ausentes no estudo,
+  como PRD e MOBILIZA, ficam sem classificação. Equivalências de sigla:
+  SDD/SOLIDARIEDADE, CDD/CIDADANIA, PROGRE/PP, REP/REPUBLICANOS e PATRI/PATRIOTA.
+
+A ligação TSE–IBGE exige UF e nome coincidentes após normalizar acentos, caixa,
+espaços e pontuação. Não há correspondência aproximada: nomes divergentes ficam
+sem indicadores. Os indicadores são então unidos pelo código IBGE. O snapshot
+registra 13 nomes sem associação; no recorte de 5.239 municípios há também 42 sem
+prefeito eleito identificado. Ausência não vira zero nem exclui a cidade da lista.
+
+Nas 11 cidades acima de 90% em 2026, `prefeituras_verificadas.json` registra fontes
+institucionais sobre os gestores, a data de referência e a consulta. Essas evidências
+datadas não são prova de filiação atual ou de ausência de substituições posteriores;
+a coluna partidária continua explicitamente identificada como 2024.
+
+Comparam-se medianas municipais do grupo acima de 90% com o restante, com o mesmo
+peso para cada cidade e tamanho amostral por indicador. Para cada bloco partidário,
+mostram-se o total elegível, o número acima de 90% e a proporção dentro do bloco.
+Spearman usa todos os municípios com o par de dados disponível, com empates por
+postos médios, entre o indicador e a participação do **candidato mais votado**.
+O gráfico de PIB por habitante usa escala logarítmica. Não há ajuste por região,
+população ou outros fatores; associação não estabelece causalidade.
+
+Reprodução, depois de gerar as bases municipais e o cadastro de nomes:
+
+```bash
+python -m auditoria distribuicao-secoes --dir data/raw --out data/derived
+python -m auditoria.contexto --raw data/external --derived data/derived
+python -m auditoria site --derived data/derived --out site/data/painel.json
+```
+
+`data/external` é cache local, fora do git. `contexto_municipal.json` contém somente
+as variáveis públicas selecionadas; `fontes_contexto.json` guarda URLs, hashes,
+data de coleta e faltas de correspondência. O gerador confere o hash do snapshot
+e o hash do cadastro municipal usado no cruzamento antes de publicá-lo e registra
+as entradas da rodada. O navegador usa dados locais;
+não depende das APIs externas para abrir o painel.

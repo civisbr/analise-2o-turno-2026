@@ -1,0 +1,8 @@
+{
+  "fontes_sha256": {
+    "detalhe_votacao_munzona_2022.zip": "dbf41c5e95c2efedc72848bd0ec70a47f419b539c82e893388314749617ea2f4",
+    "detalhe_votacao_munzona_2026.zip": "9272a7afe24e08adec549b77b03c93622ed2586ab78765026156e3c0f01e53e1"
+  },
+  "saida_sha256": "302ae6407ab8ce66995879d09d5035f69446be0771e03ac3ecc44239475e58d4",
+  "origem": "TSE, detalhe_votacao_munzona, membro BR, cargo Presidente; cadastro por ano e código TSE"
+}

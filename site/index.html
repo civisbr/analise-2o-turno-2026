@@ -18,10 +18,13 @@
       <a href="#topo" aria-current="page">Início</a>
       <a href="#resultados">Resultados</a>
       <a href="#mapas">Mapas</a>
+      <a href="#secoes-votos">Seções</a>
+      <a href="#municipios-90">Municípios &gt; 90%</a>
+      <a href="#contexto-municipal">IDH e prefeituras</a>
       <a href="#dados">Dados</a>
-      <a href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Metodologia</a>
+      <a href="#metodologia">Metodologia</a>
       <a href="#sobre">Sobre</a>
-      <a href="https://github.com/civisbr/analise-2o-turno-2026#readme">FAQ</a>
+      <a href="#faq">FAQ</a>
     </nav>
     <div class="acoes">
       <a class="btn-contorno" href="#sobre"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Entenda o projeto</a>
@@ -57,7 +60,7 @@
           <li>Explicações alternativas sempre consideradas</li>
           <li>Rastreabilidade total</li>
         </ul>
-        <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026#readme">Saiba mais sobre o projeto <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="mais" href="#faq">Saiba mais sobre o projeto <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </aside>
     </section>
 
@@ -72,20 +75,20 @@
           <h3 id="t-ganho">De onde veio o ganho dos finalistas?</h3>
           <p class="muted peq">Decomposição do aumento de votos válidos</p>
           <div class="ganho"><div id="donut" class="donut"></div><ul id="ganho-leg" class="legenda"></ul></div>
-          <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Ver metodologia completa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="mais" href="#metodologia">Ver metodologia completa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
         <article class="cartao" aria-labelledby="t-div">
-          <h3 id="t-div">Divisão do ganho entre Lula e Flávio</h3>
+          <h3 id="t-div">Divisão do ganho entre os finalistas</h3>
           <p class="muted peq">2026 comparado a 2022</p>
-          <div class="barras-emp"><div id="barras" class="barras"></div><ul class="legenda leg-lf"><li><i class="cor-verde"></i>Lula</li><li><i class="cor-azul"></i>Flávio</li></ul></div>
+          <div class="barras-emp"><div id="barras" class="barras"></div><ul class="legenda leg-lf"><li><i class="cor-verde"></i>Lula</li><li><i class="cor-azul"></i>Jair Bolsonaro (2022)<br>Flávio Bolsonaro (2026)</li></ul></div>
           <p class="peq" id="div-txt"></p>
-          <a class="mais" href="#resultados">Entenda essa análise <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="mais" href="#exp-divisao">Entenda essa análise <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
         <article class="cartao" aria-labelledby="t-atip">
           <h3 id="t-atip">Municípios com padrão atípico</h3>
           <p class="muted peq">% de municípios por critério (Q3), com controle de 2022</p>
           <div id="atipicos" class="hbarras"></div>
-          <a class="mais" href="#resultados">Explorar no mapa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="mais" href="#exp-atipicos">Entenda os critérios <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
         <article class="cartao" aria-labelledby="t-hip">
           <h3 id="t-hip">Explique primeiro</h3>
@@ -97,7 +100,7 @@
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h13l-3-3M19 15H6l3 3"/></svg>Transferência entre seções</li>
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M6 20v-2a6 6 0 0 1 12 0v2z"/></svg>Outros fatores locais</li>
           </ul>
-          <a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ver todas as hipóteses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="mais" href="#hipoteses">Ver todas as hipóteses <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </article>
       </div>
       <div class="perguntas" id="perguntas" role="group" aria-label="Perguntas Q1 a Q6"></div>
@@ -106,11 +109,130 @@
       <p class="nota"><a href="data/tabelas.html">Versão em tabelas, sem JavaScript</a></p>
     </section>
 
+
+    <section class="painel" id="secoes-votos" aria-labelledby="t-secoes">
+      <div class="painel-cab"><h2 id="t-secoes">Seções com até 10 votos</h2><span class="muted">2º turno · 2026 × 2022</span></div>
+      <p class="nota">Contagem de seções com votos válidos, incluindo as pequenas. Até 10 inclui zero; o percentual usa o total de seções avaliadas.</p>
+      <p id="secoes-verificacao" class="nota"></p>
+      <div class="filtros"><label>Abrangência<select id="escopo-secoes"><option value="brasil">Brasil, sem exterior</option><option value="brasil_exterior">Brasil + exterior</option><option value="exterior">Somente exterior</option></select></label></div>
+      <div class="concentracao-resumo" id="secoes-resumo"></div>
+      <p id="secoes-comparacao" class="nota" role="status" aria-live="polite"></p>
+      <details class="explicacao" id="exp-secoes"><summary>O que essa contagem mostra — e como foi feita</summary>
+        <p>Contamos uma vez cada seção de votação, identificada por UF, município, zona e número da seção, para o cargo Presidente no segundo turno. Aqui “urna” significa a seção apurada, não um equipamento físico identificado por número de série.</p>
+        <p>Entram todas as seções com pelo menos um voto válido no segundo turno, sem exigir que existissem no primeiro turno e sem o corte de 50 votos usado em Q5. Isso inclui seções de municípios pequenos que estão agrupados em OUTROS na tabela municipal. Seções sem votos válidos ficam fora do denominador e não contam como zero voto de um candidato.</p>
+        <p>“Até 10 votos” é um limite absoluto, de 0 a 10 inclusive. É diferente de “mais de 90% dos válidos”: 10 de 50 votos são 20%, enquanto 10 de 300 são 3,33%. Uma votação muito concentrada pode desaparecer na média municipal; por isso os recortes por seção e município se complementam.</p>
+        <p>As contagens de 2022 e 2026 usam os universos de cada eleição; não são as mesmas seções acompanhadas no tempo. A coluna “mais de 90%” refere-se ao próprio candidato da linha. A classificação é descritiva e não é o teste estatístico de Q5, nem demonstra irregularidade por si só.</p>
+        <div id="secoes-tamanho"></div>
+        <p>Fonte: arquivos de votação e detalhe por seção do <a href="https://dadosabertos.tse.jus.br/dataset/resultados-2026">TSE — 2026</a> e <a href="https://dadosabertos.tse.jus.br/dataset/resultados-2022">TSE — 2022</a>, com hashes registrados e conferência entre arquivos antes da contagem.</p>
+      </details>
+      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Distribuição de votos por seção, com rolagem horizontal"><table class="tabela"><caption>Mesma regra para os dois candidatos e os dois anos</caption><thead><tr><th scope="col">Ano / candidato</th><th scope="col">Seções avaliadas</th><th scope="col">Zero voto</th><th scope="col">1–5 votos</th><th scope="col">6–10 votos</th><th scope="col">Até 10 votos</th><th scope="col">% das seções</th><th scope="col">Mais de 90% dos válidos</th></tr></thead><tbody id="secoes-linhas"></tbody></table></div>
+      <details class="explicacao" id="secoes-ufs"><summary>Ver a distribuição por estado</summary>
+        <div class="filtros"><label>Candidato<select id="candidato-secoes-uf"><option value="flavio">Nº 22: Flávio (2026) / Jair Bolsonaro (2022)</option><option value="lula">Lula nos dois anos</option></select></label></div>
+        <p class="nota">Até 10 votos por seção; cada percentual usa as seções com válidos da própria UF e ano. Exterior fica fora desta tabela.</p>
+        <div class="tabela-scroll" tabindex="0" role="region" aria-label="Contagem por UF"><table class="tabela"><caption>Seções com até 10 votos por UF</caption><thead><tr><th scope="col">UF</th><th scope="col">2026: seções</th><th scope="col">2026: %</th><th scope="col">2022: seções</th><th scope="col">2022: %</th></tr></thead><tbody id="secoes-uf-linhas"></tbody></table></div>
+      </details>
+      <noscript><p class="nota">Consulte as contagens nas <a href="data/tabelas.html">tabelas em HTML</a>.</p></noscript>
+    </section>
+
+    <section class="painel" id="municipios-90" aria-labelledby="t-concentracao">
+      <div class="painel-cab"><h2 id="t-concentracao">Municípios com mais de 90% dos votos válidos</h2><span class="muted">2º turno · 2026 × 2022</span></div>
+      <p class="nota">Recorte da base municipal publicada: seções presentes nos dois turnos, sem municípios agrupados em OUTROS e sem exterior.</p>
+      <div id="concentracao-resumo" class="concentracao-resumo"></div>
+      <details class="explicacao" id="exp-concentracao">
+        <summary>Como calculamos e comparamos os 90%</summary>
+        <p>Dividimos os votos do candidato pelos votos válidos do segundo turno de cada município e ano. Brancos, nulos e abstenções não entram no denominador. O corte é estritamente maior que 90%, calculado antes de arredondar; exatamente 90% fica fora.</p>
+        <p>A lista reúne cidades acima do corte em pelo menos um dos anos. Cada coluna apresenta o candidato mais votado naquele ano, seu percentual e a contagem de votos. “Nos dois anos” indica que algum candidato ultrapassou 90% em ambas as eleições, sem presumir que fosse a mesma pessoa. Em 2022, o candidato nº 22 era Jair Bolsonaro; em 2026, é Flávio Bolsonaro.</p>
+        <p>A comparação usa UF e código municipal do TSE, sem ajuste de mudanças nos limites territoriais. Municípios com menos de dez seções são agrupados pelo projeto em OUTROS, com supressão complementar; esses grupos não são cidades e ficam fora desta lista. Uma cidade sem linha individual em um dos anos aparece como “Sem comparação”, nunca como zero.</p>
+        <p>São percentuais da base de seções pareadas do projeto, que podem diferir da totalização municipal completa. O número de cidades avaliadas muda entre os anos; a diferença das contagens não mede, sozinha, uma mudança no mesmo conjunto de municípios. Esta é uma análise descritiva adicional, não um teste de padrão atípico nem evidência de irregularidade.</p>
+      </details>
+      <div class="filtros">
+        <label>Buscar município ou UF<input id="busca-municipio" type="search" placeholder="Ex.: Carnaubeira ou PE"></label>
+        <label>Mostrar<select id="filtro-concentracao"><option value="2026">Mais de 90% em 2026</option><option value="2022">Mais de 90% em 2022</option><option value="ambos">Nos dois anos</option><option value="todos">Todos: pelo menos um ano</option></select></label>
+      </div>
+      <p id="concentracao-contagem" class="nota" role="status" aria-live="polite"></p>
+      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Comparação municipal, role horizontalmente em telas pequenas">
+        <table class="tabela"><caption>Candidato mais votado e participação nos válidos por município</caption><thead><tr><th scope="col">Município / UF</th><th scope="col">2026</th><th scope="col">2022</th><th scope="col">Mais de 90%</th></tr></thead><tbody id="concentracao-linhas"></tbody></table>
+      </div>
+      <noscript><p class="nota">Veja a lista completa nas <a href="data/tabelas.html">tabelas em HTML</a>.</p></noscript>
+    </section>
+
+    <section class="painel" id="contexto-municipal" aria-labelledby="t-contexto">
+      <div class="painel-cab"><h2 id="t-contexto">Concentração de votos, desenvolvimento e prefeituras</h2><span class="muted">Eleição presidencial de 2026 · contexto municipal</span></div>
+      <p class="nota">IDHM de 2010 · PIB e PIB por habitante de 2023 · prefeitos e partidos eleitos em 2024. A classificação política é do partido nacional, não da posição pessoal do prefeito ou do seu apoio presidencial.</p>
+      <div id="contexto-resumo" class="concentracao-resumo"></div>
+      <details class="explicacao" id="exp-contexto"><summary>Fontes, datas e limites deste cruzamento</summary>
+        <p>Comparamos os municípios com mais de 90% dos válidos para um candidato em 2026 com os demais municípios individuais da base pública. Cada município tem o mesmo peso. O contexto é de 2026; a votação de 2022 aparece somente como referência eleitoral, sem atribuir a ela os governos eleitos em 2024.</p>
+        <p>O IDHM combina renda, educação e longevidade e varia de 0 a 1. Usamos a medição municipal de 2010 do Atlas do Desenvolvimento Humano (PNUD/Ipea/FJP), disponível no Ipeadata. É uma referência histórica, não uma medição de 2026. O PIB de 2023 e o PIB por habitante vêm do IBGE, a preços correntes. PIB por habitante mede produção econômica, não renda recebida por pessoa.</p>
+        <p>Os vínculos TSE–IBGE exigem UF e nome normalizado coincidentes; depois, os indicadores são associados pelo código IBGE. Nomes divergentes ficam sem indicador, sem associação aproximada. As medianas e correlações informam o número de casos com dados disponíveis; ausências não viram zero.</p>
+        <p>Prefeitos e partidos são os eleitos na eleição ordinária de 2024, conforme o cadastro do TSE. Nas cidades acima de 90% em 2026, há também fontes institucionais sobre os gestores, com referência e data de consulta acessíveis na linha da cidade. Essas fontes podem ter datas distintas e não comprovam filiação partidária atual nem ausência de substituições posteriores.</p>
+        <p>Usamos as categorias da tabela 1 de Bolognesi, Ribeiro, Codato e Silva (2025), com pesquisa entre especialistas de 2022. Agrupamos centro-esquerda e extrema esquerda em “Esquerda”, e centro-direita e extrema direita em “Direita”; “Centro” mantém sua categoria. “Extrema” é uma posição na escala do estudo, não uma afirmação sobre comportamento antidemocrático. Siglas ausentes no estudo ficam sem classificação, sem imputar a ideologia dos partidos que lhes deram origem.</p>
+        <p>As associações são descritivas e não ajustam região, tamanho da população ou outros fatores. A correlação de Spearman compara o indicador com o percentual do candidato mais votado, qualquer que seja o candidato; varia de −1 a +1. Não demonstra causalidade, influência de prefeitos, compra de votos ou irregularidade.</p>
+        <p>Fontes: <a href="https://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='ADH_IDHM')">IDHM — Ipeadata</a>; <a href="https://www.ibge.gov.br/estatisticas/economicas/contas-nacionais/9088-produto-interno-bruto-dos-municipios.html">PIB — IBGE</a>; <a href="https://dadosabertos.tse.jus.br/dataset/candidatos-2024">eleitos — TSE</a>; <a href="https://doi.org/10.1590/1807-0191202531120">classificação partidária — artigo original</a>.</p>
+        <div id="contexto-cobertura"></div>
+      </details>
+      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Comparação por bloco partidário"><table class="tabela"><caption>Bloco do partido eleito para a prefeitura em 2024 × concentração presidencial de 2026</caption><thead><tr><th scope="col">Bloco</th><th scope="col">Municípios avaliados</th><th scope="col">Com mais de 90%</th><th scope="col">% dentro do bloco</th></tr></thead><tbody id="contexto-blocos"></tbody></table></div>
+      <details class="explicacao" id="contexto-grafico"><summary>Explorar a relação entre desenvolvimento e concentração de votos</summary>
+        <div class="filtros"><label>Indicador no eixo horizontal<select id="contexto-indicador"><option value="idhm_2010">IDHM 2010</option><option value="pib_pc_2023">PIB por habitante 2023 (escala logarítmica)</option></select></label></div>
+        <p class="nota">Um ponto por município com dados. Verde: mais de 90% em 2026; cinza: demais. Passe sobre um ponto ou toque para ver o município. O gráfico usa toda a base, independentemente dos filtros da lista.</p>
+        <div id="contexto-scatter"></div><p id="contexto-ponto" class="nota" role="status"></p>
+        <p id="contexto-correlacao" class="nota"></p>
+      </details>
+      <div class="filtros">
+        <label>Buscar cidade, UF ou partido<input id="contexto-busca" type="search" placeholder="Ex.: Guaribas, PI ou MDB"></label>
+        <label>Municípios<select id="contexto-filtro"><option value="2026">Mais de 90% em 2026</option><option value="historico">Mais de 90% em 2026 ou 2022</option><option value="todos">Todos os municípios avaliados em 2026</option></select></label>
+      </div>
+      <p id="contexto-contagem" class="nota" role="status" aria-live="polite"></p>
+      <div class="tabela-scroll" tabindex="0" role="region" aria-label="Contexto municipal, com rolagem horizontal"><table class="tabela"><caption>Indicadores e prefeitura ao lado da votação</caption><thead><tr><th scope="col">Município / UF</th><th scope="col">Líder em 2026</th><th scope="col">Líder em 2022 (%)</th><th scope="col">IDHM 2010</th><th scope="col">PIB/hab. 2023</th><th scope="col">Prefeito eleito em 2024</th><th scope="col">Partido em 2024 / bloco</th></tr></thead><tbody id="contexto-linhas"></tbody></table></div>
+      <button type="button" class="btn-contorno" id="contexto-mais" hidden>Mostrar mais municípios</button>
+      <noscript><p class="nota">Consulte o cruzamento nas <a href="data/tabelas.html">tabelas em HTML</a>.</p></noscript>
+    </section>
+
+    <section class="painel explicacoes" aria-labelledby="t-explicacoes">
+      <div class="painel-cab"><h2 id="t-explicacoes">Entenda os dados e o método</h2><span class="muted">Clique em um assunto para abrir a explicação</span></div>
+      <details class="explicacao" id="metodologia"><summary>Metodologia da análise</summary>
+        <p>O projeto compara os dois turnos da eleição presidencial de 2026 e usa 2022 como controle histórico. A fonte são os arquivos abertos do TSE de votação por seção, detalhe por seção e detalhe por município e zona. Votos válidos seguem os arquivos por seção: votos nominais, sem brancos e nulos.</p>
+        <p>Q1 decompõe o ganho conjunto dos finalistas: votos da terceira via no primeiro turno mais a variação dos votos válidos. A variação dos válidos equivale à variação do comparecimento mais a queda de brancos e nulos. A identidade contábil não revela para quem cada eleitor mudou o voto.</p>
+        <p>Q2 compara regressões municipais ponderadas pelos válidos do primeiro turno. Os modelos incorporam terceira via, variação dos válidos, comparecimento, brancos e nulos, tamanho do município e efeito de UF. A incerteza é estimada por bootstrap municipal, com 2.000 reamostragens na rodada final.</p>
+        <p>Q3 avalia desvios municipais em relação ao modelo. Q4 compara perda de votos do candidato nº 22 com a variação do comparecimento: Jair Bolsonaro em 2022 e Flávio Bolsonaro em 2026. Q5 compara seções extremas com simulação e controle histórico. Q6 não foi testada: os CSV usados não informam a hora de encerramento da seção; recebimento do boletim no TSE não mede encerramento.</p>
+        <p>Seções presentes em apenas um turno são descartadas das comparações. Q2 a Q4 excluem municípios com menos de 200 válidos em qualquer turno; Q5 exclui seções com menos de 50 votos dos finalistas em qualquer turno. O exterior fica separado em Q1 e fora de Q2 a Q5. A lista de municípios acima de 90% é um recorte descritivo adicional da tabela municipal pública.</p>
+      </details>
+      <details class="explicacao" id="exp-divisao"><summary>O que significa a divisão do ganho?</summary>
+        <p>Calculamos o aumento líquido de votos de cada finalista entre o primeiro e o segundo turno e dividimos pelo ganho conjunto. As barras mostram a participação nesse ganho, não a participação no total de votos do segundo turno. Em 2022, os finalistas eram Lula e Jair Bolsonaro; em 2026, Lula e Flávio Bolsonaro.</p>
+        <p>Os coeficientes α e β descrevem associações entre municípios. α não é a fração de eleitores da terceira via que votou em Lula. Dados agregados não permitem seguir o voto de pessoas individuais.</p>
+      </details>
+      <details class="explicacao" id="exp-atipicos"><summary>Como interpretamos padrões atípicos?</summary>
+        <p>Q3 mostra a fração de municípios com p &lt; 0,05 e, separadamente, os sinalizados após correção de múltiplos testes por Benjamini–Hochberg (FDR de 5%). A seleção final exige que o sinal persista nos ajustes com e sem refit robusto. A correção controla a proporção esperada de falsos entre os sinalizados, sob as condições do método.</p>
+        <p>Q5 usa |z| &gt; 4, com piso de erro-padrão de 0,5 ponto percentual conforme a errata, e compara a frequência observada com simulação e com 2022. A concentração acima de 90% é outro indicador: uma votação alta, por si só, não representa um desvio estatístico do modelo.</p>
+        <p>“Não explicado pelo modelo” não significa irregularidade. Resultados negativos e explicações alternativas devem ser considerados com o mesmo destaque.</p>
+      </details>
+      <details class="explicacao" id="hipoteses"><summary>Quais explicações alternativas são consideradas?</summary>
+        <p>Mobilização de eleitores que antes não votavam; abstenção seletiva; voto útil; orientação da terceira via a um finalista; transferência ou criação de seções; clima e transporte no dia; diferenças de composição urbana, rural e etária; novos eleitores no cadastro.</p>
+        <p>Comparecimento, brancos e nulos, tamanho do município e UF entram nos modelos quando disponíveis. Mobilização, clima, transporte e decisão individual de voto não são medidos diretamente por esses arquivos; aparecem como hipóteses qualitativas, não como causas demonstradas.</p>
+      </details>
+      <details class="explicacao" id="pre-registro"><summary>Pré-registro e alterações do método</summary>
+        <p>As perguntas Q1 a Q6, filtros e limiares foram documentados antes da análise municipal de 2026. O pré-registro foi congelado na tag prereg-v1; os agregados nacionais e os dados usados para validar a leitura já eram conhecidos, conforme a declaração de acesso.</p>
+        <p>As erratas registram o piso de 0,5 ponto percentual no erro-padrão de Q5, o acesso ao segundo turno após o congelamento e a migração de pandas para polars. A comparação municipal acima de 90% foi adicionada depois, a pedido do usuário, como análise descritiva exploratória; não integra as hipóteses originalmente pré-registradas.</p>
+        <p>Um efeito é considerado explicado pelas covariáveis quando a diferença entre anos cai abaixo da metade ou seu intervalo de confiança de 95% inclui zero, conforme a comparação entre os modelos. Coeficientes sem variação suficiente são marcados como não avaliáveis.</p>
+      </details>
+      <details class="explicacao" id="rastreabilidade"><summary>Como os números podem ser conferidos?</summary>
+        <p>Os arquivos de origem têm hashes SHA-256 registrados. O pipeline confere votação e detalhe por seção, depois as somas contra o detalhe por município e zona. A checagem de município e zona cobre totais de participação e votos válidos, mas não é uma segunda verificação dos votos por candidato.</p>
+        <p>O painel é gerado das tabelas derivadas, sem números digitados à mão. Cada rodada registra entradas, saídas, comando, versão do código e bibliotecas. Os nomes das cidades vêm do cadastro municipal dos arquivos do TSE, associados pelo ano, UF e código.</p>
+        <p>No primeiro turno de 2026, os arquivos de seção e a totalização diferem em 5.246 votos nulos técnicos. A análise segue a definição reproduzível dos arquivos por seção; a regra é conferida pelo pipeline. Seções presentes em apenas um turno podem explicar diferenças entre totais nacionais e decomposições pareadas.</p>
+      </details>
+      <details class="explicacao" id="faq"><summary>Perguntas frequentes e propósito do projeto</summary>
+        <p><strong>É uma fonte oficial?</strong> Não. É uma análise independente de dados públicos do TSE, em versão preliminar e aguardando revisão externa.</p>
+        <p><strong>Por que comparar com 2022?</strong> O controle histórico ajuda a distinguir padrões recorrentes de diferenças entre eleições. Os candidatos nº 22 são pessoas diferentes: Jair Bolsonaro (pai) em 2022 e Flávio Bolsonaro (filho) em 2026.</p>
+        <p><strong>Mais de 90% significa irregularidade?</strong> Não. É uma descrição da concentração de votos, sem conclusão sobre sua causa.</p>
+        <p><strong>Por que uma cidade pode não aparecer?</strong> Além de não ultrapassar o corte, ela pode estar agrupada em OUTROS ou sem dados individuais elegíveis. A lista não equivale a um censo completo de todos os municípios.</p>
+        <p><strong>Como consultar sem JavaScript?</strong> A <a href="data/tabelas.html">versão em tabelas HTML</a> contém os resultados e a comparação municipal completa.</p>
+      </details>
+    </section>
+
     <section class="faixa" id="dados" aria-label="Transparência do projeto">
       <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.500"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg></span><div><strong>Dados e código abertos</strong><p>Todo o código, dados derivados e documentação estão disponíveis no GitHub.</p><a class="pill" href="https://github.com/civisbr/analise-2o-turno-2026">Ver repositório <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 19v-3.500M15 19v-3.500M9 15c-3 1-3-2-5-2M15 15c3 1 3-2 5-2"/></svg></a></div></div>
       <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v3l6 5M18 8v3l-6 5"/></svg></span><div><strong>Status do projeto <span class="selo-prelim">Versão preliminar</span></strong><p>Aguardando revisão externa antes da divulgação ampla.</p></div></div>
-      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6M10 8h2"/></svg></span><div><strong>Pré-registro</strong><p>Metodologia, hipóteses e critérios definidos antes de qualquer análise.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/pre-registro.md">Ler pré-registro <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
-      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a6 6 0 0 0-6 6v3M12 4a6 6 0 0 1 6 6v6M9 20c0-3 0-6 3-6s3 3 3 6M12 8a2 2 0 0 0-2 2v3"/></svg></span><div><strong>Transparência total</strong><p>Cada número desta página tem origem, comando e data. Sem números digitados à mão.</p><a class="mais" href="https://github.com/civisbr/analise-2o-turno-2026/blob/main/docs/metodologia.md">Como garantimos isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h8l4 4v14H7z"/><path d="M10 12h6M10 16h6M10 8h2"/></svg></span><div><strong>Pré-registro</strong><p>Metodologia, hipóteses e critérios definidos antes de qualquer análise.</p><a class="mais" href="#pre-registro">Ler pré-registro <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
+      <div class="faixa-item"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a6 6 0 0 0-6 6v3M12 4a6 6 0 0 1 6 6v6M9 20c0-3 0-6 3-6s3 3 3 6M12 8a2 2 0 0 0-2 2v3"/></svg></span><div><strong>Transparência total</strong><p>Cada número desta página tem origem, comando e data. Sem números digitados à mão.</p><a class="mais" href="#rastreabilidade">Como garantimos isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></div>
     </section>
   </main>
 

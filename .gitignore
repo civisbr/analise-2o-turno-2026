@@ -29,3 +29,6 @@ data/raw/*.part
 data/derived/secoes_*
 **/secoes_*
 .claude/
+
+# snapshots externos usados para contextualização municipal; derivados e hashes são públicos
+/data/external/

@@ -13,9 +13,21 @@ UFS = ['BA', 'PE', 'SP', 'PA']
 def _derived(synth_dir, tmp_path):
     cli.main(['analise', '--dir', str(synth_dir), '--out', str(tmp_path), '--ufs', ','.join(UFS), '--boot', '20',
               '--sim', '1', '--sem-prereg'])
+    cli.main(['distribuicao-secoes', '--dir', str(synth_dir), '--out', str(tmp_path), '--sem-prereg'])
     pl.DataFrame({'NR_TURNO': [1, 2], 'apt': [1000, 1000], 'comp': [800, 850], 'abstencao': [200, 150],
                   'valid': [760, 820], 'lula': [300, 450], 'flavio': [350, 370], 'terceira_via': [110, 0],
                   'branco': [15, 10], 'nulo': [25, 20]}).write_csv(tmp_path / 'totais_nacionais_2026.csv')
+    for ano in ('2022', '2026'):
+        pl.DataFrame({'SG_UF': ['BA'], 'mun': ['BA-1'], 'municipios_agregados': [0],
+                      'valid2': [1000], 'lula2': [950], 'flavio2': [50]}).write_csv(tmp_path / f'municipios_{ano}.csv')
+    (tmp_path / 'nomes_municipios.csv').write_text('ano,mun,nome\n2022,BA-1,Cidade teste\n2026,BA-1,Cidade teste\n')
+    contexto = {'municipios': [{'mun': 'BA-1', 'nome': 'Cidade teste', 'ibge': '2900001', 'idhm_2010': 0.55,
+                               'pib_pc_2023': 12000, 'pib_2023': 12000000, 'prefeito_2024': None, 'ideologia': None}],
+                'ideologias': {}}
+    f = tmp_path / 'contexto_municipal.json'; f.write_text(json.dumps(contexto))
+    (tmp_path / 'fontes_contexto.json').write_text(json.dumps({
+        'saida_sha256': _sha(f), 'nomes_municipios_sha256': _sha(tmp_path / 'nomes_municipios.csv')}))
+    (tmp_path / 'prefeituras_verificadas.json').write_text('{}')
     return tmp_path
 
 
@@ -30,6 +42,15 @@ def test_painel_gerado_dos_arquivos_e_sem_nan(synth_dir, tmp_path):
     assert k['lula']['delta']['valor'] == 150 and k['comparecimento']['valor'] == 85.0
     assert k['brancos_nulos']['delta']['texto'] == 'queda vs 1º turno'
     assert abs(sum(x['pct'] for x in p['ganho']['partes']) - 100) < 0.2
+    assert p['concentracao']['nos_dois_anos'] == 1
+    assert p['distribuicao_secoes']['turno'] == 2
+    assert p['contexto']['anos']['2026']['grupos'][0]['indicadores']['idhm_2010']['mediana'] == 0.55
+    assert p['divisao']['anos'][0]['candidato_22'] == 'Jair Bolsonaro'
+    assert p['divisao']['anos'][1]['candidato_22'] == 'Flávio Bolsonaro'
+    for q in p['perguntas']:
+        for linha in q['linhas']:
+            if linha.startswith('2022:'):
+                assert 'Flávio' not in linha
 
 
 def test_painel_deterministico(synth_dir, tmp_path):
@@ -56,6 +77,14 @@ def test_painel_recusa_resultados_fora_da_rodada(synth_dir, tmp_path):
     d = _derived(synth_dir, tmp_path)
     (d / 'resultados.json').write_text((d / 'resultados.json').read_text() + ' ')
     with pytest.raises(SystemExit, match='difere'):
+        painel(d, tmp_path / 'p.json', exige_real=False)
+
+
+def test_painel_recusa_distribuicao_fora_da_rodada(synth_dir, tmp_path):
+    d = _derived(synth_dir, tmp_path)
+    f = d / 'distribuicao_secoes.json'
+    f.write_text(f.read_text() + ' ')
+    with pytest.raises(SystemExit, match='distribuicao_secoes.json difere'):
         painel(d, tmp_path / 'p.json', exige_real=False)
 
 
@@ -112,6 +141,9 @@ def test_tabelas_html_sem_js_escapa_e_traz_os_numeros(synth_dir, tmp_path):
     for x in p['atipicos']:
         assert f'<td>{_br(x["pct"], 1)}%</td>' in q3   # 1 casa, igual à página com JS
     assert '85,00%' in h   # comparecimento do CSV sintético (850/1000)
+    assert 'Cidade teste' in h and '95,000%' in h and 'Jair Bolsonaro' in h
+    assert 'Seções com até 10 votos' in h and 'Brasil + exterior' in h and 'Até 10 votos por UF' in h
+    assert 'Contexto municipal' in h and 'R$ 12.000,00' in h
     p['atipicos'][0]['rotulo'] = '<img src=x onerror=1>'
     h2 = tabelas_html(p)
     assert '<img' not in h2 and '&lt;img' in h2
