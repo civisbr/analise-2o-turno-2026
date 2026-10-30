@@ -5,7 +5,7 @@
         NR_TURNO, CD_CARGO, SG_UF, CD_MUNICIPIO, NR_ZONA, NR_SECAO, NR_VOTAVEL, QT_VOTOS
   detalhe_votacao_secao/detalhe_votacao_secao_<ano>.zip   arquivo nacional único; membro
         detalhe_votacao_secao_<ano>_BR.csv (Presidente): QT_APTOS, QT_COMPARECIMENTO
-  CSV com ';', aspas, latin1. NR_VOTAVEL: 13 = Lula, 22 = Flávio/Bolsonaro, 95 = branco, 96 = nulo.
+  CSV com ';', aspas, latin1. NR_VOTAVEL: 13 = Lula, 22 = Jair Bolsonaro (2022) ou Flávio Bolsonaro (2026), 95 = branco, 96 = nulo.
   detalhe_votacao_munzona/detalhe_votacao_munzona_<ano>.zip: agregação do TSE por município-zona (munzona.py).
 O exterior (ZZ) fica fora de ALL; verify e build o somam à parte.
 """

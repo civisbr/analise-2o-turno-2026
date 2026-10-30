@@ -194,7 +194,7 @@
    "id": "Q1",
    "titulo": "De onde veio o ganho conjunto dos finalistas?",
    "linhas": [
-    "2026: Lula +10.376.696, Flávio +3.721.538 votos.",
+    "2026: Lula +10.376.696, Flávio Bolsonaro +3.721.538 votos.",
     "2022: Lula +3.086.436, Jair Bolsonaro +7.133.820 votos."
    ]
   },
@@ -204,14 +204,16 @@
    "linhas": [
     "Diferença de α (2026 − 2022): +0,10 (IC 95%: +0,07 a +0,16).",
     "Diferença de β (voto válido novo): +0,26 (IC 95%: +0,20 a +0,32).",
-    "Explicado pelas covariáveis dos dados oficiais: não."
+    "A diferença entre as eleições atende à regra de “explicado pelo modelo”: não.",
+    "Em palavras simples: comparamos cidades para ver como o ganho varia com terceira via, participação e votos brancos ou nulos. O modelo não acompanha eleitores nem determina a causa da diferença."
    ]
   },
   {
    "id": "Q3",
    "titulo": "Há municípios que destoam do padrão do estado?",
    "linhas": [
-    "Sinalizados (FDR 5%, nos dois ajustes): 139 de 5.571 em 2026; 134 de 5.570 em 2022."
+    "Sinalizados (FDR 5%, nos dois ajustes): 139 de 5.571 em 2026; 134 de 5.570 em 2022.",
+    "São cidades que merecem exame mais atento em relação ao padrão usado na comparação; a sinalização não identifica sua causa."
    ]
   },
   {
@@ -227,12 +229,13 @@
    "titulo": "Há excesso de seções extremas?",
    "linhas": [
     "Seções com |z| > 4: 0,084% em 2026, 0,098% em 2022; esperado por acaso (simulação): 0,008%.",
-    "Conjunto atípico de seções: não."
+    "Conjunto atípico de seções: não.",
+    "A regra exige ultrapassar tanto a referência histórica quanto a simulação. Um resultado negativo significa que esse critério conjunto não foi atingido."
    ]
   },
   {
    "id": "Q6",
-   "titulo": "Seções que fecharam tarde tiveram swing diferente?",
+   "titulo": "Seções que fecharam tarde tiveram mudança de votação diferente?",
    "linhas": [
     "Não testável com dados públicos: a hora de encerramento por seção não existe nos CSV do TSE."
    ]
@@ -240,6 +243,12 @@
  ],
  "notas": [
   "Diferença de 2 votos entre os totais do TSE e a decomposição: seções presentes em só um turno ficam fora da decomposição (descartes_2026.csv)."
+ ],
+ "virada": [
+  "Nos totais nacionais de 2026, incluindo o exterior, Lula terminou o primeiro turno 2.224.965 votos atrás de Flávio Bolsonaro e o segundo 4.430.191 votos à frente. A diferença a favor de Lula mudou em +6.655.156 votos.",
+  "Entre os turnos, Lula teve +10.376.694 votos e Flávio Bolsonaro +3.721.538 votos. A mudança da vantagem é a diferença entre esses dois ganhos líquidos. Ganho líquido é o saldo: entradas menos saídas de votos.",
+  "Os outros candidatos, chamados aqui de terceira via, somavam 9.321.993 votos no primeiro turno. O total de votos válidos também mudou em +4.776.239: o comparecimento variou em +2.960.239 e a redução de brancos e nulos contribuiu com +1.816.000. Essa soma fecha o ganho conjunto dos finalistas; ela não separa a origem dos votos de cada um.",
+  "Lula teve o maior ganho líquido em 2026. Isso é compatível com ter atraído mais eleitores da terceira via, mas também com ter mobilizado quem faltou no primeiro turno, conquistado votos antes brancos ou nulos, ou recebido votos de quem havia escolhido o adversário. Esses movimentos podem ocorrer ao mesmo tempo. Os totais, sozinhos, não demonstram que a terceira via foi a única causa da vitória."
  ],
  "concentracao": {
   "resumo": {

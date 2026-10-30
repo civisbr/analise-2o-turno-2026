@@ -378,6 +378,7 @@ async function main() {
   const notas = document.getElementById('notas');
   for (const n of d.notas || []) notas.appendChild(el('p', {}, n));
   donut(d.ganho); barras(d.divisao); atipicos(d.atipicos); perguntas(d.perguntas);
+  document.getElementById('leitura-virada').replaceChildren(...d.virada.map(l => el('p', {}, l)));
   concentracao(d.concentracao);
   distribuicaoSecoes(d.distribuicao_secoes);
   contextoMunicipal(d.contexto);

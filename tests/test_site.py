@@ -47,6 +47,10 @@ def test_painel_gerado_dos_arquivos_e_sem_nan(synth_dir, tmp_path):
     assert p['contexto']['anos']['2026']['grupos'][0]['indicadores']['idhm_2010']['mediana'] == 0.55
     assert p['divisao']['anos'][0]['candidato_22'] == 'Jair Bolsonaro'
     assert p['divisao']['anos'][1]['candidato_22'] == 'Flávio Bolsonaro'
+    leitura = ' '.join(p['virada'])
+    assert '50 votos atrás' in leitura and '80 votos à frente' in leitura
+    assert '+130 votos' in leitura and '+150 votos' in leitura and '+20 votos' in leitura
+    assert 'não separa a origem dos votos de cada um' in leitura
     for q in p['perguntas']:
         for linha in q['linhas']:
             if linha.startswith('2022:'):

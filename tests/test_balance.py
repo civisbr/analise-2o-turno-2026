@@ -23,7 +23,11 @@ def test_identidade_contabil(fixture, request):
 
 
 def test_controle_sem_anomalia_recupera_coeficientes(wide22, tmp_path):
-    res = run_balance(wide22, '2022 (controle)', tmp_path)
+    saida = io.StringIO()
+    with contextlib.redirect_stdout(saida):
+        res = balance(wide22, '2022 (controle)', tmp_path, min_valid=200, boot=50)
+    assert 'ΔJair Bolsonaro' in saida.getvalue()
+    assert 'Flávio' not in saida.getvalue()
     a, b = res[('A', True)]
     assert a == pytest.approx(0.53, abs=0.03)   # a + b·o = .45 + .40·.20
     assert b == pytest.approx(0.40, abs=0.03)
